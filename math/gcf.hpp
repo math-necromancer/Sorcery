@@ -1,10 +1,9 @@
 /*The Math Necromaner*/
 
-#ifndef __GCM__
-#define __GCM__
+#ifndef __GCF__
+#define __GCF__
 
 #include "swap.hpp"
-#include "rem.hpp"
 
 namespace necromancer_gcf
 {
@@ -23,7 +22,7 @@ namespace necromancer_gcf
           double _r;
           while(y != 0)
           {
-               _r = necromancer_rem::rem(x, y);
+               _r = x % y;
                x = y;
                y = _r;
           }
@@ -35,4 +34,4 @@ namespace necromancer_gcf
      }
 }
 
-#endif /* __GCM__ */
+#endif /* __GCF__ */
