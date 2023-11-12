@@ -373,7 +373,7 @@ namespace necromancer_complex
 
      template<typename _C>
      /*Return the Complex Positive of a Complex Number _z*/
-     /*(Basically just return _z)*/
+     /*(Basically, just return _z)*/
      complex<_C> operator + (const complex<_C>& _z)
      {
           return _z;
@@ -487,6 +487,7 @@ namespace necromancer_complex
 
      template<typename _C>
      template<typename _C1>
+     /*Assign one Polar Complex Number to Another*/
      complex_polar<_C> complex_polar<_C>::operator = (const complex_polar<_C1>& _z)
      {
           _ray = _z.ray();
@@ -495,6 +496,7 @@ namespace necromancer_complex
      }
      template<typename _C>
      template<typename _C1>
+     /*Assign a Polar Complex Number to a Scalar*/
      complex_polar<_C> complex_polar<_C>::operator = (const _C1& _s)
      {
           _ray = _s;
@@ -504,6 +506,7 @@ namespace necromancer_complex
 
      template<typename _C>
      template<typename _C1>
+     /*Add one Polar Complex Number to Another*/
      complex_polar<_C> complex_polar<_C>::operator += (const complex_polar<_C1>& _z)
      {
           complex<_C> _cr = cart(*this);
@@ -513,6 +516,7 @@ namespace necromancer_complex
      }
      template<typename _C>
      template<typename _C1>
+     /*Add a Scalar to a Polar Complex Number*/
      complex_polar<_C> complex_polar<_C>::operator += (const _C1& _s)
      {
           complex<_C> _cr = cart(*this);
@@ -523,6 +527,7 @@ namespace necromancer_complex
 
      template<typename _C>
      template<typename _C1>
+     /*Subtract one Polar Complex Number from Another*/
      complex_polar<_C> complex_polar<_C>::operator -= (const complex_polar<_C1>& _z)
      {
           complex<_C> _cr = cart(*this);
@@ -532,6 +537,7 @@ namespace necromancer_complex
      }
      template<typename _C>
      template<typename _C1>
+     /*Subtract a Scalar from a Polar Complex Number*/
      complex_polar<_C> complex_polar<_C>::operator -= (const _C1& _s)
      {
           complex<_C> _cr = cart(*this);
@@ -542,6 +548,7 @@ namespace necromancer_complex
 
      template<typename _C>
      template<typename _C1>
+     /*Multiply one Polar Complex Number by Another*/
      complex_polar<_C> complex_polar<_C>::operator *= (const complex_polar<_C1>& _z)
      {
           _ray *= _z.ray();
@@ -550,6 +557,7 @@ namespace necromancer_complex
      }
      template<typename _C>
      template<typename _C1>
+     /*Multiply a Polar Complex Number by a Scalar*/
      complex_polar<_C> complex_polar<_C>::operator *= (const _C1& _s)
      {
           _ray *= _s;
@@ -558,6 +566,7 @@ namespace necromancer_complex
 
      template<typename _C>
      template<typename _C1>
+     /*Divide one Polar Complex Number by Another*/
      complex_polar<_C> complex_polar<_C>::operator /= (const complex_polar<_C1>& _z)
      {
           _ray /= _z.ray();
@@ -566,6 +575,7 @@ namespace necromancer_complex
      }
      template<typename _C>
      template<typename _C1>
+     /*Divide a Polar Complex Number by a Scalar*/
      complex_polar<_C> complex_polar<_C>::operator /= (const _C1& _s)
      {
           _ray /= _s;
@@ -573,17 +583,21 @@ namespace necromancer_complex
      }
 
      template<typename _C>
+     /*Return the Complex Positive of a Polar Complex Number _z*/
+     /*(Basically, just return _z)*/
      complex_polar<_C> operator + (const complex_polar<_C>& _z)
      {
           return _z;
      }
      template<typename _C>
+     /*Return the Complex Negation of a Polar Complex Number _z*/
      complex_polar<_C> operator - (const complex_polar<_C>& _z)
      {
           return complex_polar<_C>(_z.ray(), -_z.theta());
      }
 
      template<typename _C>
+     /*Return the Result of Adding Two Polar Complex Numbers _x and _y*/
      complex_polar<_C> operator + (const complex_polar<_C>& _x, const complex_polar<_C>& _y)
      {
           complex_polar<_C> _r = _x;
@@ -591,6 +605,7 @@ namespace necromancer_complex
           return _r;
      }
      template<typename _C>
+     /*Return the Result of Adding a Polar Complex Number _x and a Scalar _y*/
      complex_polar<_C> operator + (const complex_polar<_C>& _x, const _C& _y)
      {
           complex_polar<_C> _r = _x;
@@ -598,6 +613,7 @@ namespace necromancer_complex
           return _r;
      }
      template<typename _C>
+     /*Return the Result of Adding a Scalar _x and a Polar Complex Number _y*/
      complex_polar<_C> operator + (const _C& _x, const complex_polar<_C>& _y)
      {
           complex_polar<_C> _r = _y;
@@ -606,6 +622,7 @@ namespace necromancer_complex
      }
 
      template<typename _C>
+     /*Return the Result of Subtracting Two Polar Complex Numbers _x and _y*/
      complex_polar<_C> operator - (const complex_polar<_C>& _x, const complex_polar<_C>& _y)
      {
           complex_polar<_C> _r = _x;
@@ -613,6 +630,7 @@ namespace necromancer_complex
           return _r;
      }
      template<typename _C>
+     /*Return the Result of Subtracting a Polar Complex Number _x and a Scalar _y*/
      complex_polar<_C> operator - (const complex_polar<_C>& _x, const _C& _y)
      {
           complex_polar<_C> _r = _x;
@@ -620,6 +638,7 @@ namespace necromancer_complex
           return _r;
      }
      template<typename _C>
+     /*Return the Result of Subtracting a Scalar _x and a Polar Complex Number _y*/
      complex_polar<_C> operator - (const _C& _x, const complex_polar<_C>& _y)
      {
           complex_polar<_C> _r = -_y;
@@ -628,6 +647,7 @@ namespace necromancer_complex
      }
 
      template<typename _C>
+     /*Return the Result of Multiplying Two Polar Complex Numbers _x and _y*/
      complex_polar<_C> operator * (const complex_polar<_C>& _x, const complex_polar<_C>& _y)
      {
           complex_polar<_C> _r = _x;
@@ -635,6 +655,7 @@ namespace necromancer_complex
           return _r;
      }
      template<typename _C>
+     /*Return the Result of Multiplying a Complex Polar Number _x and a Scalar _y*/
      complex_polar<_C> operator * (const complex_polar<_C>& _x, const _C& _y)
      {
           complex_polar<_C> _r = _x;
@@ -642,6 +663,7 @@ namespace necromancer_complex
           return _r;
      }
      template<typename _C>
+     /*Return the Result of Multiplying a Scalar _x and a Complex Polar Number _y*/
      complex_polar<_C> operator * (const _C& _x, const complex_polar<_C>& _y)
      {
           complex_polar<_C> _r = _y;
@@ -650,6 +672,7 @@ namespace necromancer_complex
      }
 
      template<typename _C>
+     /*Return the Result of Dividing Two Polar Complex Numbers _x and _y*/
      complex_polar<_C> operator / (const complex_polar<_C>& _x, const complex_polar<_C>& _y)
      {
           complex_polar<_C> _r = _x;
@@ -657,6 +680,7 @@ namespace necromancer_complex
           return _r;
      }
      template<typename _C>
+     /*Return the Result of Dividing a Polar Complex Number _x and a Scalar _y*/
      complex_polar<_C> operator / (const complex_polar<_C>& _x, const _C& _y)
      {
           complex_polar<_C> _r = _x;
@@ -664,6 +688,7 @@ namespace necromancer_complex
           return _r;
      }
      template<typename _C>
+     /*Return the Result of Dividing a Scalar _x with a Polar Complex Number _y*/
      complex_polar<_C> operator / (const _C& _x, const complex_polar<_C>& _y)
      {
           complex<_C> _r = _x;
@@ -707,6 +732,44 @@ namespace necromancer_complex
      bool operator != (const _C& _x, const complex<_C>& _y)
      {
           return (_y.real() != _x || _y.img() != 0);
+     }
+
+     template<typename _C>
+     /*Return True if Two Polar Complex Numbers are Equal*/
+     bool operator == (const complex_polar<_C>& _x, const complex_polar<_C>& _y)
+     {
+          return (_x.ray() == _y.ray() && _x.theta() == _y.theta());
+     }
+     template<typename _C>
+     /*Return True if a Polar Complex Number and a Scalar are Equal*/
+     bool operator == (const complex_polar<_C>& _x, const _C& _y)
+     {
+          return (_x.ray() == _y && _x.theta() == 0);
+     }
+     template<typename _C>
+     /*Return True if a Scalar and a Polar Complex Number are Equal*/
+     bool operator == (const _C& _x, const complex_polar<_C>& _y)
+     {
+          return (_y.ray() == _x && _y.theta() == 0);
+     }
+
+     template<typename _C>
+     /*Return False if Two Polar Complex Numbers are Equal*/
+     bool operator != (const complex_polar<_C>& _x, const complex_polar<_C>& _y)
+     {
+          return (_x.ray() != _y.ray() || _x.theta() != _y.theta());
+     }
+     template<typename _C>
+     /*Return False if a Polar Complex Number and a Scalar are Equal*/
+     bool operator != (const complex<_C>& _x, const _C& _y)
+     {
+          return (_x.ray() != _y || _x.theta() != 0);
+     }
+     template<typename _C>
+     /*Return False if a Scalar and a Polar Complex Number are Equal*/
+     bool operator != (const _C& _x, const complex_polar<_C>& _y)
+     {
+          return (_y.ray() != _x || _y.theta() != 0);
      }
 
      template<typename _C>
