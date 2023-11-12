@@ -8,10 +8,10 @@
 /*This file was made to help Wizards in need of the more Complex spells,*/
 /*And venture down into the mines of custom libraries without any standard*/
 /*Libraries. It is a beacon for those who dare to walk away from the well-*/
-/*word path*/
+/*worn path of standard libraries*/
 
 /*Add, Subtract, Multiply, Divide, Convert to Polar Coordinates*/
-/*Get the Magnitude, and more*/
+/*Get the Magnitude, Square Root, and more*/
 
 /*Enchanted Runes, These protect the sacred knowledge from within*/
 /*From being summoned more than once. These are crucial for the*/
@@ -36,6 +36,10 @@ namespace necromancer_complex
      /*Forward function declarations*/
      /*These will be defined later.*/
      /*=============================*/
+
+     /*Return i*/
+     template<typename _C>
+     complex<_C> i();
      /*Convert a Scalar to a Complex Number*/
      template<typename _C>
      complex<_C> complx(const _C& _s);
@@ -53,7 +57,11 @@ namespace necromancer_complex
      _C abs(const complex<_C>& _z);
      /*Get the Phase Angle of a Complex Number*/
      template<typename _C>
-     _C complex_angle(const complex<_C>& _z);
+     complex<_C> complex_angle(const complex<_C>& _z);
+     /*Get the Square Root of a Complex Number*/
+     /*(Only the Positive one)*/
+     template<typename _C>
+     complex<_C> sqrt(const complex<_C>& _z);
      /*Convert Cartesian Complex Numbers to*/
      /*Polar Complex Numbers*/
      template<typename _C>
@@ -62,6 +70,12 @@ namespace necromancer_complex
      /*Cartesian Complex Numbers*/
      template<typename _C>
      complex<_C> cart(const complex_polar<_C>& _z);
+     /*Get the Arc Sine of a Complex Number _z*/
+     template<typename _C>
+     complex<_C> _complex_sin(const complex<_C>& _z);
+     /*Get the Arc Cosine of a Complex Number*/
+     template<typename _C>
+     complex<_C> _complex_cos(const complex<_C>& _z);
 
      /*Flexible template. Defaults to double*/
      /*If no type is specified*/
@@ -128,6 +142,9 @@ namespace necromancer_complex
                complex()
                     : _real(0), _img(0), _err_state(false)
                {}
+               complex(const _C& _r)
+                    : _real(_r), _img(0), _err_state(false)
+               {}
                /*Assign complex values*/
                complex(const _C& _r, const _C& _i)
                     : _real(_r), _img(_i), _err_state(false)
@@ -177,6 +194,8 @@ namespace necromancer_complex
                template<typename _C1>
                complex<_C> operator /= (const complex<_C1>& _z);
      };
+     template<typename _C>
+     complex<_C> i = sqrt(complex<_C>(-1, 0));
 
      /*Polar complex numbers - The idea is very similar*/
      /*to normal Complex Numbers*/
@@ -761,7 +780,7 @@ namespace necromancer_complex
      }
      template<typename _C>
      /*Return False if a Polar Complex Number and a Scalar are Equal*/
-     bool operator != (const complex<_C>& _x, const _C& _y)
+     bool operator != (const complex_polar<_C>& _x, const _C& _y)
      {
           return (_x.ray() != _y || _x.theta() != 0);
      }
@@ -770,6 +789,13 @@ namespace necromancer_complex
      bool operator != (const _C& _x, const complex_polar<_C>& _y)
      {
           return (_y.ray() != _x || _y.theta() != 0);
+     }
+
+     template<typename _C>
+     /*Return i*/
+     complex<_C> i()
+     {
+          return complex<_C>(0, 1);
      }
 
      template<typename _C>
@@ -796,13 +822,29 @@ namespace necromancer_complex
      /*Get the Magnitude Squared of a Complex Number*/
      _C abs2(const complex<_C>& _z)
      {
+          if(_z.real() == 0)
+          {
+               return _z.img() * _z.img();
+          }
+          else if(_z.img() == 0)
+          {
+               return _z.real() * _z.real();
+          }
           return (_z.real() * _z.real() + _z.img() * _z.img());
      }
      template<typename _C>
      /*Get the Magnitude of a Complex Number*/
      _C abs(const complex<_C>& _z)
      {
-          return root::sqrt(_z.real() * _z.real() + _z.img() * _z.img());
+          if(_z.real() == 0)
+          {
+               return _z.img();
+          }
+          else if(_z.img() == 0)
+          {
+               return _z.img();
+          }
+          return cordic::hypot(_z.real(), _z.img());
      }
 
      template<typename _C>
@@ -810,6 +852,39 @@ namespace necromancer_complex
      _C complex_angle(const complex<_C>& _z)
      {
           return cordic::atan2(_z.img(), _z.real());
+     }
+     template<typename _C>
+     /*Get the Argument of a Complex Number*/
+     _C arg(const complex<_C>& _z)
+     {
+          /*Arg is just the angle under a different name*/
+          return complex_angle(_z);
+     }
+
+     template<typename _C>
+     /*Get the Square Root of a Complex Number*/
+     complex<_C> sqrt(const complex<_C>& _z)
+     {
+          if(_z.img() == 0)
+          {
+               return _z.real() > 0? complex<_C>(root::sqrt(_z.real()), 0): complex<_C>(0, root::sqrt(_z.real()));
+          }
+          /*Extremely scary, but derivable formula*/
+          _C _r = root::sqrt((abs(_z) + _z.real()) / 2);
+          _C _i = (_z.img() / absolute::abs(_z.img())) * root::sqrt((abs(_z) - _z.real()) / 2);
+          return complex<_C>(_r, _i);
+     }
+
+     template<typename _C>
+     /*Get the Square Root of a Polar Complex Number*/
+     complex_polar<_C> polar_sqrt(const complex_polar<_C>& _z)
+     {
+          /*Just convert to cartesian and take the roots*/
+          _C _r = root::sqrt(_z.ray()) * cordic::cos(_z.theta() / 2);
+          _C _i = root::sqrt(_z.ray()) * cordic::sin(_z.theta() / 2);
+          complex<_C> cart_r(_r, _i);
+          /*Then convert back to polar*/
+          return polar(cart_r);
      }
 
      template<typename _C>
@@ -832,6 +907,13 @@ namespace necromancer_complex
           complex<_C> result = _r * complex<_C>(cordic::cos(_t), cordic::sin(_t));
           return result;
      }
+
+     template<typename _C>
+     complex<_C> _complex_sin()
+     {
+          
+     }
+
 }
 
 #endif /*__COMPLEX__*/

@@ -1,16 +1,13 @@
-#include "math/fractions.hpp"
-#include "math/constants.hpp"
+#include "math/complex.hpp"
 #include <iostream>
-#include <iomanip>
 
-using namespace necromancer_fractions;
+using namespace necromancer_complex;
 
 int main()
 {
-    mixed _x(7, fraction(6, 9));
-    _x /= mixed(3, fraction(17, 2));
-
-    std::cout << "Result: " << _x.integer() << " + " << _x.fractional().numerator() << " / " << _x.fractional().denominator() << '\n';
-    
-    return 0;  // Add a return statement to keep the console window open
+    complex<double> _cz = 1.0;
+    std::cout << '(' << _cz.real() << " + " << _cz.img() << "i)\n";
+    complex<double> _sqrt_cz = sqrt(_cz);
+    std::cout << '(' << _sqrt_cz.real() << " + " << _sqrt_cz.img() << "i)\n";
 }
+/* :D */

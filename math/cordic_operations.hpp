@@ -27,6 +27,9 @@ namespace necromancer_cordic_operations
      /*Scale Factor for the Infinite Product of the Cosine of the CORDIC Rotation Matrix*/
      const long double cordic_K = 0.6072529350088812561694;
 
+     /*CORDIC gain for Hyperbolic Trig*/
+     const long double cordic_Kh = 1.20513635844646;
+
      /*Class for return values, resembles a vector*/
      /*Contains x, y, and the angle*/
      class cordic_result
