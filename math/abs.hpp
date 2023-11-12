@@ -8,7 +8,7 @@ namespace absolute
     template <typename T>
     T abs(T _x)
     {
-        return x < 0? -_x: _x;
+        return _x < 0? -_x: _x;
     }
 }
 

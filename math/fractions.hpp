@@ -5,12 +5,15 @@
 
 #include "gcf.hpp"
 #include "lcm.hpp"
+#include "abs.hpp"
+#include <iostream>
 
 namespace necromancer_fractions
 {
      class fraction;
      class mixed;
 
+     fraction abs(const fraction& _f);
      fraction frac(const mixed& _m);
      mixed mix(const fraction& _f);
      fraction purify(const fraction& _f);
@@ -88,11 +91,11 @@ namespace necromancer_fractions
                     _integer = _i;
                }
 
-               fraction frac() const
+               fraction fractional() const
                {
                     return _frac;
                }
-               void fraction(const fraction& _f)
+               void fractional(const fraction& _f)
                {
                     _frac = _f;
                }
@@ -108,6 +111,9 @@ namespace necromancer_fractions
 
                mixed()
                     : _integer(0), _frac(1, 1)
+               {}
+               mixed(int _i)
+                    : _integer(_i)
                {}
                mixed(int _i, necromancer_fractions::fraction _f)
                     : _integer(_i), _frac(_f)
@@ -129,11 +135,13 @@ namespace necromancer_fractions
                mixed operator /= (const mixed& _f);
      };
 
+     /*Sorry, but the results of operations won't be nice.*/
+     /*For some reason, doing so crashes all the things :(*/
+
      fraction fraction::operator = (const fraction& _f)
      {
           _numerator = _f.numerator();
           _denominator = _f.denominator();
-          simplify(*this);
           return *this;
      }
      fraction fraction::operator = (const int& _n)
@@ -310,22 +318,180 @@ namespace necromancer_fractions
           return _r;
      }
 
+     mixed mixed::operator = (const mixed& _m)
+     {
+          _integer = _m.integer();
+          _frac = _m.fractional();
+          return *this;
+     }
+     mixed mixed::operator = (const int& _n)
+     {
+          _integer = _n;
+          _frac = 0;
+          return *this;
+     }
+
+     mixed mixed::operator += (const mixed& _m)
+     {
+          fraction _x = frac(*this);
+          fraction _y = frac(_m);
+          _x += _y;
+          *this = mix(_x);
+          return *this;
+     }
+     mixed mixed::operator += (const int& _n)
+     {
+          _integer += _n;
+          return *this;
+     }
+
+     mixed mixed::operator -= (const mixed& _m)
+     {
+          fraction _x = frac(*this);
+          fraction _y = frac(_m);
+          _x -= _y;
+          *this = mix(_x);
+          return *this;
+     }
+     mixed mixed::operator -= (const int& _n)
+     {
+          _integer -= _n;
+          return *this;
+     }
+
+     mixed mixed::operator *= (const mixed& _m)
+     {
+          fraction _x = frac(*this);
+          fraction _y = frac(_m);
+          _x *= _y;
+          *this = mix(_x);
+          return *this;
+     }
+     mixed mixed::operator *= (const int& _n)
+     {
+          fraction _f = frac(*this);
+          _f *= _n;
+          *this = mix(_f);
+          return *this;
+     }
+
+     mixed mixed::operator /= (const mixed& _m)
+     {
+          fraction _x = frac(*this);
+          fraction _y = frac(_m);
+          _x /= _y;
+          *this = mix(_x);
+          return *this;
+     }
+     mixed mixed::operator /= (const int& _n)
+     {
+          fraction _f = frac(*this);
+          _f /= _n;
+          *this = mix(_f);
+          return *this;
+     }
+
+     mixed operator + (const mixed& _m)
+     {
+          return _m;
+     }
+     mixed operator - (const mixed& _m)
+     {
+          return mixed(-_m.integer(), -_m.fractional());
+     }
+
+     mixed operator + (const mixed& _x, const mixed& _y)
+     {
+          mixed _r = _x;
+          _r += _y;
+          return _r;
+     }
+     mixed operator + (const mixed& _x, const int& _y)
+     {
+          mixed _r = _x;
+          _r += _y;
+          return _r;
+     }
+     mixed operator + (const int& _x, const mixed& _y)
+     {
+          mixed _r = _y;
+          _r += _x;
+          return _r;
+     }
+
+     mixed operator - (const mixed& _x, const mixed& _y)
+     {
+          mixed _r = _x;
+          _r -= _y;
+          return _r;
+     }
+     mixed operator - (const mixed& _x, const int& _y)
+     {
+          mixed _r = _x;
+          _r -= _y;
+          return _r;
+     }
+     mixed operator - (const int& _x, const mixed& _y)
+     {
+          mixed _r = -_y;
+          _r += _x;
+          return _r;
+     }
+
+     mixed operator * (const mixed& _x, const mixed& _y)
+     {
+          mixed _r = _x;
+          _r *= _y;
+          return _r;
+     }
+     mixed operator * (const mixed& _x, const int& _y)
+     {
+          mixed _r = _x;
+          _r *= _y;
+          return _r;
+     }
+     mixed operator * (const int& _x, const mixed& _y)
+     {
+          mixed _r = _y;
+          _r *= _x;
+          return _r;
+     }
+     
+     mixed operator / (const mixed& _x, const mixed& _y)
+     {
+          mixed _r = _x;
+          _r /= _y;
+          return _r;
+     }
+     mixed operator / (const mixed& _x, const int& _y)
+     {
+          mixed _r = _x;
+          _r /= _y;
+          return _r;
+     }
+     mixed operator / (const int& _x, const mixed& _y)
+     {
+          mixed _r = _x;
+          _r /= _y;
+          return _r;
+     }
+
      fraction frac(const mixed& _m)
      {
-          int _n = _m.frac().numerator();
+          int _n = _m.fractional().numerator();
           if(_n == 0)
           {
-               return fraction(_m.frac().numerator(), 1);
+               return fraction(_m.fractional().numerator(), 1);
           }
-          int _d = _m.frac().denominator();
+          int _d = _m.fractional().denominator();
           fraction _int_part = fraction(_m.integer() * _d, _d);
-          fraction _r = _int_part + _m.frac();
+          fraction _r = purify(_int_part + _m.fractional());
           return _r;
      }
      mixed mix(const fraction& _f)
      {
           fraction _f1 = _f;
-          if(_f1.numerator() < _f1.denominator())
+          if(absolute::abs(_f1.numerator()) < absolute::abs(_f1.denominator()))
           {
                return mixed(0, fraction(_f1.numerator(), _f1.denominator()));
           }
@@ -334,32 +500,15 @@ namespace necromancer_fractions
                return mixed(1, fraction(0, 1));
           }
           int _int_part = _f1.numerator() / _f1.denominator();
-          fraction _fractional_part = _f1 - fraction(_int_part * _f1.denominator(), _f1.denominator());
+          fraction _fractional_part = purify(_f1 - fraction(_int_part * _f1.denominator(), _f1.denominator()));
           return mixed(_int_part, _fractional_part);
      }
-
-     /*A Hardcore version of simlification - makes the fraction*/
-     /*as nice to look at as possible*/
-     fraction purify(const fraction& _f)
-     {
-          fraction _f1 = _f;
-          if(_f1.denominator() < 0)
-          {
-               _f1.numerator(-_f1.numerator());
-               _f1.denominator(-_f1.denominator());
-          }
-          else if(_f1.denominator() == 0)
-          {
-               return fraction(0, 0, true);
-          }
-          else if(_f1.numerator() == 0)
-          {
-               return fraction(0, 1);
-          }
-          fraction _r = simplify(_f1);
-          return _r;
-     }
      
+     fraction abs(const fraction& _f)
+     {
+          return fraction(absolute::abs(_f.numerator()), absolute::abs(_f.denominator()));
+     }
+
      fraction form_of_1(const int& _n)
      {
           if(_n == 0)
@@ -371,23 +520,32 @@ namespace necromancer_fractions
      fraction simplify(const fraction& _f)
      {
           fraction _f1 = _f;
-          if(_f1.numerator() == 0)
-          {
-               return fraction(0, 1);
-          }
-          else if(_f1.numerator() == 1)
-          {
-               return _f1;
-          }
-          else if(_f1.numerator() == 2 && _f1.denominator() % 2 == 0)
-          {
-               _f1.numerator(1);
-               _f1.denominator(_f1.denominator() / 2);
-          }
-          int _gcf = necromancer_gcf::gcf(_f1.numerator(), _f1.denominator());
+          int _gcf = necromancer_gcf::gcf(absolute::abs(_f1.numerator()), absolute::abs(_f1.denominator()));
           _f1.numerator(_f1.numerator() / _gcf);
           _f1.denominator(_f1.denominator() / _gcf);
           return _f1;
+     }
+     /*A Hardcore version of simlification - makes the fraction*/
+     /*as nice to look at as possible*/
+     fraction purify(const fraction& _f)
+     {
+          fraction _f1 = _f;
+          if(_f1.denominator() == 0)
+          {
+               return fraction(0, 0, true);
+          }
+          else if(_f1.numerator() == 0)
+          {
+               return fraction(0, 1);
+          }
+          int mult = 1;
+          if(_f1.numerator() < 0 ^ _f1.denominator() < 0)
+          {
+               mult = -1;
+          }
+          _f1 = abs(_f1) * mult;
+          fraction _r = simplify(_f1);
+          return _r;
      }
 }
 

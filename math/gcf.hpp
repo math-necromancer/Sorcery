@@ -12,7 +12,11 @@ namespace necromancer_gcf
      {
           int x = _x;
           int y = _y;
-          if(x < y)
+          if(x == y)
+          {
+               return x;
+          }
+          else if(x < y)
           {
                necromancer_swap::swap(x, y);
           }
