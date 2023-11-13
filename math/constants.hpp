@@ -53,9 +53,9 @@ double_bits static nan_bits = {0x7FF8000000000001ull};
 
 /*Speed of light in a vacuum*/
 /*measured in m/s*/
-#define C 299792458;
+#define C 299792458
 /*Planck Constant*/
-#define planck_h 6.62607015e-34;
+#define planck_h 6.62607015e-34
 /*planck_h / pi_2*/
 #define reduced_plank_h 1.054571817e-34
 /*Elementary Charge*/

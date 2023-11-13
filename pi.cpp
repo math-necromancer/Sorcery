@@ -1,13 +1,13 @@
-#include "math/complex.hpp"
+#include "math/fractions.hpp"
 #include <iostream>
 
-using namespace necromancer_complex;
+using namespace necromancer_fractions;
 
 int main()
 {
-    complex<double> _cz = 1.0;
-    std::cout << '(' << _cz.real() << " + " << _cz.img() << "i)\n";
-    complex<double> _sqrt_cz = sqrt(_cz);
-    std::cout << '(' << _sqrt_cz.real() << " + " << _sqrt_cz.img() << "i)\n";
+    fraction _x(2, 3);
+    fraction _y(3, 2);
+    _x += _y;
+    std::cout << _x.numerator() << " / " << _x.denominator() << "\n";
 }
 /* :D */

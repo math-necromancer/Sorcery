@@ -13,12 +13,36 @@ namespace necromancer_fractions
      class fraction;
      class mixed;
 
+     /*Return the value of a fraction as a float*/
+     float evalf(const fraction& _f);
+     /*Return the value of a fraction as a double*/
+     double evald(const fraction& _f);
+     /*Return the value of a fraction as a long double*/
+     long double evall(const fraction& _f);
+     /*eval() returns double*/
+     double eval(const fraction& _f);
+     /*Return the value of a mixed number as a float*/
+     float m_evalf(const mixed& _m);
+     /*Return the value of a mixed number as a double*/
+     double m_evald(const mixed& _m);
+     /*Return the value of a mixed number as a long double*/
+     long double m_evall(const mixed& _m);
+     /*m_eval() returns double*/
+     double m_eval(const mixed& _m);
+     /*Return the Absolute Value of a fraction*/
      fraction abs(const fraction& _f);
+     /*Convert a mixed number to a fraction*/
      fraction frac(const mixed& _m);
+     /*Convet a fraction to a mixed number*/
      mixed mix(const fraction& _f);
-     fraction purify(const fraction& _f);
+     /*Return a fraction that evaluates to 1 with numerator*/
+     /*and denominator values of an integer _n*/
      fraction form_of_1(const int& _n);
+     /*Simplify a Fraction*/
      fraction simplify(const fraction& _f);
+     /*Hardcore version of simplification. Makes the fraction*/
+     /*as nice to look at as possible*/
+     fraction purify(const fraction& _f);
 
      class fraction
      {
@@ -136,7 +160,8 @@ namespace necromancer_fractions
      };
 
      /*Sorry, but the results of operations won't be nice.*/
-     /*For some reason, doing so crashes all the things :(*/
+     /*For some reason, purifying the fractions in the operation code*/
+     /*crashes all the things :(*/
 
      fraction fraction::operator = (const fraction& _f)
      {
@@ -475,6 +500,140 @@ namespace necromancer_fractions
           _r /= _y;
           return _r;
      }
+
+     bool operator == (const fraction& _x, const fraction& _y)
+     {
+          fraction _s_x = purify(_x);
+          fraction _s_y = purify(_y);
+          return (_s_x.numerator() == _s_y.numerator() && _s_x.denominator() == _s_y.denominator());
+     }
+     template<typename _F>
+     bool operator == (const fraction& _x, const _F& _y)
+     {
+          fraction _s_x = purify(_x);
+          return (_s_x.numerator() == _y && _s_x.denominator() == 1);
+     }
+     template<typename _F>
+     bool operator == (const _F& _x, const fraction& _y)
+     {
+          fraction _s_y = purify(_y);
+          return (_s_y.numerator() == _x && _s_y.denominator() == 1);
+     }
+
+     bool operator != (const fraction& _x, const fraction& _y)
+     {
+          fraction _s_x = purify(_x);
+          fraction _s_y = purify(_y);
+          return (_s_x.numerator() != _s_y.numerator() || _s_x.denominator() != _s_y.denominator());
+     }
+     template<typename _F>
+     bool operator != (const fraction& _x, const _F& _y)
+     {
+          fraction _s_x = purify(_x);
+          return (_s_x.numerator != _y || _s_x.denominator() != 1);
+     }
+     template<typename _F>
+     bool operator != (const _F& _x, const fraction& _y)
+     {
+          fraction _s_y = purify(_y);c v
+          return (_s_y.numerator() != _x || _s_y.denominator() != 1);
+     }
+
+     bool operator > (const fraction& _x, const fraction& _y)
+     {
+          if(_x.denominator() == _y.denominator())
+          {
+               return (_x.numerator() > _x.denominator());
+          }
+          /*Cross multiplying method*/
+          return (_x.numerator() * _y.denominator() > _x.denominator() * _y.numerator());
+     }
+     template<typename _F>
+     bool operator > (const fraction& _x, const _F& _y)
+     {
+          if(_x.numerator() > (_y * _x.denominator()))
+          {
+               return true;
+          }
+          return (_x > fraction(_y, 1));
+     }
+     template<typename _F>
+     bool operator > (const _F& _x, const fraction& _y)
+     {
+          if(_y.numerator() > (_x * _y.denominator()))
+          {
+               return true;
+          }
+          return (_y < fraction(_x, 1));
+     }
+
+     bool operator < (const fraction& _x, const fraction& _y)
+     {
+          if(_x.denominator() == _y.denominator())
+          {
+               return (_x.numerator() < _y.denominator());
+          }
+          /*Cross multiplying method*/
+          return (_x.numerator() * _y.denominator() < _x.denominator() * _y.numerator()); 
+     }
+     template<typename _F>
+     bool operator < (const fraction& _x, const _F& _y)
+     {
+          if(_x.numerator() < (_y * _x.denominator()))
+          {
+               return true;
+          }
+          return (_x < fraction(_y, 1));
+     }
+     template<typename _F>
+     bool operator < (const _F& _x, const fraction& _y)
+     {
+          if(_y.numerator() < (_x * _y.denominator()))
+          {
+               return true;
+          }
+          return (_y > fraction(_x, 1));
+     }
+
+     float evalf(const fraction& _f)
+     {
+          return (float) _f.numerator() / _f.denominator();
+     }
+     double evald(const fraction& _f)
+     {
+          return (double) _f.numerator() / _f.denominator();
+     }
+     long double evall(const fraction& _f)
+     {
+          return (long double) _f.numerator() / _f.denominator();
+     }
+     /*eval() returns double*/
+     double eval(const fraction& _f)
+     {
+          return evald(_f);
+     }
+     /*For other types, use evalf() for float,*/
+     /* or evall() for long double*/
+
+     float m_evalf(const mixed& _m)
+     {
+          return _m.integer() + evalf(_m.fractional());
+     }
+     double m_evald(const mixed& _m)
+     {
+          return _m.integer() + evald(_m.fractional());
+     }
+     long double m_evall(const mixed& _m)
+     {
+          return _m.integer() + evall(_m.fractional());
+     }
+     /*m_eval() returns double*/
+     double m_eval(const mixed& _m)
+     {
+          return m_evald(_m);
+     }
+     /*For other types, use m_evalf() for float,*/
+     /*or m_evall() for long double*/
 
      fraction frac(const mixed& _m)
      {

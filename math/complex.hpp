@@ -57,7 +57,10 @@ namespace necromancer_complex
      _C abs(const complex<_C>& _z);
      /*Get the Phase Angle of a Complex Number*/
      template<typename _C>
-     complex<_C> complex_angle(const complex<_C>& _z);
+     _C complex_angle(const complex<_C>& _z);
+     /*Get the Argument of a Complex Number*/
+     template<typename _C>
+     _C arg(const complex<_C>& _z);
      /*Get the Square Root of a Complex Number*/
      /*(Only the Positive one)*/
      template<typename _C>
@@ -70,10 +73,10 @@ namespace necromancer_complex
      /*Cartesian Complex Numbers*/
      template<typename _C>
      complex<_C> cart(const complex_polar<_C>& _z);
-     /*Get the Arc Sine of a Complex Number _z*/
+     /*Get the Sine of a Complex Number _z*/
      template<typename _C>
      complex<_C> _complex_sin(const complex<_C>& _z);
-     /*Get the Arc Cosine of a Complex Number*/
+     /*Get the Cosine of a Complex Number*/
      template<typename _C>
      complex<_C> _complex_cos(const complex<_C>& _z);
 
@@ -194,8 +197,6 @@ namespace necromancer_complex
                template<typename _C1>
                complex<_C> operator /= (const complex<_C1>& _z);
      };
-     template<typename _C>
-     complex<_C> i = sqrt(complex<_C>(-1, 0));
 
      /*Polar complex numbers - The idea is very similar*/
      /*to normal Complex Numbers*/
@@ -908,6 +909,7 @@ namespace necromancer_complex
           return result;
      }
 
+     /*A mystical Sign of Things to Come...*/
      template<typename _C>
      complex<_C> _complex_sin()
      {
