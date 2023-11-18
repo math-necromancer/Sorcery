@@ -892,7 +892,7 @@ namespace necromancer_complex
      /*Convert a Cartesian Complex Number to Polar Coordinates*/
      complex_polar<_C> polar(const complex<_C>& _z)
      {
-          _C _ray = root::sqrt(_z.real() * _z.real() + _z.img() * _z.img());
+          _C _ray = cordic::hypot(_z.real(), _z.img());
           _C _theta = cordic::atan2(_z.img(), _z.real());
           return complex_polar<_C>(_ray, _theta);
      }
@@ -915,7 +915,6 @@ namespace necromancer_complex
      {
           
      }
-
 }
 
 #endif /*__COMPLEX__*/

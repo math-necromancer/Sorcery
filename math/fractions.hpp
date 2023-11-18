@@ -535,7 +535,7 @@ namespace necromancer_fractions
      template<typename _F>
      bool operator != (const _F& _x, const fraction& _y)
      {
-          fraction _s_y = purify(_y);c v
+          fraction _s_y = purify(_y);
           return (_s_y.numerator() != _x || _s_y.denominator() != 1);
      }
 
@@ -557,6 +557,9 @@ namespace necromancer_fractions
           }
           return (_x > fraction(_y, 1));
      }
+     template<typename _F>
+     bool operator < (const _F& _x, const fraction& _y);
+
      template<typename _F>
      bool operator > (const _F& _x, const fraction& _y)
      {

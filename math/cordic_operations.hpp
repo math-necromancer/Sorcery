@@ -1,4 +1,4 @@
-/*The Math Necromacner*/
+/*The Math Necromancer*/
 
 #ifndef __CORDIC_OPERATIONS__
 #define __CORDIC_OPERATIONS__
@@ -8,127 +8,148 @@
 
 namespace necromancer_cordic_operations
 {
-     /*Arctangent values in radians of reciprocals of powers of 2*/
-     const long double arctan_table[] =
+     template<typename _CRDC>
+     class cordic_result;
+
+     typedef long double lngdbl_tp;
+
+     const lngdbl_tp atan_table[] =
      {
-         0.78539816339744830962, 0.46364760900080611621,
-         0.24497866312686415417, 0.12435499454676143503, 0.062418809995957348474,
-         0.031239833430268276254, 0.015623728620476830803, 0.0078123410601011112965,
-         0.0039062301319669718276, 0.0019531225164788186851, 0.0009765621895593194304,
-         0.00048828121119489827547, 0.00024414062014936176402, 0.00012207031189367020424,
-         0.000061035156174208775022, 0.000030517578115526096862, 0.000015258789061315762107,
-         0.0000076293945311019702634, 0.0000038146972656064962829, 0.0000019073486328101870354
+          0.78539816339744830962, 0.46364760900080611621,
+          0.24497866312686415417, 0.12435499454676143503, 0.062418809995957348474,
+          0.031239833430268276254, 0.015623728620476830803, 0.0078123410601011112965,
+          0.0039062301319669718276, 0.0019531225164788186851, 0.0009765621895593194304,
+          0.00048828121119489827547, 0.00024414062014936176402, 0.00012207031189367020424,
+          0.000061035156174208775022, 0.000030517578115526096862, 0.000015258789061315762107,
+          0.0000076293945311019702634, 0.0000038146972656064962829, 0.0000019073486328101870354
      };
+     int atan_table_len = sizeof(atan_table) / sizeof(atan_table[0]);
 
-     /*Get the amount of values in the arctangent table*/
-     int arctan_table_length = sizeof(arctan_table) / sizeof(arctan_table[0]);
+     const lngdbl_tp cordic_K = 0.6072529350088812561694;
 
-     /*CORDIC gain*/
-     /*Scale Factor for the Infinite Product of the Cosine of the CORDIC Rotation Matrix*/
-     const long double cordic_K = 0.6072529350088812561694;
-
-     /*CORDIC gain for Hyperbolic Trig*/
-     const long double cordic_Kh = 1.20513635844646;
-
-     /*Class for return values, resembles a vector*/
-     /*Contains x, y, and the angle*/
+     template<typename _CRDC = lngdbl_tp>
      class cordic_result
      {
+          private:
+               _CRDC _x, _y, _angle;
           public:
-               long double x, y, angle;
+               _CRDC x()
+               {
+                    return _x;
+               }
+               void x(_CRDC _x_val)
+               {
+                    _x = _x_val;
+               }
 
-               /*If values are not specified, default to 0*/
+               _CRDC y()
+               {
+                    return _y;
+               }
+               void y(_CRDC _y_val)
+               {
+                    _y = _y_val;
+               }
+
+               _CRDC angle()
+               {
+                    return _angle;
+               }
+               void angle(_CRDC _ang_val)
+               {
+                    _angle = _ang_val;
+               }
+
                cordic_result()
-                   : x(0.0), y(0.0), angle(0.0)
+                    : _x(0), _y(0), _angle(0)
                {}
-               /*Constructor for specific initialization of vales*/
-               cordic_result(long double _x, long double _y, long double _angle)
-                    : x(_x), y(_y), angle(_angle)
+               cordic_result(_CRDC _x_val, _CRDC _y_val, _CRDC _a_val)
+                    : _x(_x_val), _y(_y_val), _angle(_a_val)
                {}
      };
 
-     class cordic_result_polar
+     template<typename _CRDC = lngdbl_tp>
+     _CRDC reduce_angle(const _CRDC& _theta)
      {
-          public:
-               long double r, theta;
-               /*If values are not specified, default to 0*/
-               cordic_result_polar()
-                    : r(0.0), theta(0.0)
-               {}
-               cordic_result_polar(double _r, double _theta)
-                    : r(_r), theta(_theta)
-               {}
-     };
-     
-     double reduce_angle(double theta)
-     {
-          theta = necromancer_rem::rem(theta, tau);
-          if(theta < -pi)
+          _CRDC _theta1 = _theta;
+          _theta1 = necromancer_rem::rem(_theta1, tau);
+          if(_theta1 < -pi)
           {
-              theta += tau;
+               _theta1 += tau;
           }
-          else if(theta > pi)
+          else if(_theta1 > pi)
           {
-              theta -= tau;
+               _theta1 -= tau;
           }
-          return theta;
+          return _theta1;
      }
 
-     /*Method Used to Compare Vectors and Determine Angles*/
-     cordic_result cordic_vector(double x, double y, double theta)
+     template<typename _CRDC = lngdbl_tp>
+     cordic_result<_CRDC> cordic_vec_euclid(const _CRDC& _x, const _CRDC& _y, const _CRDC& _theta)
      {
-          double x_new = x;
-          double y_new = y;
-          double exp_2 = 1.0;
-          double angle = 0.0;
-          for(int i = 1; i < arctan_table_length; i++)
+          _CRDC x_new = _x;
+          _CRDC y_new = _y;
+          _CRDC __x = _x;
+          _CRDC __y = _y;
+          _CRDC _ang = 0;
+          _CRDC exp_2 = 1;
+          int _delta = 1;
+          _CRDC y_exp_2, x_exp_2;
+          for(int i = 0; i < atan_table_len; i++)
           {
-               double delta = (y >= 0.0)? 1.0: -1.0;
-               x_new += delta * (y / exp_2);
-               y_new -= delta * (x / exp_2);
-               angle += delta * arctan_table[i - 1];
+               y_exp_2 = (__y / exp_2);
+               x_exp_2 = (__x / exp_2);
+               _delta = (__y >= 0)? 1: -1;
+               x_new += _delta * (y_exp_2);
+               y_new -= _delta * (x_exp_2);
+               _ang += _delta * atan_table[i];
 
-               x = x_new;
-               y = y_new;
+               __x = x_new;
+               __y = y_new;
                exp_2 *= 2;
           }
-          /*Defines the return values. The angle variable is the arctangent*/
-          cordic_result return_val(x, y, angle);
-          return return_val;
+          return cordic_result<_CRDC>(__x, __y, _ang);
      }
 
-     /*Method Used to Compare Angles and Determine Vectors*/
-     cordic_result cordic_angle(double x, double y, double theta)
+     template<typename _CRDC = lngdbl_tp>
+     cordic_result<_CRDC> cordic_angle_euclid(const _CRDC& _x, const _CRDC& _y, const _CRDC& _theta)
      {
-          theta = reduce_angle(theta);
-          double multiplier = 1.0;
-          if(theta > pi_2)
+          _CRDC _theta1 = reduce_angle(_theta);
+          int mult = 1;
+          if(_theta1 > pi_2)
           {
-              theta -= pi;
-              multiplier = -1.0;
+               _theta1 -= pi;
+               mult = -1;
           }
-          else if(theta < -pi_2)
+          else if(_theta1 < -pi_2)
           {
-              theta += pi;
-              multiplier = -1.0;
+               _theta1 += pi;
+               mult = -1;
           }
-          double x_new = x;
-          double y_new = y;
-          double exp_2 = 1.0;
-          double angle = 0.0;
-          for(int i = 0; i < arctan_table_length; i++)
+          _CRDC x_new = _x;
+          _CRDC y_new = _y;
+          _CRDC __x = x_new;
+          _CRDC __y = y_new;
+          _CRDC _ang = 0;
+          _CRDC exp_2 = 1;
+          int _delta = 1;
+          _CRDC y_exp_2, x_exp_2;
+          for(int i = 0; i < atan_table_len; i++)
           {
-              double delta = (angle <= theta)? 1.0: -1.0;
-              x_new -= delta * (y / exp_2);
-              y_new += delta * (x / exp_2);
-              angle += delta * arctan_table[i];
-              x = x_new;
-              y = y_new;
-              exp_2 *= 2;
+               y_exp_2 = (__y / exp_2);
+               x_exp_2 = (__x / exp_2);
+               _delta = (_ang <= _theta1)? 1: -1;
+               x_new -= _delta * (y_exp_2);
+               y_new += _delta * (x_exp_2);
+               _ang += _delta * atan_table[i];
+
+               __x = x_new;
+               __y = y_new;
+               exp_2 *= 2;
           }
-          cordic_result return_val(x * multiplier, y * multiplier, angle);
-          return return_val;
+          __x *= mult;
+          __y *= mult;
+          return cordic_result<_CRDC>(__x, __y, _ang);
      }
 }
-
 #endif /*__CORDIC_OPERATIONS__*/

@@ -18,60 +18,68 @@ using namespace necromancer_cordic_operations;
 
 namespace necromancer_cordic_functions
 {
-    /*Get the Arc Tangnet in Radians From a Ratio y / x*/
-    long double cordic_arctan2(long double y, long double x)
+    typedef long double lngdbl_tp;
+
+    /*Get the Arc Tangnet in Radians From a Ratio x / y*/
+    template<typename _CRDC = lngdbl_tp>
+    _CRDC cordic_arctan2(const _CRDC& _x, const _CRDC& _y)
     {
-        cordic_result result = cordic_vector(x, y, 0);
-        return result.angle;
+        cordic_result<_CRDC> result = cordic_vec_euclid(_y, _x, 0.0);
+        return result.angle();
     }
 
     /*Get the Arc Tangent of a Tangent Value x*/
-    long double cordic_arctan(long double x)
+    template<typename _CRDC = lngdbl_tp>
+    _CRDC cordic_arctan(const _CRDC& _x)
     {
-        long double y = 1;
-        cordic_result result = cordic_vector(y, x, 0);
-        return result.angle;
+        _CRDC _y = 1;
+        cordic_result<_CRDC> result = cordic_vec_euclid(_y, _x, 0.0);
+        return result.angle();
     }
 
     /*Get the Hypotinuse of a Right Triangle With Lengths x and y*/
-    long double cordic_hypot(long double x, long double y)
+    template<typename _CRDC = lngdbl_tp>
+    _CRDC cordic_hypot(const _CRDC _x, const _CRDC& _y)
     {
         /*When calling cordic_vector, the x variable is*/
         /*The hypotinuse of an imaginary triangle with side lengths of*/
         /*the original x variable and y variable*/
-        cordic_result result = cordic_vector(x, y, 0);
+        cordic_result<_CRDC> result = cordic_vec_euclid(_x, _y, 0.0);
         /*The hypotinuse is scaled by a constant cordic_K*/
-        return result.x * cordic_K;
+        return result.x() * cordic_K;
     }
 
     /*Get the Sine of Theta Radians*/
-    long double cordic_sin(long double theta)
+    template<typename _CRDC = lngdbl_tp>
+    _CRDC cordic_sin(const _CRDC& _theta)
     {
-        theta = reduce_angle(theta);
-        long double x = 1.0;
-        long double y = 0.0;
-        cordic_result result = cordic_angle(x, y, theta);
-        return result.y * cordic_K;
+        _CRDC theta = reduce_angle(_theta);
+        _CRDC _x = 1;
+        _CRDC _y = 0;
+        cordic_result<_CRDC> result = cordic_angle_euclid(_x, _y, theta);
+        return result.y() * cordic_K;
     }
 
     /*Get the Cosine of Theta Radians*/
-    long double cordic_cos(long double theta)
+    template<typename _CRDC = lngdbl_tp>
+    _CRDC cordic_cos(const _CRDC& _theta)
     {
-        theta = reduce_angle(theta);
-        long double x = 1.0;
-        long double y = 0.0;
-        cordic_result result = cordic_angle(x, y, theta);
-        return result.x * cordic_K;
+        _CRDC theta = reduce_angle(_theta);
+        _CRDC _x = 1;
+        _CRDC _y = 0;
+        cordic_result<_CRDC> result = cordic_angle_euclid(_x, _y, theta);
+        return result.x() * cordic_K;
     }
 
     /*Get the Tangent of Theta Radians*/
-    long double cordic_tan(long double theta)
+    template<typename _CRDC = lngdbl_tp>
+    _CRDC cordic_tan(_CRDC _theta)
     {
-        theta = reduce_angle(theta);
-        long double x = 1.0;
-        long double y = 0.0;
-        cordic_result result = cordic_angle(x, y, theta);
-        return result.y / result.x;
+        _CRDC theta = reduce_angle(_theta);
+        _CRDC _x = 1;
+        _CRDC _y = 0;
+        cordic_result result = cordic_angle(_x, _y, theta);
+        return result.y() / result.x();
     }
 }
 #endif /*__CORDIC_FUNCTIONS__*/
