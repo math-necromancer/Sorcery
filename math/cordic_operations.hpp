@@ -72,7 +72,7 @@ namespace necromancer_cordic_operations
               theta -= tau;
           }
           return theta;
-          }
+     }
 
      /*Method Used to Compare Vectors and Determine Angles*/
      cordic_result cordic_vector(double x, double y, double theta)

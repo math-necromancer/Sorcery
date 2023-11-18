@@ -1,13 +1,9 @@
-#include "math/fractions.hpp"
+#include "math/cordic.hpp"
 #include <iostream>
-
-using namespace necromancer_fractions;
+#include <iomanip>
 
 int main()
 {
-    fraction _x(2, 3);
-    fraction _y(3, 2);
-    _x += _y;
-    std::cout << _x.numerator() << " / " << _x.denominator() << "\n";
+    std::cout<< std::setprecision(16) << cordic::sin(2.0l);
 }
 /* :D */
