@@ -11,6 +11,7 @@ typedef unsigned long long uint64_t;
 #define INFINITY (1.0 / 0.0)
 /*-inf - Never used as it just returns NaN*/
 #define NEGATIVE_INFINITY (-1.0 / 0.0)
+/*1/inf - Approaches 0*/
 #define RECIPROCAL_INFINITY 0.0
 
 /*NaN and Undefined Values*/
@@ -46,7 +47,13 @@ double_bits static nan_bits = {0x7FF8000000000001ull};
 #define deg_to_rad 0.017453292519943
 
 /*Euler stuff*/
+
+/*Euler's number*/
 #define e 2.7182818284590452353602
+/*Euler's constant*/
+/*It's also the difference of the extended*/
+/*harmonic series and the logarithmic derivative*/
+/*of the Gamma function*/
 #define gamma 0.577215664901532
 
 /*Physics things*/

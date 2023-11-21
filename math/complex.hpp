@@ -23,6 +23,7 @@
 #include "roots.hpp"
 #include "cordic.hpp"
 #include "abs.hpp"
+#include "exp.hpp"
 
 namespace necromancer_complex
 {
@@ -866,9 +867,13 @@ namespace necromancer_complex
      /*Get the Square Root of a Complex Number*/
      complex<_C> sqrt(const complex<_C>& _z)
      {
-          if(_z.img() == 0)
+          if(_z == -1)
           {
-               return _z.real() > 0? complex<_C>(root::sqrt(_z.real()), 0): complex<_C>(0, root::sqrt(_z.real()));
+               return i<_C>();
+          }
+          else if(_z.img() == 0)
+          {
+               return _z.real() > 0? complex<_C>(root::sqrt(_z.real()), 0): complex<_C>(0, root::sqrt(-_z.real()));
           }
           /*Extremely scary, but derivable formula*/
           _C _r = root::sqrt((abs(_z) + _z.real()) / 2);
@@ -911,9 +916,13 @@ namespace necromancer_complex
 
      /*A mystical Sign of Things to Come...*/
      template<typename _C>
-     complex<_C> _complex_sin()
+     complex<_C> exp(const complex<_C>& _z)
      {
-          
+          if(_z.real() == 0)
+          {
+               return complex<_C>(cordic::cos(_z.img()), cordic::sin(_z.img()));
+          }
+          return necromancer_exp::exp<_C>(_z.real()) * complex(cordic::cos(_z.img()), cordic::sin(_z.img()));
      }
 }
 

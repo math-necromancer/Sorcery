@@ -24,7 +24,7 @@ namespace necromancer_cordic_functions
     template<typename _CRDC = lngdbl_tp>
     _CRDC cordic_arctan2(const _CRDC& _x, const _CRDC& _y)
     {
-        cordic_result<_CRDC> result = cordic_vec_euclid(_y, _x, 0.0);
+        cordic_result<_CRDC> result = cordic_vec_euclid(_y, _x, (_CRDC) 0);
         return result.angle();
     }
 
@@ -33,7 +33,7 @@ namespace necromancer_cordic_functions
     _CRDC cordic_arctan(const _CRDC& _x)
     {
         _CRDC _y = 1;
-        cordic_result<_CRDC> result = cordic_vec_euclid(_y, _x, 0.0);
+        cordic_result<_CRDC> result = cordic_vec_euclid(_y, _x, (_CRDC) 0);
         return result.angle();
     }
 
@@ -44,7 +44,7 @@ namespace necromancer_cordic_functions
         /*When calling cordic_vector, the x variable is*/
         /*The hypotinuse of an imaginary triangle with side lengths of*/
         /*the original x variable and y variable*/
-        cordic_result<_CRDC> result = cordic_vec_euclid(_x, _y, 0.0);
+        cordic_result<_CRDC> result = cordic_vec_euclid(_x, _y, (_CRDC) 0);
         /*The hypotinuse is scaled by a constant cordic_K*/
         return result.x() * cordic_K;
     }
@@ -78,7 +78,7 @@ namespace necromancer_cordic_functions
         _CRDC theta = reduce_angle(_theta);
         _CRDC _x = 1;
         _CRDC _y = 0;
-        cordic_result result = cordic_angle(_x, _y, theta);
+        cordic_result result = cordic_angle_euclid(_x, _y, theta);
         return result.y() / result.x();
     }
 }

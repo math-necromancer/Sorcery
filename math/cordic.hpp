@@ -10,6 +10,8 @@
 
 #include "cordic_operations.hpp"
 #include "cordic_functions.hpp"
+#include "constants.hpp"
+#include "number_classifications.hpp"
 #include "rem.hpp"
 
 using namespace necromancer_cordic_operations;
@@ -17,44 +19,95 @@ using namespace necromancer_cordic_functions;
 
 namespace cordic
 {
+     float atanf(const float& _x);
+     double atand(const double& _x);
+     long double atanl(const long double& _x);
+     float atan(const float& _x);
+     double atan(const double& _x);
+     long double atan(const long double& _x);
+     template<typename _atan_typ>
+     double atan(const _atan_typ& _x);
+
+     float atan2f(const float& _x, const float& _y);
+     double atan2d(const double& _x, const double& _y);
+     long double atan2l(const long double& _x, const long double& _y);
+     float atan2(const float& _x, const float& _y);
+     double atan2(const double& _x, const double& _y);
+     long double atan2(const long double& _x, const long double& _y);
+     template<typename _atan2_typ>
+     double atan2(const _atan2_typ& _x, const _atan2_typ& _y);
+
+     float hypotf(const float& _x, const float& _y);
+     double hypotd(const double& _x, const double& _y);
+     long double hypotl(const long double& _x, const long double& _y);
+     float hypot(const float& _x, const float& _y);
+     double hypot(const double& _x, const double& _y);
+     long double hypot(const long double& _x, const long double& _y);
+     template<typename _hypot_typ>
+     double hypot(const _hypot_typ& _x, const _hypot_typ& _y);
+
+     float sinf(const float& _x);
+     double sind(const double& _x);
+     long double sinl(const long double& _x);
+     float sin(const float& _x);
+     double sin(const double& _x);
+     long double sin(const long double& _x);
+     template<typename _sin_typ>
+     double sin(const _sin_typ& _x);
+
+     float cosf(const float& _x);
+     double cosd(const double& _x);
+     long double cosl(const long double& _x);
+     float cos(const float& _x);
+     double cos(const double& _x);
+     long double cos(const long double& _x);
+     template<typename _cos_typ>
+     double cos(const _cos_typ& _x);
+
+     float tanf(const float& _x);
+     double tand(const double& _x);
+     long double tanl(const long double& _x);
+     float tan(const float& _x);
+     double tan(const double& _x);
+     long double tan(const long double& _x);
+     template<typename _tan_typ>
+     double tan(const _tan_typ& _x);
+
      float atanf(const float& _x)
      {
-          float _r = _x;
-          if(_r == 0.0f || _r == NaN || _r == undefined)
+          if(is_infinite(_x))
           {
-               return _r;
+               return (float) pi_2;
           }
-          else if(_r == INFINITY)
+          else if(_x == 0 || _x == 1 || _x == -1 || is_nan(_x))
           {
-               return pi_2;
+               return (float) (_x * pi_4);
           }
-          return (float) cordic_arctan(_r);
+          return cordic_arctan<float>(_x);
      }
      double atand(const double& _x)
      {
-          double _r = _x;
-          if(_r == 0.0 || _r == NaN || _r == undefined)
+          if(is_infinite(_x))
           {
-               return _r;
+               return (double) pi_2;
           }
-          else if(_r == INFINITY)
+          else if(_x == 0 || _x == 1 || _x == -1 || is_nan(_x))
           {
-               return pi_2;
+               return (double) (_x * pi_4);
           }
-          return (double) cordic_arctan(_r);
+          return cordic_arctan<double>(_x);
      }
      long double atanl(const long double& _x)
      {
-          long double _r = _x;
-          if(_r == 0.0l || _r == NaN || _r == undefined)
+          if(is_infinite(_x))
           {
-               return _r;
+               return (long double) pi_2;
           }
-          else if(_r == INFINITY)
+          else if(_x == 0 || _x == 1 || _x == -1 || is_nan(_x))
           {
-               return pi_2;
+               return (long double) (_x * pi_4);
           }
-          return cordic_arctan(_r);
+          return cordic_arctan<long double>(_x);
      }
      float atan(const float& _x)
      {
@@ -68,48 +121,74 @@ namespace cordic
      {
           return atanl(_x);
      }
+     template<typename _atan_typ>
+     double atan(const _atan_typ& _x)
+     {
+          return atand((double) _x);
+     }
 
      float atan2f(const float& _x, const float& _y)
      {
-          float _o = _x;
-          float _a = _y;
-          if(_a == 0.0f || _o == INFINITY)
+          if(is_nan(_x) || is_nan(_y))
           {
-               return pi_2;
+               return undefined;
           }
-          else if(_o == 0.0f || _o == NaN || _o == undefined)
+          else if(is_infinite(_x))
           {
-               return _o;
+               return is_infinite(_y)? undefined: (float) pi_2;
           }
-          return (float) cordic_arctan2(_o, _a);
+          int neg = 1;
+          if(_x < 0 ^ _y < 0)
+          {
+               neg = -1;
+          }
+          if(_x == 0 || _x == _y || -_x == _y)
+          {
+               return (float) (neg * pi_4);
+          }
+          return cordic_arctan2<float>(_x, _y);
      }
      double atan2d(const double& _x, const double& _y)
      {
-          float _o = _x;
-          float _a = _y;
-          if(_a == 0.0 || _o == INFINITY)
+          if(is_nan(_x) || is_nan(_y))
           {
-               return pi_2;
+               return undefined;
           }
-          else if(_o == 0.0 || _o == NaN || _o == undefined)
+          else if(is_infinite(_x))
           {
-               return _o;
+               return is_infinite(_y)? undefined: (double) pi_2;
           }
-          return (double) cordic_arctan2(_o, _a);
+          int neg = 1;
+          if(_x < 0 ^ _y < 0)
+          {
+               neg = -1;
+          }
+          if(_x == 0 || _x == _y || -_x == _y)
+          {
+               return (double) (neg * pi_4);
+          }
+          return cordic_arctan2<double>(_x, _y);
      }
-     long double atan2l(const double& _x, const double& _y)
+     long double atan2l(const long double& _x, const long double& _y)
      {
-          float _o = _x;
-          float _a = _y;
-          if(_a == 0.0l || _o == INFINITY)
+          if(is_nan(_x) || is_nan(_y))
           {
-               return pi_2;
+               return undefined;
           }
-          else if(_o == 0.0l || _o == NaN || _o == undefined)
+          else if(is_infinite(_x))
           {
-               return _o;
+               return is_infinite(_y)? undefined: (long double) pi_2;
           }
-          return cordic_arctan2(_o, _a);
+          int neg = 1;
+          if(_x < 0 ^ _y < 0)
+          {
+               neg = -1;
+          }
+          if(_x == 0 || _x == _y || -_x == _y)
+          {
+               return (long double) (neg * pi_4);
+          }
+          return cordic_arctan2<long double>(_x, _y);
      }
      float atan2(const float& _x, const float& _y)
      {
@@ -123,43 +202,73 @@ namespace cordic
      {
           return atan2l(_x, _y);
      }
+     template<typename _atan2_typ>
+     double atan2(const _atan2_typ& _x, const _atan2_typ& _y)
+     {
+          return atan2d((double) _x, (double) _y);
+     }
 
      float hypotf(const float& _x, const float& _y)
      {
-          if(_x == 0.0f)
+          if(is_nan(_x) || is_nan(_y))
+          {
+               return undefined;
+          }
+          else if(is_infinite(_x) || is_infinite(_y))
+          {
+               return INFINITY;
+          }
+          else if(_x == 0)
           {
                return _y;
           }
-          else if(_y == 0.0f)
+          else if(_y == 0)
           {
                return _x;
           }
-          return (float) cordic_hypot(_x, _y);
+          return cordic_hypot<float>(_x, _y);
      }
      double hypotd(const double& _x, const double& _y)
      {
-          if(_x == 0.0)
+          if(is_nan(_x) || is_nan(_y))
+          {
+               return undefined;
+          }
+          else if(is_infinite(_x) || is_infinite(_y))
+          {
+               return INFINITY;
+          }
+          else if(_x == 0)
           {
                return _y;
           }
-          else if(_y == 0.0)
+          else if(_y == 0)
           {
                return _x;
           }
-          return (double) cordic_hypot(_x, _y);
+          return cordic_hypot<double>(_x, _y);
      }
-     double hypotl(const long double& _x, const long double& _y)
+     long double hypotl(const long double& _x, const long double& _y)
      {
-          if(_x == 0.0l)
+          if(is_nan(_x) || is_nan(_y))
+          {
+               return undefined;
+          }
+          else if(is_infinite(_x) || is_infinite(_y))
+          {
+               return INFINITY;
+          }
+          else if(_x == 0)
           {
                return _y;
           }
-          else if(_y == 0.0l)
+          else if(_y == 0)
           {
                return _x;
           }
-          return cordic_hypot(_x, _y);
+          return cordic_hypot<long double>(_x, _y);
      }
+
      float hypot(const float& _x, const float& _y)
      {
           return hypotf(_x, _y);
@@ -168,113 +277,87 @@ namespace cordic
      {
           return hypotd(_x, _y);
      }
-     float hypot(const long double& _x, const long double& _y)
+     long double hypot(const long double& _x, const long double& _y)
      {
           return hypotl(_x, _y);
      }
-
-     float cosf(const float& _x)
+     template<typename _hypot_typ>
+     double hypot(const _hypot_typ& _x, const _hypot_typ& _y)
      {
-          float _r = necromancer_rem::rem(_x, tau);
-          if(_r == 0.0f || _r == pi)
-          {
-               return 1.0f;
-          }
-          else if(_r == pi_2 || _r == tau - pi_2)
-          {
-               return 0.0f;
-          }
-          return (float) cordic_cos(_r);
-     }
-     double cosd(const double& _x)
-     {
-          double _r = necromancer_rem::rem(_x, tau);
-          if(_r == 0.0 || _r == pi)
-          {
-               return 0.0;
-          }
-          else if(_r == pi_2 || _r == tau - pi_2)
-          {
-               return 1.0;
-          }
-          return (double) cordic_cos(_r);
-     }
-     long double cosl(const long double& _x)
-     {
-          long double _r = necromancer_rem::rem(_x, tau);
-          if(_r == 0.0l || _r == pi)
-          {
-               return 0.0l;
-          }
-          else if(_r == pi_2 || _r == tau - pi_2)
-          {
-               return 1.0l;
-          }
-          return (long double) cordic_cos(_r);
-     }
-     float cos(const float& _x)
-     {
-          return cosf(_x);
-     }
-     double cos(const double& _x)
-     {
-          return cosd(_x);
-     }
-     long double cos(const long double& _x)
-     {
-          return cosl(_x);
+          return hypotd((double) _x, (double) _y);
      }
 
      float sinf(const float& _x)
      {
-          float _r = necromancer_rem::rem(_x, tau);
-          if(_r == 0.0f || _r == pi)
+          if(is_nan(_x))
           {
-               return 0.0f;
+               return _x;
           }
-          else if(_r == pi_2)
+          else if(is_infinite(_x))
           {
-               return 1.0f;
+               return undefined;
           }
-          else if(_r == tau - pi_2)
+          else if(necromancer_rem::rem(_x, pi) == 0)
           {
-               return -1.0f;
+               return 0;
           }
-          return (float) cordic_sin(_r);
+          else if(necromancer_rem::rem(_x, tau) == pi_2)
+          {
+               return 1;
+          }
+          else if(necromancer_rem::rem(_x, tau) == -pi_2)
+          {
+               return -1;
+          }
+          return cordic_sin<float>(_x);
      }
      double sind(const double& _x)
      {
-          double _r = necromancer_rem::rem(_x, tau);
-          if(_r == 0.0 || _r == pi)
+          if(is_nan(_x))
           {
-               return 0.0;
+               return _x;
           }
-          else if(_r == pi_2)
+          else if(is_infinite(_x))
           {
-               return 1.0;
+               return undefined;
           }
-          else if(_r == tau - pi_2)
+          else if(necromancer_rem::rem(_x, pi) == 0)
           {
-               return -1.0;
+               return 0;
           }
-          return (double) cordic_sin(_r);
+          else if(necromancer_rem::rem(_x, tau) == pi_2)
+          {
+               return 1;
+          }
+          else if(necromancer_rem::rem(_x, tau) == -pi_2)
+          {
+               return -1;
+          }
+          return cordic_sin<double>(_x);
      }
      long double sinl(const long double& _x)
      {
-          long double _r = necromancer_rem::rem(_x, tau);
-          if(_r == 0.0l || _r == pi)
+          if(is_nan(_x))
           {
-               return 0.0l;
+               return _x;
           }
-          else if(_r == pi_2)
+          else if(necromancer_rem::rem(_x, pi) == 0)
           {
-               return 1.0l;
+               return 0;
           }
-          else if(_r == tau - pi_2)
+          else if(is_infinite(_x))
           {
-               return -1.0l;
+               return undefined;
           }
-          return (long double) cordic_sin(_r);
+          else if(necromancer_rem::rem(_x, tau) == pi_2)
+          {
+               return 1;
+          }
+          else if(necromancer_rem::rem(_x, tau) == -pi_2)
+          {
+               return -1;
+          }
+          return cordic_sin<long double>(_x);
      }
      float sin(const float& _x)
      {
@@ -288,57 +371,137 @@ namespace cordic
      {
           return sinl(_x);
      }
+     template<typename _sin_typ>
+     double sin(const _sin_typ& _x)
+     {
+          return sind((double) _x);
+     }
+
+     float cosf(const float& _x)
+     {
+          if(is_nan(_x) || is_infinite(_x))
+          {
+               return undefined;
+          }
+          else if(necromancer_rem::rem(_x, tau) == 0)
+          {
+               return 1;
+          }
+          else if(necromancer_rem::rem(_x, tau) == pi)
+          {
+               return -1;
+          }
+          else if(necromancer_rem::rem(_x, tau) == pi_2)
+          {
+               return 0;
+          }
+          else if(necromancer_rem::rem(_x, tau) == -pi_2)
+          {
+               return -0;
+          }
+          return cordic_cos<float>(_x);
+     }
+     double cosd(const double& _x)
+     {
+          if(is_nan(_x) || is_infinite(_x))
+          {
+               return undefined;
+          }
+          else if(necromancer_rem::rem(_x, tau) == 0)
+          {
+               return 1;
+          }
+          else if(necromancer_rem::rem(_x, tau) == pi)
+          {
+               return -1;
+          }
+          else if(necromancer_rem::rem(_x, tau) == pi_2)
+          {
+               return 0;
+          }
+          else if(necromancer_rem::rem(_x, tau) == -pi_2)
+          {
+               return -0;
+          }
+          return cordic_cos<double>(_x);
+     }
+     long double cosl(const long double& _x)
+     {
+          if(is_nan(_x) || is_infinite(_x))
+          {
+               return undefined;
+          }
+          else if(necromancer_rem::rem(_x, tau) == 0)
+          {
+               return 1;
+          }
+          else if(necromancer_rem::rem(_x, tau) == pi)
+          {
+               return -1;
+          }
+          else if(necromancer_rem::rem(_x, tau) == pi_2)
+          {
+               return 0;
+          }
+          else if(necromancer_rem::rem(_x, tau) == -pi_2)
+          {
+               return -0;
+          }
+          return cordic_cos<long double>(_x);
+     }
+     float cos(const float& _x)
+     {
+          return cosf(_x);
+     }
+     double cos(const double& _x)
+     {
+          return cosd(_x);
+     }
+     long double cos(const long double& _x)
+     {
+          return cosl(_x);
+     }
+     template<typename _cos_typ>
+     double cos(const _cos_typ& _x)
+     {
+          return cosd((double) _x);
+     }
 
      float tanf(const float& _x)
      {
-          float _r = necromancer_rem::rem(_x, pi);
-          if(_r == 0.0f)
+          if(is_nan(_x) || is_infinite(_x) || necromancer_rem::rem(_x, pi) == pi_2 || necromancer_rem::rem(_x, pi) == -pi_2)
           {
-               return _r;
+               return undefined;
           }
-          else if(_r == pi_2)
+          else if(necromancer_rem::rem(_x, pi) == 0)
           {
-               return 1.0f / 0.0f;
+               return 0;
           }
-          else if(_r == -pi_2)
-          {
-               return -1.0f / 0.0f;
-          }
-          return (float) cordic_tan(_r);
+          return cordic_tan<float>(_x);
      }
      double tand(const double& _x)
      {
-          float _r = necromancer_rem::rem(_x, pi);
-          if(_r == 0.0)
+          if(is_nan(_x) || is_infinite(_x) || necromancer_rem::rem(_x, pi) == pi_2 || necromancer_rem::rem(_x, pi) == -pi_2)
           {
-               return _r;
+               return undefined;
           }
-          else if(_r == pi_2)
+          else if(necromancer_rem::rem(_x, pi) == 0)
           {
-               return 1.0 / 0.0;
+               return 0;
           }
-          else if(_r == -pi_2)
-          {
-               return -1.0 / 0.0;
-          }
-          return (double) cordic_tan(_r);
+          return cordic_tan<double>(_x);
      }
      long double tanl(const long double& _x)
      {
-          float _r = necromancer_rem::rem(_x, pi);
-          if(_r == 0.0l)
+          if(is_nan(_x) || is_infinite(_x) || necromancer_rem::rem(_x, pi) == pi_2 || necromancer_rem::rem(_x, pi) == -pi_2)
           {
-               return _r;
+               return undefined;
           }
-          else if(_r == pi_2)
+          else if(necromancer_rem::rem(_x, pi) == 0)
           {
-               return 1.0l / 0.0l;
+               return 0;
           }
-          else if(_r == -pi_2)
-          {
-               return -1.0l / 0.0l;
-          }
-          return cordic_tan(_r);
+          return cordic_tan<long double>(_x);
      }
      float tan(const float& _x)
      {
@@ -351,6 +514,11 @@ namespace cordic
      long double tan(const long double& _x)
      {
           return tanl(_x);
+     }
+     template<typename _tan_typ>
+     double tan(const _tan_typ& _x)
+     {
+          return tand((double) _x);
      }
 }
 

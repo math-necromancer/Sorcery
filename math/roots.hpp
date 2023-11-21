@@ -6,52 +6,128 @@
 #include "abs.hpp"
 #include "constants.hpp"
 #include "exponent_int.hpp"
+#include "exp.hpp"
 #include "rem.hpp"
 
 namespace root
 {
-    double sqrt(double x)
+    float sqrtf(const float& _x)
     {
         /*Roots of Negatives are Complex*/
-        if(x < 0)
+        if(_x < 0)
         {
             return undefined;
         }
-        /*These are all their own Square Roots*/
-        else if(x == 0 || x == 1 || x == INFINITY || x == NaN || x == undefined)
+        else if(_x == e)
         {
-            return x;
+            return necromancer_exp::exp(0.5f);
         }
-        double root = x > 1? x / 2: x;
-        double prev_root = 0.0;
+        /*These are all their own Square Roots*/
+        else if(_x == 0 || _x == 1 || _x == INFINITY || _x == NaN || _x == undefined)
+        {
+            return _x;
+        }
+        float _root = _x > 1? _x / 2: _x;
+        float _prev_root = 0.0f;
         /*EPSILON represents the tolarance of the root approximation*/
-        double EPSILON = 1e-16;
+        const float EPSILON = 1e-8f;
         /*Iterative Babylonian method*/
         for(int i = 0; i < 200 /*Arbitrarily high number of iterations*/; i++)
         {
-            prev_root = root;
-            root = (root + (x / root)) / 2;
+            _prev_root = _root;
+            _root = (_root + (_x / _root)) / 2;
             /*If the root is precise enough, break out of the loop*/
-            if(absolute::abs(root - prev_root) < EPSILON)
+            if(absolute::abs(_root - _prev_root) < EPSILON)
             {
                 break;
             }
         }
-        return root;
+        return _root;
+    }
+    double sqrtd(const double& _x)
+    {
+        if(_x < 0)
+        {
+            return undefined;
+        }
+        else if(_x == e)
+        {
+            return necromancer_exp::exp(0.5);
+        }
+        else if(_x == 0 || _x == 1 || _x == INFINITY || _x == NaN || _x == undefined)
+        {
+            return _x;
+        }
+        double _root = _x > 1? _x / 2: _x;
+        double _prev_root = 0.0;
+        /*EPSILON represents the tolarance of the root approximation*/
+        const double EPSILON = 1e-8;
+        /*Iterative Babylonian method*/
+        for(int i = 0; i < 200 /*Arbitrarily high number of iterations*/; i++)
+        {
+            _prev_root = _root;
+            _root = (_root + (_x / _root)) / 2;
+            /*If the root is precise enough, break out of the loop*/
+            if(absolute::abs(_root - _prev_root) < EPSILON)
+            {
+                break;
+            }
+        }
+        return _root;
+    }
+    long double sqrtl(const long double& _x)
+    {
+        if(_x < 0)
+        {
+            return undefined;
+        }
+        else if(_x == e)
+        {
+            return necromancer_exp::exp(0.5l);
+        }
+        else if(_x == 0 || _x == 1 || _x == INFINITY || _x == NaN || _x == undefined)
+        {
+            return _x;
+        }
+        long double _root = _x > 1? _x / 2: _x;
+        long double _prev_root = 0.0f;
+        /*EPSILON represents the tolarance of the root approximation*/
+        const long double EPSILON = 1e-18;
+        /*Iterative Babylonian method*/
+        for(int i = 0; i < 200 /*Arbitrarily high number of iterations*/; i++)
+        {
+            _prev_root = _root;
+            _root = (_root + (_x / _root)) / 2;
+            /*If the root is precise enough, break out of the loop*/
+            if(absolute::abs(_root - _prev_root) < EPSILON)
+            {
+                break;
+            }
+        }
+        return _root;
+    }
+    float sqrt(const float& _x)
+    {
+        return sqrtf(_x);
+    }
+    double sqrt(const double& _x)
+    {
+        return sqrtd(_x);
+    }
+    long double sqrt(const long double& _x)
+    {
+        return sqrtl(_x);
     }
 
     double cbrt(double x)
     {
-        bool is_negative = false;
+        int negative_mult = 1;
         /*Unlike square roots, cube roots of negatives are defiend*/
         /*It's just the negative of their positive counterpart*/
-        if(x < 0)
-        {
-            x *= -1;
-            is_negative = true;
-        }
+        negative_mult = x < 0? -1: 1;
+        x = absolute::abs(x);
         /*These are all their Cube Roots*/
-        else if(x == 0 || x == 1 || x == INFINITY || x == NaN || x == undefined)
+        if(x == 0 || x == 1 || x == INFINITY || x == NaN || x == undefined)
         {
             return x;
         }
@@ -71,7 +147,7 @@ namespace root
             }
         }
         /*If the input was negative, negate the result before returning*/
-        return is_negative? -root: root; 
+        return root * negative_mult;
     }
 
     double intRoot(double x, int y)
@@ -80,7 +156,7 @@ namespace root
         {
         case 1: return x;
             break;
-        case 2: return sqrt(x);
+        case 2: return sqrtf(x);
             break;
         case 3: return cbrt(x);
             break;
