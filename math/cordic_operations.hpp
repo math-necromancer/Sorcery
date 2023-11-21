@@ -21,7 +21,8 @@ namespace necromancer_cordic_operations
           0.0039062301319669718276, 0.0019531225164788186851, 0.0009765621895593194304,
           0.00048828121119489827547, 0.00024414062014936176402, 0.00012207031189367020424,
           0.000061035156174208775022, 0.000030517578115526096862, 0.000015258789061315762107,
-          0.0000076293945311019702634, 0.0000038146972656064962829, 0.0000019073486328101870354
+          0.0000076293945311019702634, 0.0000038146972656064962829, 0.0000019073486328101870354,
+          0.00000095367431640596087942
      };
      int atan_table_len = sizeof(atan_table) / sizeof(atan_table[0]);
 
@@ -67,7 +68,6 @@ namespace necromancer_cordic_operations
                     : _x(_x_val), _y(_y_val), _angle(_a_val)
                {}
      };
-
      template<typename _CRDC = lngdbl_tp>
      _CRDC reduce_angle(const _CRDC& _theta)
      {
@@ -83,7 +83,6 @@ namespace necromancer_cordic_operations
           }
           return _theta1;
      }
-
      template<typename _CRDC = lngdbl_tp>
      cordic_result<_CRDC> cordic_vec_euclid(const _CRDC& _x, const _CRDC& _y, const _CRDC& _theta)
      {
@@ -110,7 +109,6 @@ namespace necromancer_cordic_operations
           }
           return cordic_result<_CRDC>(__x, __y, _ang);
      }
-
      template<typename _CRDC = lngdbl_tp>
      cordic_result<_CRDC> cordic_angle_euclid(const _CRDC& _x, const _CRDC& _y, const _CRDC& _theta)
      {

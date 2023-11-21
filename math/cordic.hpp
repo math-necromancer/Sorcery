@@ -477,6 +477,10 @@ namespace cordic
           {
                return 0;
           }
+          else if(necromancer_rem::rem(_x, pi) == pi_4)
+          {
+               return 1;
+          }
           return cordic_tan<float>(_x);
      }
      double tand(const double& _x)
@@ -489,6 +493,10 @@ namespace cordic
           {
                return 0;
           }
+          else if(necromancer_rem::rem(_x, pi) == pi_4)
+          {
+               return 1;
+          }
           return cordic_tan<double>(_x);
      }
      long double tanl(const long double& _x)
@@ -500,6 +508,10 @@ namespace cordic
           else if(necromancer_rem::rem(_x, pi) == 0)
           {
                return 0;
+          }
+          else if(necromancer_rem::rem(_x, pi) == pi_4)
+          {
+               return 1;
           }
           return cordic_tan<long double>(_x);
      }

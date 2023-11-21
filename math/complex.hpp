@@ -74,12 +74,9 @@ namespace necromancer_complex
      /*Cartesian Complex Numbers*/
      template<typename _C>
      complex<_C> cart(const complex_polar<_C>& _z);
-     /*Get the Sine of a Complex Number _z*/
+     /*Raise e to a Complex Number*/
      template<typename _C>
-     complex<_C> _complex_sin(const complex<_C>& _z);
-     /*Get the Cosine of a Complex Number*/
-     template<typename _C>
-     complex<_C> _complex_cos(const complex<_C>& _z);
+     complex<_C> exp(const complex<_C>& _z);
 
      /*Flexible template. Defaults to double*/
      /*If no type is specified*/
@@ -794,6 +791,21 @@ namespace necromancer_complex
      }
 
      template<typename _C>
+     /*Similar to _z.is_real(). However, It is not*/
+     /*a member function*/
+     bool is_real(const complex<_C>& _z)
+     {
+          return _z.is_real();
+     }
+     template<typename _C>
+     /*Similar to _z.is_complex(). However, It is not*/
+     /*a member function*/
+     bool is_complex(const complex<_C>& _z)
+     {
+          return _z.is_complex();
+     }
+
+     template<typename _C>
      /*Return i*/
      complex<_C> i()
      {
@@ -824,14 +836,6 @@ namespace necromancer_complex
      /*Get the Magnitude Squared of a Complex Number*/
      _C abs2(const complex<_C>& _z)
      {
-          if(_z.real() == 0)
-          {
-               return _z.img() * _z.img();
-          }
-          else if(_z.img() == 0)
-          {
-               return _z.real() * _z.real();
-          }
           return (_z.real() * _z.real() + _z.img() * _z.img());
      }
      template<typename _C>
@@ -846,7 +850,8 @@ namespace necromancer_complex
           {
                return _z.img();
           }
-          return cordic::hypot(_z.real(), _z.img());
+          _C _r =  cordic::hypot(_z.real(), _z.img());
+          return _r;
      }
 
      template<typename _C>
@@ -914,8 +919,8 @@ namespace necromancer_complex
           return result;
      }
 
-     /*A mystical Sign of Things to Come...*/
      template<typename _C>
+     /*Raise e to a Complex Number*/
      complex<_C> exp(const complex<_C>& _z)
      {
           if(_z.real() == 0)

@@ -2,11 +2,13 @@
 #include <iomanip>
 #include "math/constants.hpp"
 #include "math/complex.hpp"
+#include "math/cordic.hpp"
+#include "math/euclid_trig.hpp"
 
 using namespace necromancer_complex;
+using namespace cordic;
 
 int main()
 {
-     complex e_r = exp(complex(0.0, 0.0));
-     std::cout << e_r.real() << " + " << e_r.img() << "i\n";
+     std::cout << std::setprecision(16) << euclid_trig::cos(0.02);
 }

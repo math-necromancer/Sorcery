@@ -4,12 +4,13 @@
 #define __REM__
 
 #include "constants.hpp"
+#include "number_classifications.hpp"
 
 namespace necromancer_rem
 {
     double rem(const double& _x, const double& _y)
     {
-        if(_y == 0)
+        if(_y == 0 || is_nan(_x) || is_nan(_y) || is_infinite(_x) || is_infinite(_y))
         {
             return undefined;
         }
