@@ -13,6 +13,7 @@
 #include "constants.hpp"
 #include "rem.hpp"
 #include "cordic_operations.hpp"
+#include "roots.hpp"
 
 using namespace necromancer_cordic_operations;
 
@@ -22,10 +23,30 @@ namespace necromancer_cordic_functions
 
     /*Get the Arc Tangnet in Radians From a Ratio x / y*/
     template<typename _CRDC = lngdbl_tp>
-    _CRDC cordic_arctan2(const _CRDC& _x, const _CRDC& _y)
+    _CRDC cordic_arctan2(const _CRDC& _y, const _CRDC& _x)
     {
+        cordic_result<_CRDC> result = cordic_vec_euclid(_x, _y, (_CRDC) 0);
+        _CRDC _r = result.angle();
+        return _r;
+    }
+
+    template<typename _CRDC = lngdbl_tp>
+    _CRDC cordic_arcsin(const _CRDC& _x)
+    {
+        /*root::sqrt() is slow, will use CORDIC sqrt() later*/
+        _CRDC _y = root::sqrt((_CRDC) 1 - (_x * _x));
         cordic_result<_CRDC> result = cordic_vec_euclid(_y, _x, (_CRDC) 0);
-        return result.angle();
+        _CRDC _r = result.angle();
+        return _r;
+    }
+
+    template<typename _CRDC = lngdbl_tp>
+    _CRDC cordic_arccos(const _CRDC& _x)
+    {
+        _CRDC _y = root::sqrt((_CRDC) 1 - (_x * _x));
+        cordic_result result = cordic_vec_euclid(_x, _y, (_CRDC) 0);\
+        _CRDC _r = result.angle() > 0? result.angle(): result.angle() + pi;
+        return _r;
     }
 
     /*Get the Arc Tangent of a Tangent Value x*/
@@ -34,7 +55,8 @@ namespace necromancer_cordic_functions
     {
         _CRDC _y = 1;
         cordic_result<_CRDC> result = cordic_vec_euclid(_y, _x, (_CRDC) 0);
-        return result.angle();
+        _CRDC _r = result.angle();
+        return _r;
     }
 
     /*Get the Hypotinuse of a Right Triangle With Lengths x and y*/

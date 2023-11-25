@@ -1,14 +1,11 @@
 #include <iostream>
 #include <iomanip>
-#include "math/constants.hpp"
-#include "math/complex.hpp"
 #include "math/cordic.hpp"
-#include "math/euclid_trig.hpp"
 
-using namespace necromancer_complex;
-using namespace cordic;
+using namespace necromancer_cordic_functions;
 
 int main()
 {
-     std::cout << std::setprecision(16) << euclid_trig::cos(0.02);
+     double r = cordic_arccos(-0.7);
+     std::cout << std::setprecision(16) << r;
 }

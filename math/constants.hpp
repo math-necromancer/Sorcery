@@ -30,31 +30,31 @@ double_bits static nan_bits = {0x7FF8000000000001ull};
 //Finite Constants for Math
 
 /*Stuff with pi*/
-#define pi 3.1415926535897932384626
+#define pi 3.1415926535897932384626l
 /*2 pi*/
-#define tau 6.2831853071795864769252
+#define tau 6.2831853071795864769252l
 /*pi / 2*/
-#define pi_2 1.5707963267948966192313
+#define pi_2 1.5707963267948966192313l
 /*pi / 3*/
-#define pi_3 1.0471975511965977461542
+#define pi_3 1.0471975511965977461542l
 /*pi / 4*/
-#define pi_4 0.7853981633974483096156
+#define pi_4 0.7853981633974483096156l
 /*pi / 6*/
-#define pi_6 0.5235987755982988730771
+#define pi_6 0.5235987755982988730771l
 
 /*Angle Conversion constants*/
-#define rad_to_deg 57.29577951308232
-#define deg_to_rad 0.017453292519943
+#define rad_to_deg 57.29577951308232l
+#define deg_to_rad 0.017453292519943l
 
 /*Euler stuff*/
 
 /*Euler's number*/
-#define e 2.7182818284590452353602
+#define e 2.7182818284590452353602l
 /*Euler's constant*/
 /*It's also the difference of the extended*/
 /*harmonic series and the logarithmic derivative*/
 /*of the Gamma function*/
-#define gamma 0.577215664901532
+#define gamma 0.577215664901532l
 
 /*Physics things*/
 

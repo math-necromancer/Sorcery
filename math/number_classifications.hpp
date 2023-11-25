@@ -3,6 +3,8 @@
 #ifndef __NUMBER_CLASS__
 #define __NUMBER_CLASS__
 
+#include "constants.hpp"
+
 template<typename _typ>
 bool is_finite(const _typ& _x)
 {

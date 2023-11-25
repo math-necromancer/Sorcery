@@ -118,6 +118,11 @@ namespace root
     {
         return sqrtl(_x);
     }
+    template<typename _S>
+    double sqrt(const _S& _x)
+    {
+        return sqrtd((double) _x);
+    }
 
     double cbrt(double x)
     {
