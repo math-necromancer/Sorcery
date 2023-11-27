@@ -404,6 +404,23 @@ namespace necromancer_complex
      }
 
      template<typename _C>
+     /*Return the Complex Increment of a Complex Number _z*/
+     complex<_C> operator ++ (const complex<_C>& _z)
+     {
+          complex<_C> _r = _z;
+          _r += 1;
+          return _r;
+     }
+     template<typename _C>
+     /*Return the Complex Decrement of a Complex Number _z*/
+     complex<_C> operator -- (const complex<_C>& _z)
+     {
+          complex<_C> _r = _z;
+          _r -= 1;
+          return _r;
+     }
+
+     template<typename _C>
      /*Return the Result of Adding Two Complex Numbers _x and _y*/
      complex<_C> operator + (const complex<_C>& _x, const complex<_C>& _y)
      {
@@ -502,6 +519,9 @@ namespace necromancer_complex
           _r /= _y;
           return _r;
      }
+
+     /*It's disputed on how to do operations on Complex Numbers*/
+     /*This is one way...*/
 
      template<typename _C>
      template<typename _C1>

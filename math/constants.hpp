@@ -3,31 +3,11 @@
 #ifndef __CONSTANTS__
 #define __CONSTANTS__
 
-typedef unsigned long long uint64_t;
+/*Infinity and undefined*/
 
-//Infinity and undefined
+#include "nan_inf.hpp"
 
-/*Infinities*/
-#define INFINITY (1.0 / 0.0)
-/*-inf - Never used as it just returns NaN*/
-#define NEGATIVE_INFINITY (-1.0 / 0.0)
-/*1/inf - Approaches 0*/
-#define RECIPROCAL_INFINITY 0.0
-
-/*NaN and Undefined Values*/
-
-union double_bits
-{
-    uint64_t bits;
-    double value;
-};
-
-double_bits static nan_bits = {0x7FF8000000000001ull};
-
-#define NaN (nan_bits.value)
-#define undefined NaN
-
-//Finite Constants for Math
+/*Finite Constants for Math*/
 
 /*Stuff with pi*/
 #define pi 3.1415926535897932384626l
