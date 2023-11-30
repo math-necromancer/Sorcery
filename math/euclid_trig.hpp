@@ -639,12 +639,10 @@ namespace euclid_trig
           if(_r > pi)
           {
                _r -= tau;
-               _r *= -1;
           }
           else if(_r < -pi)
           {
                _r += tau;
-               _r *= -1;
           }
           if(_r <= 0.07f || _r >= -0.07f)
           {
@@ -682,12 +680,10 @@ namespace euclid_trig
           if(_r > pi)
           {
                _r -= tau;
-               _r *= -1;
           }
           else if(_r < -pi)
           {
                _r += tau;
-               _r *= -1;
           }
           if(_r <= 0.07 || _r >= -0.07)
           {
@@ -725,12 +721,10 @@ namespace euclid_trig
           if(_r > pi)
           {
                _r -= tau;
-               _r *= -1;
           }
           else if(_r < -pi)
           {
                _r += tau;
-               _r *= -1;
           }
           if(_r <= 0.07l || _r >= -0.07l)
           {
