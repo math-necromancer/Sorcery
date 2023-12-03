@@ -3,12 +3,14 @@
 #ifndef __ABS__
 #define __ABS__
 
-#include "number_classifications.hpp"
+#include "float_class.hpp"
 
 namespace absolute
 {
     float absf(const float& _x)
     {
+        if(is_nan(_x))
+            return _x;
         float_32 _i;
         _i._x = _x;
         _i._y &= 0x7fffffff;
@@ -16,6 +18,8 @@ namespace absolute
     }
     double absd(const double& _x)
     {
+        if(is_nan(_x))
+            return _x;
         float_64 _i;
         _i._x = _x;
         _i._y &= 0x7fffffffffffffff;
@@ -23,6 +27,8 @@ namespace absolute
     }
     int absi(const int& _x)
     {
+        if(is_nan(_x))
+            return _x;
         return (_x >= 0)? _x : -_x;
     }
 

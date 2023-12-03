@@ -11,7 +11,7 @@
 #include "cordic_operations.hpp"
 #include "cordic_functions.hpp"
 #include "constants.hpp"
-#include "number_classifications.hpp"
+#include "float_class.hpp"
 #include "rem.hpp"
 #include "abs.hpp"
 
@@ -202,7 +202,7 @@ namespace cordic
 
      float atanf(const float& _x)
      {
-          if(is_infinite(_x))
+          if(is_inff(_x))
           {
                return (float) pi_2;
           }
@@ -214,7 +214,7 @@ namespace cordic
      }
      double atand(const double& _x)
      {
-          if(is_infinite(_x))
+          if(is_infd(_x))
           {
                return (double) pi_2;
           }
@@ -226,7 +226,7 @@ namespace cordic
      }
      long double atanl(const long double& _x)
      {
-          if(is_infinite(_x))
+          if(is_inf(_x))
           {
                return (long double) pi_2;
           }
@@ -260,9 +260,9 @@ namespace cordic
           {
                return undefined;
           }
-          else if(is_infinite(_x))
+          else if(is_inff(_x))
           {
-               return is_infinite(_y)? undefined: (float) pi_2;
+               return is_inff(_y)? undefined: (float) pi_2;
           }
           int neg = 1;
           if(_x < 0 ^ _y < 0)
@@ -281,9 +281,9 @@ namespace cordic
           {
                return undefined;
           }
-          else if(is_infinite(_x))
+          else if(is_infd(_x))
           {
-               return is_infinite(_y)? undefined: (double) pi_2;
+               return is_infd(_y)? undefined: (double) pi_2;
           }
           int neg = 1;
           if(_x < 0 ^ _y < 0)
@@ -302,9 +302,9 @@ namespace cordic
           {
                return undefined;
           }
-          else if(is_infinite(_x))
+          else if(is_inf(_x))
           {
-               return is_infinite(_y)? undefined: (long double) pi_2;
+               return is_inf(_y)? undefined: (long double) pi_2;
           }
           int neg = 1;
           if(_x < 0 ^ _y < 0)
@@ -341,7 +341,7 @@ namespace cordic
           {
                return undefined;
           }
-          else if(is_infinite(_x) || is_infinite(_y))
+          else if(is_inff(_x) || is_inff(_y))
           {
                return INFINITY;
           }
@@ -361,7 +361,7 @@ namespace cordic
           {
                return undefined;
           }
-          else if(is_infinite(_x) || is_infinite(_y))
+          else if(is_infd(_x) || is_infd(_y))
           {
                return INFINITY;
           }
@@ -381,7 +381,7 @@ namespace cordic
           {
                return undefined;
           }
-          else if(is_infinite(_x) || is_infinite(_y))
+          else if(is_inf(_x) || is_inf(_y))
           {
                return INFINITY;
           }
@@ -420,7 +420,7 @@ namespace cordic
           {
                return _x;
           }
-          else if(is_infinite(_x))
+          else if(is_inff(_x))
           {
                return undefined;
           }
@@ -444,7 +444,7 @@ namespace cordic
           {
                return _x;
           }
-          else if(is_infinite(_x))
+          else if(is_inff(_x))
           {
                return undefined;
           }
@@ -472,7 +472,7 @@ namespace cordic
           {
                return 0;
           }
-          else if(is_infinite(_x))
+          else if(is_inff(_x))
           {
                return undefined;
           }
@@ -506,7 +506,7 @@ namespace cordic
 
      float cosf(const float& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inff(_x))
           {
                return undefined;
           }
@@ -530,7 +530,7 @@ namespace cordic
      }
      double cosd(const double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_infd(_x))
           {
                return undefined;
           }
@@ -554,7 +554,7 @@ namespace cordic
      }
      long double cosl(const long double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
@@ -596,7 +596,7 @@ namespace cordic
 
      float tanf(const float& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inff(_x))
           {
                return undefined;
           }
@@ -616,7 +616,7 @@ namespace cordic
      }
      double tand(const double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_infd(_x))
           {
                return undefined;
           }
@@ -636,7 +636,7 @@ namespace cordic
      }
      long double tanl(const long double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }

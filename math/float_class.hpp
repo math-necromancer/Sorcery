@@ -1,8 +1,11 @@
+/*The Math Necromancer*/
 
 #ifndef _NUMBER_CLASS_
 #define _NUMBER_CLASS_
 
 #include "constants.hpp"
+
+/*IEEE-754 Float Classifications*/
 
 #ifndef _IEEE_754_CLASS_
 #define _IEEE_754_CLASS_
@@ -70,16 +73,15 @@ float classify_ieee754_32f(const float& _x)
      float_32 _i;
      _i._x = _x;
      _32int _x_int32 = _i._y;
-     if(!_x_int32)
+     if(!(_x_int32 | 0x000))
           return _FLT_ZERO;
      if(_x_int32 < 0x00800000)
           return _FLT_SUBNORMAL;
      if(_x_int32 >= 0x7f800000)
      {
-          _32int _s = _i._f_32._sign;
           return (_x_int32 > 0x7f800000)?
-               ((_s)? _FLT_QNAN : _FLT_SNAN) :
-                    ((_s)? _FLT_NEG_INFY : _FLT_INFINITY);
+               ((_i._f_32._sign)? _FLT_QNAN : _FLT_SNAN) :
+                    ((_i._f_32._sign)? _FLT_NEG_INFY : _FLT_INFINITY);
      }
      return _FLT_NORMAL;
 }
@@ -88,17 +90,15 @@ double classify_ieee754_64f(const double& _x)
      float_64 _i;
      _i._x = _x;
      _64int _x_int64 = _i._y;
-     if(!_x_int64)
+     if(!(_x_int64 | 0x000))
           return _FLT_ZERO;
      if(_x_int64 < 0x10000000000000)
           return _FLT_SUBNORMAL;
      if(_i._f_64._exp >= 0x7ff)
      {
-          _64int _s = _i._f_64._sign;
-          _64int _m = _i._f_64._mantissa;
-          return (_m)?
-               ((_s)? _FLT_QNAN : _FLT_SNAN) :
-                    ((_s)? _FLT_NEG_INFY : _FLT_INFINITY);
+          return (_i._f_64._mantissa)?
+               ((_i._f_64._sign)? _FLT_QNAN : _FLT_SNAN) :
+                    ((_i._f_64._sign)? _FLT_NEG_INFY : _FLT_INFINITY);
      }
      return _FLT_NORMAL;
 }
@@ -150,7 +150,7 @@ bool is_inf(const _flt& _x)
 bool is_finitef(const float& _x)
 {
      return (classify(_x)
-          != _FLT_ZERO && classify(_x)
+          != _FLT_ZERO || classify(_x)
                == _FLT_NORMAL || classify(_x)
                     == _FLT_SUBNORMAL);
 }

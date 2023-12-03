@@ -32,19 +32,19 @@
 #include "cordic.hpp"
 #include "abs.hpp"
 #include "rem.hpp"
-#include "number_classifications.hpp"
+#include "float_class.hpp"
 #include "sign.hpp"
+
+#define SIN_PI_6 5.000000000000003-01
+#define SIN_PI_4 7.07106781186547e-01
+#define SIN_PI_3 8.66025403784438e-01
+
+#define COS_PI_6 8.66025403784438e-01
+#define COS_PI_4 7.07106781186547e-01
+#define COS_PI_3 5.00000000000000e-01
 
 namespace euclid_trig
 {
-     #define SIN_PI_6 5.000000000000003-01
-     #define SIN_PI_4 7.07106781186547e-01
-     #define SIN_PI_3 8.66025403784438e-01
-
-     #define COS_PI_6 8.66025403784438e-01
-     #define COS_PI_4 7.07106781186547e-01
-     #define COS_PI_3 5.00000000000000e-01
-
      float asinf(const float& _x);
      double asind(const double& _x);
      long double asinl(const long double& _x);
@@ -110,15 +110,15 @@ namespace euclid_trig
 
      float asinf(const float& _x)
      {
-          if(is_nan(_x) || absolute::abs(_x) > 1)
+          if(is_nanf(_x) || absolute::absf(_x) > 1)
           {
                return undefined;
           }
-          else if(_x == 0 || absolute::abs(_x) == 1)
+          else if(!_x || absolute::absf(_x) == 1)
           {
                return _x * pi_2;
           }
-          else if(absolute::abs(_x) == 0.5)
+          else if(absolute::absf(_x) == 0.5)
           {
                /*asin(.5) = pi/6*/
                return _x * pi_3;
@@ -279,7 +279,7 @@ namespace euclid_trig
                _r *= -1.0f;
                mult = -1.0f;
           }
-          if(is_infinite(_r))
+          if(is_inf(_r))
           {
                return pi_2 * mult;
           }
@@ -313,7 +313,7 @@ namespace euclid_trig
                _r *= -1.0;
                mult = -1.0;
           }
-          if(is_infinite(_r))
+          if(is_inf(_r))
           {
                return pi_2 * mult;
           }
@@ -347,7 +347,7 @@ namespace euclid_trig
                _r *= -1.0l;
                mult = -1;
           }
-          if(is_infinite(_r))
+          if(is_inf(_r))
           {
                return pi_2 * mult;
           }
@@ -405,9 +405,9 @@ namespace euclid_trig
                _y1 *= -1;
                mult = -1;
           }
-          else if(is_infinite(_x1))
+          else if(is_inf(_x1))
           {     
-               return is_infinite(_y1)? undefined: pi_2 * mult;
+               return is_inf(_y1)? undefined: pi_2 * mult;
           }
           else if(_x1 == _y1)
           {
@@ -430,9 +430,9 @@ namespace euclid_trig
                _y1 *= -1;
                mult = -1;
           }
-          else if(is_infinite(_x1))
+          else if(is_inf(_x1))
           {     
-               return is_infinite(_y1)? undefined: pi_2 * mult;
+               return is_inf(_y1)? undefined: pi_2 * mult;
           }
           else if(_x1 == _y1)
           {
@@ -455,9 +455,9 @@ namespace euclid_trig
                _y1 *= -1;
                mult = -1;
           }
-          else if(is_infinite(_x1))
+          else if(is_inf(_x1))
           {     
-               return is_infinite(_y1)? undefined: pi_2 * mult;
+               return is_inf(_y1)? undefined: pi_2 * mult;
           }
           else if(_x1 == _y1)
           {
@@ -485,7 +485,7 @@ namespace euclid_trig
 
      float cosf(const float& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
@@ -527,7 +527,7 @@ namespace euclid_trig
      }
      double cosd(const double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
@@ -570,7 +570,7 @@ namespace euclid_trig
      }
      long double cosl(const long double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
@@ -631,7 +631,7 @@ namespace euclid_trig
      /*Sine doesn't want to work right now D:*/
      float sinf(const float& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
@@ -672,7 +672,7 @@ namespace euclid_trig
      }
      double sind(const double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
@@ -713,7 +713,7 @@ namespace euclid_trig
      }
      long double sinl(const long double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
@@ -772,7 +772,7 @@ namespace euclid_trig
 
      float tanf(const float& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
@@ -793,7 +793,7 @@ namespace euclid_trig
      }
      double tand(const double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
@@ -814,7 +814,7 @@ namespace euclid_trig
      }
      long double tanl(const long double& _x)
      {
-          if(is_nan(_x) || is_infinite(_x))
+          if(is_nan(_x) || is_inf(_x))
           {
                return undefined;
           }
