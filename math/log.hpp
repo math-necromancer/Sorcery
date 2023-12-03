@@ -76,7 +76,7 @@ float logf(const float& _x)
      _z2 = _z * _z;
      _t1 = _z * (log1 + _z2 * (log3 + _z2 * (log5 + _z2 * log7)));
      _t2 = _z2 * (log2 + _z2 * (log4 + _z2 * log6));
-     _r = _t1 * _t2;
+     _r = _t1 + _t2;
      _hfsq = 0.5f * _f * _f;
      /*We can't just return _e * log(2). It isn't precise enough*/
      return _e * log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * log2_l)) - _f);
@@ -107,7 +107,7 @@ double logd(const double& _x)
      _z2 = _z * _z;
      _t1 = _z * (log1 + _z2 * (log3 + _z2 * (log5 + _z2 * log7)));
      _t2 = _z2 * (log2 + _z2 * (log4 + _z2 * log6));
-     _r = _t1 * _t2;
+     _r = _t1 + _t2;
      _hfsq = 0.5 * _f * _f;
      /*We can't just return _e * log(2). It isn't precise enough*/
      return _e * log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * log2_l)) - _f);
