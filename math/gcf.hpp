@@ -7,30 +7,33 @@
 
 namespace necromancer_gcf
 {
-     int euclid_gcf(const int& _x, const int& _y)
-     {
-          int x = _x;
-          int y = _y;
-          if(x == y)
-          {
-               return x;
-          }
-          else if(x < y)
-          {
-               necromancer_swap::swap(x, y);
-          }
-          double _r;
-          while(y != 0)
-          {
-               _r = x % y;
-               x = y;
-               y = _r;
-          }
-          return x;
-     }
      int gcf(const int& _x, const int& _y)
      {
-          return euclid_gcf(_x, _y);
+          if(_x == _y)
+               return _x;
+          if(_x == 0)
+               return _y;
+          if(_y == 0)
+               return _x;
+          int _x1 = _x, _y1 = _y;
+          int _k;
+          while(((_x1 | _y1) & 1) == 0)
+          {
+               _x1 >>= 1;
+               _y1 >>= 1;
+               _k ++;
+          }
+          while((_x1 & 1) == 0)
+               _x1 >>= 1;
+          while(_y1 != 0)
+          {
+               while((_y1 & 1) == 0)
+                    _y1 >>= 1;
+               if(_x1 > _y1)
+                    necromancer_swap::swap(_x1, _y1);
+               _y1 -= _x1;
+          }
+          return _x1 << _k;
      }
 }
 

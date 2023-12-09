@@ -9,8 +9,7 @@ namespace factorial
 {
     /*Get the Factorial of any number*/
     /*Decimals will truncate*/
-    template <typename T>
-    long long factorial(T x)
+    long long factorial(int x)
     {
         /*Negative Factorials require the Gamma Function*/
         if(x < 0)
@@ -20,7 +19,8 @@ namespace factorial
             return undefined;
         }
         long long factorial = 1;
-        for(int i = 2; i <= x /*If x isn't an integer, it doesn't matter*/; i++)
+        /*Start i at 2 because all previous factorials are 1*/
+        for(int i = 2; i <= x; i++)
         {
             factorial *= i;
         }

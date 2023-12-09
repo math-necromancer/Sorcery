@@ -3,8 +3,7 @@
 #ifndef __CONSTANTS__
 #define __CONSTANTS__
 
-/*Infinity and undefined*/
-
+/*Casualy defining undefined...*/
 #include "nan_inf.hpp"
 
 /*Finite Constants for Math*/

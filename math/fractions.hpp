@@ -6,7 +6,6 @@
 #include "gcf.hpp"
 #include "lcm.hpp"
 #include "abs.hpp"
-#include <iostream>
 
 namespace necromancer_fractions
 {

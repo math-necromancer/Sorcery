@@ -1,6 +1,7 @@
 /*The Math Necromancer*/
 
 /*I promise I'll change it later; Taylor Series are slow :(*/
+/*It doesn't even include range reduction, so it kinda diverges at large values*/
 
 #ifndef __EXP__
 #define __EXP__

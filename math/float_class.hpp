@@ -5,6 +5,47 @@
 
 #include "constants.hpp"
 
+typedef unsigned long _int32;
+typedef unsigned long long _int64;
+
+/*128-Bit Integer!*/
+union _128int
+{
+    _int64 _bits[2]; 
+};
+
+/*IEEE-754 Floating-Point Forms*/
+
+/*Long double not supported yet...*/
+/*For some reason, all the CPUs do Different Things*/
+/* :o */
+
+union float_64
+{
+     double _x;
+     _int64 _y;
+     struct _f_64
+     {
+          _int64 _mantissa : 52;
+          _int64 _exp : 11;
+          _int64 _sign : 1;
+     };
+     _f_64 _f_64;
+};
+
+union float_32
+{
+     float _x;
+     _int32 _y;
+     struct _f_32
+     {
+          _int32 _mantissa : 23;
+          _int32 _exp : 8;
+          _int32 _sign : 1;
+     };
+     _f_32 _f_32;
+};
+
 /*IEEE-754 Float Classifications*/
 
 #ifndef _IEEE_754_CLASS_
@@ -27,52 +68,11 @@
      #define _FLT_NAN 0x1000
 #endif /*_IEEE_754_CLASS_*/
 
-typedef unsigned long _32int;
-typedef unsigned long long _64int;
-
-/*128-Bit Integer!*/
-union _128int
-{
-    _64int _bits[2]; 
-};
-
-/*IEEE-754 Floating-Point Forms*/
-
-/*Long double not supported yet...*/
-/*For some reason, all the CPUs do Different Things*/
-/* :o */
-
-union float_64
-{
-     double _x;
-     _64int _y;
-     struct _f_64
-     {
-          _64int _mantissa : 52;
-          _64int _exp : 11;
-          _64int _sign : 1;
-     };
-     _f_64 _f_64;
-};
-
-union float_32
-{
-     float _x;
-     _32int _y;
-     struct _f_32
-     {
-          _32int _mantissa : 23;
-          _32int _exp : 8;
-          _32int _sign : 1;
-     };
-     _f_32 _f_32;
-};
-
 float classify_ieee754_32f(const float& _x)
 {
      float_32 _i;
      _i._x = _x;
-     _32int _x_int32 = _i._y;
+     _int32 _x_int32 = _i._y;
      if(!(_x_int32 | 0x000))
           return _FLT_ZERO;
      if(_x_int32 < 0x00800000)
@@ -89,10 +89,10 @@ double classify_ieee754_64f(const double& _x)
 {
      float_64 _i;
      _i._x = _x;
-     _64int _x_int64 = _i._y;
+     _int64 _x_int64 = _i._y;
      if(!(_x_int64 | 0x000))
           return _FLT_ZERO;
-     if(_x_int64 < 0x10000000000000)
+     if(_x_int64 < 0x0010000000000000)
           return _FLT_SUBNORMAL;
      if(_i._f_64._exp >= 0x7ff)
      {
@@ -243,52 +243,225 @@ bool is_snan(const _flt& _x)
      return is_snand((double) _x);
 }
 
-template<typename _typ>
-bool is_positive(const _typ& _x)
+/*12/8/2023*/
+bool is_positivef(const float& _x)
 {
-     if(is_nan(_x))
-     {
+     if(is_nanf(_x))
           return false;
-     }
-     return _x > 0;
+     float_32 _i;
+     _i._x = _x;
+     return !(_i._f_32._sign);
 }
-template<typename _typ>
-bool is_negative(const _typ& _x)
+/*12/8/2023*/
+bool is_positived(const double& _x)
 {
      if(is_nan(_x))
-     {
           return false;
-     }
-     return _x < 0;
+     float_64 _i;
+     _i._x = _x;
+     return !(_i._f_64._sign);
+}
+/*12/8/2023*/
+/*Return true if a 32-bit float is positive*/
+bool is_positive(const float& _x)
+{
+     return is_positivef(_x);
+}
+/*12/8/2023*/
+/*Return true if a 64-bit float is positive*/
+bool is_positive(const double& _x)
+{
+     return is_positived(_x);
 }
 
-template<typename _typ>
-bool is_int(const _typ& _x)
+/*12/8/2023*/
+bool is_negativef(const float& _x)
+{
+     if(is_nanf(_x))     
+          return false;
+     float_32 _i;
+     _i._x = _x;
+     return _i._f_32._sign;
+}
+/*12/8/2023*/
+bool is_negatived(const double& _x)
 {
      if(is_nan(_x))
-     {
           return false;
-     }
-     return _x == (int) _x;
+     float_64 _i;
+     _i._x = _x;
+     return _i._f_64._sign;
+}
+/*12/8/2023*/
+/*Return true if a 32-bit float is negative*/
+bool is_negative(const float& _x)
+{
+     return is_negativef(_x);
+}
+/*12/8/2023*/
+/*Return true if a 64-bit float is negative*/
+bool is_negative(const double& _x)
+{
+     return is_negatived(_x);
 }
 
-bool is_even(const int& _x)
+/*12/8/2023*/
+bool is_intf(const float& _x)
 {
-     return !(_x & 1);
+     if(is_nanf(_x) || is_inff(_x))
+          return false;
+     float_32 _i;
+     _i._x = _x;
+     return _i._f_32._mantissa == 0x000;
 }
-bool is_odd(const int& _x)
+/*12/8/2023*/
+bool is_intd(const double& _x)
 {
-     return (_x & 1);
+     if(is_nan(_x) || is_inf(_x))
+          return false;
+     float_64 _i;
+     _i._x = _x;
+     return _i._f_64._mantissa == 0x000;
+}
+/*12/8/2023*/
+/*Return true if a 32-bit float can be expressed as an integer*/
+bool is_int(const float& _x)
+{
+     return is_intf(_x);
+}
+/*12/8/2023*/
+/*Return true if a 64-bit float can be expressed as an integer*/
+bool is_int(const double& _x)
+{
+     return is_intd(_x);
 }
 
-template<typename _typ>
-bool is_decimal(const _typ& _x)
+/*12/8/2023*/
+bool is_decimalf(const float& _x)
 {
-     if(is_nan(_x))
-     {
+     if(is_nanf(_x) || is_inff(_x))
           return false;
+     float_32 _i;
+     _i._x = _x;
+     return _i._f_32._mantissa != 0x000;
+}
+/*12/8/2023*/
+bool is_decimald(const double& _x)
+{
+     float_64 _i;
+     _i._x = _x;
+     if(is_nan(_x) || is_inf(_x))
+          return false;
+     return _i._f_64._mantissa != 0x000;
+}
+/*12/8/2023*/
+/*Return true if a 32-bit float cannot be expressed as an integer*/
+bool is_decimal(const float& _x)
+{
+     return is_decimalf(_x);
+}
+/*12/8/2023*/
+/*Return true if a 64-bit flaot cannot be expressed as an integer*/
+bool is_decimal(const double& _x)
+{
+     return is_decimald(_x);
+}
+
+/*12/8/2023*/
+float nextafterf(const float& _x, const float& _y)
+{
+     float_32 _fx, _fy;
+     _int32 _ix, _iy, _aix, _aiy;
+     _fx._x = _x;
+     _fy._x = _y;
+     _ix = _fx._y;
+     _iy = _fy._y;
+     _aix = _fx._y & 0x7fffffff;
+     _aiy = _fy._y & 0x7fffffff;
+     if(_aix > 0x7f800000 || _aiy > 0x7f800000) /*_x or _y is NaN*/
+          return _x + _y;
+     if(_aix == 0x7f800000)
+          return _x;
+     if(_x == _y)
+          return _y;
+     if(_aix == 0x000)
+     {
+          if(_iy > 0)
+               _ix = 0x00800000;
+          else
+               _ix = 0x80800000;
+          _fx._y = _ix;
+          return _fx._x;
      }
-     return _x != (int) _x;
+     if(_aix > 0x000)
+     {
+          if(_ix > _iy)
+               _ix --;
+          else
+               _ix ++;
+     }
+     else
+     {
+          if(_ix > _iy)
+               _ix --;
+          else
+               _ix ++;
+     }
+     _fx._y = _ix;
+     return _fx._x;
+}
+/*12/8/2023*/
+double nextafterd(const double& _x, const double& _y)
+{
+     float_64 _fx, _fy;
+     _int64 _ix, _iy, _aix, _aiy;
+     _fx._x = _x;
+     _fy._y = _y;
+     _ix = _fx._y;
+     _iy = _fy._y;
+     _aix = _ix & 0x7fffffffffffffff;
+     _aiy = _iy & 0x7fffffffffffffff;
+     if(_aix > 0x7ff0000000000000  || _aiy > 0x7ff0000000000000)
+          return _x + _y;
+     if(_aix == 0x7ff0000000000000)
+          return _x;
+     if(_aix == 0x000)
+     {
+          if(_iy > 0)
+               _ix = 0x0010000000000000;
+          else
+               _ix = 0x8010000000000000;
+          _fx._y = _ix;
+          return _fx._x;
+     }
+     if(_aix > 0x000)
+     {
+          if(_ix > _iy)
+               _ix --;
+          else
+               _ix ++;
+     }
+     else
+     {
+          if(_ix > _iy)
+               _ix --;
+          else
+               _ix ++;
+     }
+     _fx._y = _ix;
+     return _fx._x;
+}
+/*12/8/2023*/
+/*Return the next representable 32-bit float from _x heading towards _y*/
+float nextafter(const float& _x, const float& _y)
+{
+     return nextafterf(_x, _y);
+}
+/*12/8/2023*/
+/*Return the next representable 64-bit float from _x heading towards _y*/
+double nextafter(const double& _x, const double& _y)
+{
+     return nextafterd(_x, _y);
 }
 
 #endif /*_NUMBER_CLASS_*/

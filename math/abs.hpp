@@ -10,7 +10,7 @@ namespace absolute
     float absf(const float& _x)
     {
         if(is_nan(_x))
-            return _x;
+            return NaNf;
         float_32 _i;
         _i._x = _x;
         _i._y &= 0x7fffffff;
