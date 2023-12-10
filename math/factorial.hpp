@@ -1,7 +1,7 @@
 /*The Math Necromancer*/
 
-#ifndef __FACTORIAL__
-#define __FACTORIAL__
+#ifndef _NECROMANCER_FACTORIAL_
+#define _NECROMANCER_FACTORIAL_
 
 #include "constants.hpp"
 
@@ -28,4 +28,4 @@ namespace factorial
     }
 }
 
-#endif /*__FACTORIAL__*/
+#endif /*_NECROMANCER_FACTORIAL_*/

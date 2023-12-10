@@ -1,55 +1,65 @@
 /*The Math Necromancer*/
 
-#ifndef __SIGN__
-#define __SIGN__
+#ifndef _NECROMANCER_SIGN_
+#define _NECROMANCER_SIGN_
 
 #include "float_class.hpp"
 
-template<typename T>
-int sign(const T& _x)
+namespace necromancer_sign
 {
-     return _x > 0? 1: -1;
+     /*12/10/2023*/
+     int sign_bitf(const float& _x)
+     {
+          float_32 _i;
+          _i._x = _x;
+          return _i._f_32._sign;
+     }
+     /*12/10/2023*/
+     int sign_bitd(const double& _x)
+     {
+          float_64 _i;
+          _i._x = _x;
+          return _i._f_64._sign;
+     }
+     /*12/10/2023*/
+     /*Return a 32-bit float's sign bit*/
+     int sign_bit(const float& _x)
+     {
+          return sign_bitf(_x);
+     }
+     /*12/10/2023*/
+     /*Return a 64-bit float's sign bit*/
+     int sign_bit(const double& _x)
+     {
+          return sign_bitd(_x);
+     }
+
+     /*12/10/2023*/
+     int signf(const float& _x)
+     {
+          float_32 _i;
+          _i._x = _x;
+          return _i._f_32._sign? -1: 1;
+     }
+     /*12/10/2023*/
+     int signd(const double& _x)
+     {
+          float_64 _i;
+          _i._x = _x;
+          return _i._f_64._sign? -1: 1;
+     }
+     /*12/10/2023*/
+     /*Return the +- 1, where |_x| * (+- 1) = _x*/
+     int sign(const float& _x)
+     {
+          return signf(_x);
+     }
+     /*12/10/2023*/
+     /*Return the +- 1, where |_x| * (+- 1) = _x*/
+     int sign(const double& _x)
+     {
+          return signd(_x);
+     }
 }
 
-template<typename _S>
-_S sign_bitf(const float &_x)
-{
-     float_32 _i;
-     _i._x = _x;
-     return _i._f_32._sign;
-}
-template<typename _S>
-_S sign_bitd(const double& _x)
-{
-     float_64 _i;
-     _i._x = _x;
-     return _i._f_64._sign;
-}
-
-float fsign_bitf(const float& _x)
-{
-     return sign_bitf<float>(_x);
-}
-float fsign_bitd(const double& _x)
-{
-     return sign_bitd<double>(_x);
-}
-double dsign_bitf(const float& _x)
-{
-     return sign_bitf<double>(_x);
-}
-double dsign_bitd(const double& _x)
-{
-     return sign_bitd<double>(_x);
-}
-
-float sign_bit(const float& _x)
-{
-     return fsign_bitf(_x);
-}
-double sign_bit(const double _x)
-{
-     return dsign_bitd(_x);
-}
-
-#endif /*__SIGN__*/
+#endif /*_NECROMANCER_SIGN_*/

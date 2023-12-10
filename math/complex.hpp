@@ -16,8 +16,8 @@
 /*Enchanted Runes, These protect the sacred knowledge from within*/
 /*From being summoned more than once. These are crucial for the*/
 /*Magic to work in harmony, lest Chaos be Unleashed into this Realm*/
-#ifndef __COMPLEX__
-#define __COMPLEX__
+#ifndef _NECROMANCER_COMPLEX_
+#define _NECROMANCER_COMPLEX_
 
 #include "constants.hpp"
 #include "roots.hpp"
@@ -951,4 +951,4 @@ namespace necromancer_complex
      }
 }
 
-#endif /*__COMPLEX__*/
+#endif /*_NECROMANCER_COMPLEX_*/

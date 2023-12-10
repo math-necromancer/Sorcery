@@ -1,7 +1,7 @@
 /*The Math Necromancer*/
 
-#ifndef __ABS__
-#define __ABS__
+#ifndef _NECROMANCER_ABS_
+#define _NECROMANCER_ABS_
 
 #include "float_class.hpp"
 
@@ -51,4 +51,4 @@ namespace absolute
     }
 }
 
-#endif /*__ABS__*/
+#endif /*_NECROMANCER_ABS_*/

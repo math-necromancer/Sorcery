@@ -8,6 +8,7 @@
 #include "exponent_int.hpp"
 #include "exp.hpp"
 #include "rem.hpp"
+#include "float_class.hpp"
 
 namespace root
 {

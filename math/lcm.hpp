@@ -1,7 +1,9 @@
 /*The Math Necromancer*/
 
-#ifndef __LCM__
-#define __LCM__
+#ifndef _NECROMANCER_LCM_
+#define _NECROMANCER_LCM_
+
+#include "gcf.hpp"
 
 namespace necromancer_lcm
 {
@@ -12,4 +14,4 @@ namespace necromancer_lcm
      }
 }
 
-#endif /*__LCM___*/
+#endif /*_NECROMANCER_LCM_*/

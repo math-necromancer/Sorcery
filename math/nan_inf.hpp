@@ -14,8 +14,8 @@
 
 /*=====================================*/
 
-#ifndef _NECRO_NAN_INF_
-#define _NECRO_NAN_INF_
+#ifndef _NECROMANCER_NAN_INF_
+#define _NECROMANCER_NAN_INF_
 
 typedef unsigned long long int ulongl_t;
 typedef unsigned long int ulong_t;
@@ -216,4 +216,4 @@ _inf_ty_ inf(const bool& is_negative, const bool& is_double)
 /*If you want other Infinities, use inf() or different #defines*/
 #define NEGATIVE_INFINITYf inf<float>(1, 0)
 
-#endif /*_NECRO_NAN_INF_*/
+#endif /*_NECROMANCER_NAN_INF_*/

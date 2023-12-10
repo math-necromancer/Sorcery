@@ -4,8 +4,8 @@
 /*Calculate Trigonometric and other Transcendental functions with*/
 /*ease using this small file*/
 
-#ifndef __CORDIC_OPERATIONS__
-#define __CORDIC_OPERATIONS__
+#ifndef _NECROMANCER_CORDIC_OPERATIONS_
+#define _NECROMANCER_CORDIC_OPERATIONS_
 
 #include "constants.hpp"
 #include "rem.hpp"
@@ -297,4 +297,4 @@ namespace necromancer_cordic_operations
           return cordic_result<_CRDC>(__x, __y, _ang);
      }
 }
-#endif /*__CORDIC_OPERATIONS__*/
+#endif /*_NECROMANCER_CORDIC_OPERATIONS_*/

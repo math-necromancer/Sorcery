@@ -1,7 +1,7 @@
 /*The Math Necromancer*/
 
-#ifndef __EXPONENT__
-#define __EXPONENT__
+#ifndef _NECROMANCER_EXPONENT_
+#define _NECROMANCER_EXPONENT_
 
 #include "constants.hpp"
 
@@ -27,9 +27,9 @@ double exponentInteger(double x, int exp)
             result *= x;
         }
         x *= x;
-        exp /= 2;
+        exp >>= 1;
     }
     return result;
 }
 
-#endif /*__EXPONENT__*/
+#endif /*_NECROMANCER_EXPONENT_*/

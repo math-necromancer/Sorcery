@@ -7,8 +7,8 @@
 
 /*Only includes this file if it*/
 /*has not been included before*/
-#ifndef __CORDIC_FUNCTIONS__
-#define __CORDIC_FUNCTIONS__
+#ifndef _NECROMANCER_CORDIC_FUNCTIONS_
+#define _NECROMANCER_CORDIC_FUNCTIONS_
 
 #include "constants.hpp"
 #include "rem.hpp"

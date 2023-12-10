@@ -5,8 +5,8 @@
 /*This Library refines the approximantions done by*/
 /*coirdc_operations.hpp and cordic_functions.hpp*/
 
-#ifndef __CORDIC__
-#define __CORDIC__
+#ifndef _NECROMANCER_CORDIC_
+#define _NECROMANCER_CORDIC_
 
 #include "cordic_operations.hpp"
 #include "cordic_functions.hpp"
@@ -673,4 +673,4 @@ namespace cordic
      }
 }
 
-#endif /*__CORDIC__*/
+#endif /*_NECROMANCER_CORDIC_*/

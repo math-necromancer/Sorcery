@@ -1,18 +1,12 @@
 /*The Math Necromancer*/
 
-#ifndef _NUMBER_CLASS_
-#define _NUMBER_CLASS_
+#ifndef _FLOAT_CLASS_
+#define _FLOAT_CLASS_
 
 #include "constants.hpp"
 
 typedef unsigned long _int32;
 typedef unsigned long long _int64;
-
-/*128-Bit Integer!*/
-union _128int
-{
-    _int64 _bits[2]; 
-};
 
 /*IEEE-754 Floating-Point Forms*/
 
@@ -308,20 +302,20 @@ bool is_negative(const double& _x)
 /*12/8/2023*/
 bool is_intf(const float& _x)
 {
-     if(is_nanf(_x) || is_inff(_x))
-          return false;
      float_32 _i;
      _i._x = _x;
-     return _i._f_32._mantissa == 0x000;
+     if(is_nanf(_x) || is_inff(_x))
+          return false;
+     return _i._f_32._mantissa | 0x400000 == 0x400000;
 }
 /*12/8/2023*/
 bool is_intd(const double& _x)
 {
-     if(is_nan(_x) || is_inf(_x))
-          return false;
      float_64 _i;
      _i._x = _x;
-     return _i._f_64._mantissa == 0x000;
+     if(is_nan(_x) || is_inf(_x))
+          return false;
+     return _i._f_64._mantissa | 0x8000000000000 == 0x8000000000000; 
 }
 /*12/8/2023*/
 /*Return true if a 32-bit float can be expressed as an integer*/
@@ -339,11 +333,11 @@ bool is_int(const double& _x)
 /*12/8/2023*/
 bool is_decimalf(const float& _x)
 {
-     if(is_nanf(_x) || is_inff(_x))
-          return false;
      float_32 _i;
      _i._x = _x;
-     return _i._f_32._mantissa != 0x000;
+     if(is_nanf(_x) || is_inff(_x))
+          return false;
+     return _i._f_32._mantissa | 0x400000 != 0x400000;
 }
 /*12/8/2023*/
 bool is_decimald(const double& _x)
@@ -352,7 +346,7 @@ bool is_decimald(const double& _x)
      _i._x = _x;
      if(is_nan(_x) || is_inf(_x))
           return false;
-     return _i._f_64._mantissa != 0x000;
+     return _i._f_64._mantissa | 0x8000000000000 != 0x8000000000000;
 }
 /*12/8/2023*/
 /*Return true if a 32-bit float cannot be expressed as an integer*/
@@ -361,7 +355,7 @@ bool is_decimal(const float& _x)
      return is_decimalf(_x);
 }
 /*12/8/2023*/
-/*Return true if a 64-bit flaot cannot be expressed as an integer*/
+/*Return true if a 64-bit float cannot be expressed as an integer*/
 bool is_decimal(const double& _x)
 {
      return is_decimald(_x);
@@ -376,9 +370,12 @@ float nextafterf(const float& _x, const float& _y)
      _fy._x = _y;
      _ix = _fx._y;
      _iy = _fy._y;
+     /*|_x|*/
      _aix = _fx._y & 0x7fffffff;
+     /*|_y|*/
      _aiy = _fy._y & 0x7fffffff;
-     if(_aix > 0x7f800000 || _aiy > 0x7f800000) /*_x or _y is NaN*/
+     /*_x or _y is NaN*/
+     if(_aix > 0x7f800000 || _aiy > 0x7f800000)
           return _x + _y;
      if(_aix == 0x7f800000)
           return _x;
@@ -386,10 +383,7 @@ float nextafterf(const float& _x, const float& _y)
           return _y;
      if(_aix == 0x000)
      {
-          if(_iy > 0)
-               _ix = 0x00800000;
-          else
-               _ix = 0x80800000;
+          _ix = 0x00800000 | (_iy & 0x80000000);
           _fx._y = _ix;
           return _fx._x;
      }
@@ -419,18 +413,18 @@ double nextafterd(const double& _x, const double& _y)
      _fy._y = _y;
      _ix = _fx._y;
      _iy = _fy._y;
+     /*|_x|*/
      _aix = _ix & 0x7fffffffffffffff;
+     /*|_y|*/
      _aiy = _iy & 0x7fffffffffffffff;
-     if(_aix > 0x7ff0000000000000  || _aiy > 0x7ff0000000000000)
+     /*_x or _y is NaN*/
+     if(_aix > 0x7ff0000000000000 || _aiy > 0x7ff0000000000000)
           return _x + _y;
      if(_aix == 0x7ff0000000000000)
           return _x;
      if(_aix == 0x000)
      {
-          if(_iy > 0)
-               _ix = 0x0010000000000000;
-          else
-               _ix = 0x8010000000000000;
+          _ix = 0x0010000000000000 | (_iy & 0x8000000000000000);
           _fx._y = _ix;
           return _fx._x;
      }
@@ -452,16 +446,47 @@ double nextafterd(const double& _x, const double& _y)
      return _fx._x;
 }
 /*12/8/2023*/
-/*Return the next representable 32-bit float from _x heading towards _y*/
+/*Return the next representable 32-bit float after _x towards _y*/
 float nextafter(const float& _x, const float& _y)
 {
      return nextafterf(_x, _y);
 }
 /*12/8/2023*/
-/*Return the next representable 64-bit float from _x heading towards _y*/
+/*Return the next representable 64-bit float after _x towards _y*/
 double nextafter(const double& _x, const double& _y)
 {
      return nextafterd(_x, _y);
 }
 
-#endif /*_NUMBER_CLASS_*/
+/*12/9/2023*/
+float copysignf(const float& _x, const float& _y)
+{
+     float_32 _ix, _iy;
+     _ix._x = _x;
+     _iy._x = _y;
+     _ix._y = (_ix._y & 0x7fffffff) | (_iy._y & 0x80000000);
+     return _ix._x;
+}
+/*12/9/2023*/
+double copysignd(const double& _x, const double& _y)
+{
+     float_64 _ix, _iy;
+     _ix._x = _x;
+     _iy._x = _y;
+     _ix._y = (_ix._y & 0x7fffffffffffffff) | (_iy._y & 0x8000000000000000);
+     return _ix._x;
+}
+/*12/9/2023*/
+/*Return a 32-bit float with a magnitude _x and a sign _y*/
+float copysign(const float& _x, const float& _y)
+{
+     return copysignf(_x, _y);
+}
+/*12/9/2023*/
+/*Return a 64-bit float with a magnitude _x and a sign _y*/
+double copysign(const double& _x, const double& _y)
+{
+     return copysignd(_x, _y);
+}
+
+#endif /*_FLOAT_CLASS_*/

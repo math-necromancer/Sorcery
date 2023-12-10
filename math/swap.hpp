@@ -1,7 +1,7 @@
 /*The Math Necromancer*/
 
-#ifndef __SWAP__
-#define __SWAP__
+#ifndef _NECROMANCER_SWAP_
+#define _NECROMANCER_SWAP_
 
 namespace necromancer_swap
 {
@@ -15,4 +15,4 @@ namespace necromancer_swap
      }
 }
 
-#endif /* __SWAP__ */
+#endif /* _NECROMANCER_SWAP__ */

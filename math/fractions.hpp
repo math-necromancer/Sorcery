@@ -1,7 +1,7 @@
 /*The Math Necromancer*/
 
-#ifndef __FRACTIONS__
-#define __FRACTIONS__
+#ifndef _NECROMANCER_FRACTIONS_
+#define _NECROMANCER_FRACTIONS_
 
 #include "gcf.hpp"
 #include "lcm.hpp"
@@ -710,4 +710,4 @@ namespace necromancer_fractions
      }
 }
 
-#endif /*__FRACTIONS__*/
+#endif /*_NECROMANCER_FRACTIONS_*/

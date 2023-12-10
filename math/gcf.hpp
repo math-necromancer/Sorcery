@@ -1,7 +1,7 @@
 /*The Math Necromaner*/
 
-#ifndef __GCF__
-#define __GCF__
+#ifndef _NECROMANCER_GCF_
+#define _NECROMANCER_GCF_
 
 #include "swap.hpp"
 
@@ -37,4 +37,4 @@ namespace necromancer_gcf
      }
 }
 
-#endif /* __GCF__ */
+#endif /* _NECROMANCER_GCF_ */

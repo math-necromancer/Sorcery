@@ -34,5 +34,6 @@ typedef std::string string;
 
 int main()                                      
 {
-     std::cout << std::setprecision(21) << nextafterd(1.2, NEGATIVE_INFINITY);
+     std::cout << "Starting...\n";
+     std::cout << is_intf(2.002);
 }

@@ -1,7 +1,7 @@
 /*The Math Necromancer*/
 
-#ifndef __REM__
-#define __REM__
+#ifndef _NECROMANCER_REM_
+#define _NECROMANCER_REM_
 
 #include "constants.hpp"
 #include "float_class.hpp"
@@ -19,4 +19,4 @@ namespace necromancer_rem
     }
 }
 
-#endif /*__REM__*/
+#endif /*_NECROMANCER_REM_*/

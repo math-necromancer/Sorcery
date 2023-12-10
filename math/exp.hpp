@@ -3,8 +3,8 @@
 /*I promise I'll change it later; Taylor Series are slow :(*/
 /*It doesn't even include range reduction, so it kinda diverges at large values*/
 
-#ifndef __EXP__
-#define __EXP__
+#ifndef _NECROMANCER_EXP_
+#define _NECROMANCER_EXP_
 
 #include "constants.hpp"
 
@@ -124,4 +124,4 @@ namespace necromancer_exp
      }
 }
 
-#endif /*__EXP__*/
+#endif /*_NECROMANCER_EXP_*/

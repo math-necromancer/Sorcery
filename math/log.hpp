@@ -3,10 +3,8 @@
 /*============ The Natural Logarithm ============*/
 /*Computes log(x) on an IEEE-754 Machine*/
 
-/*This is only a start on it, I will optimize it more later on*/
-
-#ifndef _LOG_X_
-#define _LOG_X_
+#ifndef _NECROMANCER_LOG_
+#define _NECROMANCER_LOG_
 
 #include "float_class.hpp"
 
@@ -58,7 +56,6 @@ const static long double
 /*   _f has been decremented already. Then we just return our result scaled back up*/
 
 /*12/3/2023*/
-
 /*Compute the Natural Logarithm of _x*/
 float logf(const float& _x)
 {
@@ -100,7 +97,6 @@ float logf(const float& _x)
      return _e * log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * log2_l)) - _f);
 }
 /*12/3/2023*/
-
 /*Compute the Natural Logarithm of _x*/
 double logd(const double& _x)
 {
@@ -142,4 +138,4 @@ double logd(const double& _x)
      return _e * log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * log2_l)) - _f);
 }
 
-#endif /*_LOG_X_*/
+#endif /*_NECROMANCER_LOG_*/

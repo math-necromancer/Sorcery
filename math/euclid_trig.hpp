@@ -26,8 +26,8 @@
 
 /*π/2 ≈ 1.5707963267948966192*/
 
-#ifndef __EUCLID_TRIG__
-#define __EUCLID_TRIG__ 
+#ifndef _NECROMANCER_EUCLID_TRIG_
+#define _NECROMANCER_EUCLID_TRIG_ 
 
 #include "cordic.hpp"
 #include "abs.hpp"
@@ -125,7 +125,7 @@ namespace euclid_trig
           }
           else if(absolute::abs(_x) == SIN_PI_4)
           {
-               return sign(_x) * pi_4;
+               return necromancer_sign::sign(_x) * pi_4;
           }
           return cordic_arcsin<float>(_x);
      }
@@ -146,7 +146,7 @@ namespace euclid_trig
           }
           else if(absolute::abs(_x) == SIN_PI_4)
           {
-               return sign(_x) * pi_4;
+               return necromancer_sign::sign(_x) * pi_4;
           }
           return cordic_arcsin<double>(_x);
      }
@@ -167,7 +167,7 @@ namespace euclid_trig
           }
           else if(absolute::abs(_x) == SIN_PI_4)
           {
-               return sign(_x) * pi_4;
+               return necromancer_sign::sign((double)_x) * pi_4;
           }
           return cordic_arcsin<long double>(_x);
      }
@@ -202,11 +202,11 @@ namespace euclid_trig
           else if(absolute::abs(_x) == 0.5)
           {
                /*acos(.5) = pi/3*/
-               return sign(_x) * pi_3;
+               return necromancer_sign::sign(_x) * pi_3;
           }
           else if(absolute::abs(_x) == COS_PI_4)
           {
-               return sign(_x) * pi_4;
+               return necromancer_sign::sign(_x) * pi_4;
           }
           return cordic_arcsin<float>(_x);
      }
@@ -223,11 +223,11 @@ namespace euclid_trig
           else if(absolute::abs(_x) == 0.5)
           {
                /*acos(.5) = pi/3*/
-               return sign(_x) * pi_3;
+               return necromancer_sign::sign(_x) * pi_3;
           }
           else if(absolute::abs(_x) == COS_PI_4)
           {
-               return sign(_x) * pi_4;
+               return necromancer_sign::sign(_x) * pi_4;
           }
           return cordic_arcsin<double>(_x);
      }
@@ -244,11 +244,11 @@ namespace euclid_trig
           else if(absolute::abs(_x) == 0.5)
           {
                /*acos(.5) = pi/3*/
-               return sign(_x) * pi_3;
+               return necromancer_sign::sign((double)_x) * pi_3;
           }
           else if(absolute::abs(_x) == COS_PI_4)
           {
-               return sign(_x) * pi_4;
+               return necromancer_sign::sign((double)_x) * pi_4;
           }
           return cordic_arcsin<long double>(_x);
      }
@@ -852,4 +852,4 @@ namespace euclid_trig
      }
 }
 
-#endif /*__EUCLID_TRIG__*/
+#endif /*_NECROMANCER_EUCLID_TRIG_*/

@@ -1,7 +1,7 @@
 /*The Math Necromancer*/
 
-#ifndef __CONSTANTS__
-#define __CONSTANTS__
+#ifndef _NECROMANCER_CONSTANTS_
+#define _NECROMANCER_CONSTANTS_
 
 /*Casualy defining undefined...*/
 #include "nan_inf.hpp"
@@ -58,4 +58,4 @@
 /*~9.8m/s/s*/
 #define std_grav 9.80665
 
-#endif /*__CONSTANTS__*/
+#endif /*_NCEROMANCER_CONSTANTS_*/
