@@ -145,11 +145,11 @@ union inf_double_bits
 /*-Infinity:*/
 /*1-11111111-00000000000000000000000*/
 
-inf_float_bits static inff_bits = {0x7f800000};
-inf_float_bits static ninff_bits = {0xff800000};
+const static inf_float_bits inff_bits = {0x7f800000};
+const static inf_float_bits ninff_bits = {0xff800000};
 
-inf_double_bits static infd_bits = {0x7ff0000000000000};
-inf_double_bits static ninfd_bits = {0xfff0000000000000};
+const static inf_double_bits infd_bits = {0x7ff0000000000000};
+const static inf_double_bits ninfd_bits = {0xfff0000000000000};
 
 /*Define the Infinities...*/
 

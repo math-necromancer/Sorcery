@@ -15,11 +15,12 @@
 #include "rem.hpp"
 #include "abs.hpp"
 
-using namespace necromancer_cordic_operations;
-using namespace necromancer_cordic_functions;
-
-namespace cordic
+namespace necromancer_cordic
 {
+     using namespace necromancer_cordic_operations;
+     using namespace necromancer_cordic_functions;
+     using namespace necromancer_float_class;
+
      float asinf(const float& _x);
      double asind(const double& _x);
      long double asinl(const long double& _x);

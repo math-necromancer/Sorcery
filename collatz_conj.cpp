@@ -35,5 +35,5 @@ typedef std::string string;
 int main()                                      
 {
      std::cout << "Starting...\n";
-     std::cout << is_intf(2.002);
+     std::cout << std::setprecision(16) << necromancer_log::log(2);
 }

@@ -45,6 +45,8 @@
 
 namespace euclid_trig
 {
+     using namespace necromancer_float_class;
+     using namespace necromancer_cordic;
      float asinf(const float& _x);
      double asind(const double& _x);
      long double asinl(const long double& _x);
@@ -302,7 +304,7 @@ namespace euclid_trig
                float _r7 = _r5 * _r * _r;
                return _r - (_r3 / 3) + (_r5 / 5) - (_r7 / 7);
           }
-          return (float) cordic::atanf(_x);
+          return (float) atanf(_x);
      }
      double atand(const double& _x)
      {
@@ -336,7 +338,7 @@ namespace euclid_trig
                double _r7 = _r5 * _r * _r;
                return _r - (_r3 / 3) + (_r5 / 5) - (_r7 / 7);
           }
-          return (double) cordic::atand(_x);
+          return (double) atand(_x);
      }
      long double atanl(const long double& _x)
      {
@@ -370,7 +372,7 @@ namespace euclid_trig
                long double _r7 = _r5 * _r * _r;
                return _r - (_r3 / 3) + (_r5 / 5) - (_r7 / 7);
           }
-          return cordic::atanl(_x);
+          return atanl(_x);
      }
      float atan(const float& _x)
      {
@@ -413,7 +415,7 @@ namespace euclid_trig
           {
                return pi_4;
           }
-          return cordic::atan2f(_y1, _x1);
+          return atan2f(_y1, _x1);
      }
      double atan2d(const double& _y, const double& _x)
      {
@@ -438,7 +440,7 @@ namespace euclid_trig
           {
                return pi_4;
           }
-          return cordic::atan2d(_y1, _x1);
+          return atan2d(_y1, _x1);
      }
      long double atan2l(const long double& _y, const long double& _x)
      {
@@ -463,7 +465,7 @@ namespace euclid_trig
           {
                return pi_4;
           }
-          return cordic::atan2l(_y1, _x1);
+          return atan2l(_y1, _x1);
      }
      float atan2(const float& _y, const float& _x)
      {
@@ -523,7 +525,7 @@ namespace euclid_trig
           {
                return COS_PI_3;
           }
-          return cordic::cosf(_r);
+          return cosf(_r);
      }
      double cosd(const double& _x)
      {
@@ -565,7 +567,7 @@ namespace euclid_trig
           {
                return COS_PI_3;
           }
-          return cordic::cosd(_r);
+          return cosd(_r);
 
      }
      long double cosl(const long double& _x)
@@ -608,7 +610,7 @@ namespace euclid_trig
           {
                return COS_PI_3;
           }
-          return cordic::cosl(_r);
+          return cosl(_r);
 
      }
      float cos(const float& _x)
@@ -668,7 +670,7 @@ namespace euclid_trig
           {
                return SIN_PI_3;
           }
-          return cordic::sinf(_r);
+          return sinf(_r);
      }
      double sind(const double& _x)
      {
@@ -709,7 +711,7 @@ namespace euclid_trig
           {
                return SIN_PI_3;
           }
-          return cordic::sind(_r);
+          return sind(_r);
      }
      long double sinl(const long double& _x)
      {
@@ -750,7 +752,7 @@ namespace euclid_trig
           {
                return SIN_PI_3;
           }
-          return cordic::sinl(_r);
+          return sinl(_r);
      }
      float sin(const float& _x)
      {
@@ -789,7 +791,7 @@ namespace euclid_trig
                /*Very good approximation*/
                return (_r - (_r * _r * _r / 6)) / (1 - (_r * _r / 2));
           }
-          return cordic::tanf(_r);
+          return tanf(_r);
      }
      double tand(const double& _x)
      {
@@ -810,7 +812,7 @@ namespace euclid_trig
                /*Very good approximation*/
                return (_r - (_r * _r * _r / 6)) / (1 - (_r * _r / 2));
           }
-          return cordic::tand(_r);
+          return tand(_r);
      }
      long double tanl(const long double& _x)
      {
@@ -831,7 +833,7 @@ namespace euclid_trig
                /*Very good approximation*/
                return (_r - (_r * _r * _r / 6)) / (1 - (_r * _r / 2));
           }
-          return cordic::tand(_r);
+          return tand(_r);
      }
      float tan(const float& _x)
      {

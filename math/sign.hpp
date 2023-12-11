@@ -7,6 +7,7 @@
 
 namespace necromancer_sign
 {
+     using namespace necromancer_float_class;
      /*12/10/2023*/
      int sign_bitf(const float& _x)
      {
@@ -59,6 +60,39 @@ namespace necromancer_sign
      int sign(const double& _x)
      {
           return signd(_x);
+     }
+
+     /*12/9/2023*/
+     float copysignf(const float& _x, const float& _y)
+     {
+          float_32 _ix, _iy;
+          _ix._x = _x;
+          _iy._x = _y;
+          /*|_x| OR sign_bit(_y)*/
+          _ix._y = (_ix._y & 0x7fffffff) | (_iy._y & 0x80000000);
+          return _ix._x;
+     }
+     /*12/9/2023*/
+     double copysignd(const double& _x, const double& _y)
+     {
+          float_64 _ix, _iy;
+          _ix._x = _x;
+          _iy._x = _y;
+          /*|_x| OR sign_bit(_y)*/
+          _ix._y = (_ix._y & 0x7fffffffffffffff) | (_iy._y & 0x8000000000000000);
+          return _ix._x;
+     }
+     /*12/9/2023*/
+     /*Return a 32-bit float with a magnitude _x and a sign _y*/
+     float copysign(const float& _x, const float& _y)
+     {
+          return copysignf(_x, _y);
+     }
+     /*12/9/2023*/
+     /*Return a 64-bit float with a magnitude _x and a sign _y*/
+     double copysign(const double& _x, const double& _y)
+     {
+          return copysignd(_x, _y);
      }
 }
 
