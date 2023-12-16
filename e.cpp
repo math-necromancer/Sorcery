@@ -1,38 +1,63 @@
 #include <iostream>
+#include <iomanip>
+#include "math/log.hpp"
 
-static const long double G = 6.6743015e-11;
-static const long double c = 2.99792458e+8;
-static const long double c2 = 8.98755179e+16;
+//  π
+//  ⌠ sin(s)
+//  | ------ ds = 0
+//  ⌡ tan(s)
+//  0                                      §  ░  ▒  ▓  √  φ  ε  ∩
 
-static const long double sun = 1.989e+30;
+/** EPIC ABSOLUTE VALUE C++ BATTLES OF HISTORY
+ * 
+ * cmath
+ *   GLIBCXX_CONSTEXPR double
+ *        abs(double __x)
+ *   { return __builtin_abs(__x); }
+ * 
+ * Joseph
+ *   double abs(double _x){
+ *        return _x > 0? _x: -_x;
+ *   }
+ * 
+ * David
+ *   double abs(const double& _x)
+ *   {
+ *        if(is_nan(_x))
+ *             return NaNf;
+ *        float_32 _i;
+ *        _i._x = _x;
+ *        _i._y &= 0x7fffffff;
+ *        return _i._x;
+ *   }
+*/
+/** EPIC COPYSIGN BATTLES OF HISTORY
+ * 
+ * cmath
+ *   GLIBCXX_CONSTEXPR double
+ *        copysign(double __x, double __y)
+ *   { return __builtin_copysign(__x, __y); }
+ * 
+ * Joseph
+ *   double copysign(double _x, double _y){
+ *        return _y > 0? abs(_x): -abs(_x);
+ *   }
+ * 
+ * David
+ *   double copysignd(const double& _x, const double& _y)
+ *   {
+ *        float_64 _ix, _iy;
+ *        _ix._x = _x;
+ *        _iy._x = _y;
+ *        _ix._y = (_ix._y & 0x7fffffffffffffff) | (_iy._y & 0x8000000000000000);
+ *        return _ix._x;
+ *   }
+*/
 
-static const long double reduced_h = 1.054571817e-34;
-static const long double pi =  3.141592653589793;
-static const long double k_b = 1.38064e-23;
+typedef std::string string;
 
-/*No one cares how it works; we care that it works*/
-double schwarzschild(const double& M)
+int main()                                      
 {
-     double r = (2 * G * M) / c2;
-     /*It's in meters, so I'll just return it in Kilometers...*/
-     return r / 1e+3;
-}
-
-double tempurature(const double& M)
-{
-     return (2.84143856e-9) / (2.3159338e-32 * M);
-}
-
-int main()
-{
-     double M;
-     double rad, tem;
-     std::cout << "Yo bro, enter a mass in Solar Masses, and this sick program\nwill calculate the epic stats of a Black Hole based on that!\n";
-     std::cin >> M;
-     M *= sun;
-     rad = schwarzschild(M);
-     tem = tempurature(M);
-     std::cout << "Yo bro, this sick black hole would have a Radius of " << rad << " km!\nAin't that, like, super crazy?\n\n";
-     std::cout << "Also, check out this gnarly temperature it would possess!\n" << tem << " degrees K!\n\n";
-     std::cout << "Yo, my esteemed Physics Bro Warrior! Observe the power of the black hole before us!\nDon't touch it, however, because you can't! It's impossble!\n";
+     std::cout << "Starting...\n";
+     std::cout << std::setprecision(16) << ":)";
 }

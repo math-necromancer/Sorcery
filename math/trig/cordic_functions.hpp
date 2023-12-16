@@ -10,10 +10,10 @@
 #ifndef _NECROMANCER_CORDIC_FUNCTIONS_
 #define _NECROMANCER_CORDIC_FUNCTIONS_
 
-#include "constants.hpp"
-#include "rem.hpp"
+#include "../constants.hpp"
+#include "../rem.hpp"
 #include "cordic_operations.hpp"
-#include "roots.hpp"
+#include "../roots.hpp"
 
 using namespace necromancer_cordic_operations;
 

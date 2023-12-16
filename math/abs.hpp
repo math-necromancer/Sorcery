@@ -7,10 +7,11 @@
 
 namespace absolute
 {
+    using namespace necromancer_float_class;
     float absf(const float& _x)
     {
         if(is_nan(_x))
-            return NaNf;
+            return _x;
         float_32 _i;
         _i._x = _x;
         _i._y &= 0x7fffffff;

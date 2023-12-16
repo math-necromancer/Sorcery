@@ -30,12 +30,12 @@
 #define _NECROMANCER_EUCLID_TRIG_ 
 
 #include "cordic.hpp"
-#include "abs.hpp"
-#include "rem.hpp"
-#include "float_class.hpp"
-#include "sign.hpp"
+#include "../abs.hpp"
+#include "../rem.hpp"
+#include "../float_class.hpp"
+#include "../sign.hpp"
 
-#define SIN_PI_6 5.000000000000003-01
+#define SIN_PI_6 5.00000000000000e-01
 #define SIN_PI_4 7.07106781186547e-01
 #define SIN_PI_3 8.66025403784438e-01
 
@@ -45,6 +45,8 @@
 
 namespace euclid_trig
 {
+     
+
      using namespace necromancer_float_class;
      using namespace necromancer_cordic;
      float asinf(const float& _x);

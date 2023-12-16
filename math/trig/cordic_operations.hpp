@@ -7,9 +7,9 @@
 #ifndef _NECROMANCER_CORDIC_OPERATIONS_
 #define _NECROMANCER_CORDIC_OPERATIONS_
 
-#include "constants.hpp"
-#include "rem.hpp"
-#include "abs.hpp"
+#include "../constants.hpp"
+#include "../rem.hpp"
+#include "../abs.hpp"
 
 namespace necromancer_cordic_operations
 {

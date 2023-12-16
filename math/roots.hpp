@@ -1,17 +1,35 @@
 /*The Math Necromancer*/
 
-#ifndef __ROOTS__
-#define __ROOTS__
+#ifndef _NECROMANCER_ROOTS_
+#define _NECROMANCER_ROOTS_
 
 #include "abs.hpp"
 #include "constants.hpp"
 #include "exponent_int.hpp"
 #include "exp.hpp"
-#include "rem.hpp"
 #include "float_class.hpp"
 
 namespace root
 {
+    float _sqrtf(const float& _x)
+    {
+        using namespace necromancer_float_class;
+        float_32 _i;
+        _i._x = _x;
+        int _k = ((_i._f_32._exp - 0x07f) >> 1) + 0x07f;
+        float _f, _r;
+        _i._f_32._exp = 0x07f;
+        _f = _i._x;
+        _r = 0.625f + (0.39f * _f);
+        _r = 0.5f * (_r + (_f / _r));
+        _r = 0.5f * (_r + (_f / _r));
+        _r = 0.5f * (_r + (_f / _r));
+        _r = 0.5f * (_r + (_f / _r));
+        _r = 0.5f * (_r + (_f / _r));
+        _r = 0.5f * (_r + (_f / _r));
+        return _r;
+    }
+
     float sqrtf(const float& _x)
     {
         /*Roots of Negatives are Complex*/
@@ -169,7 +187,7 @@ namespace root
         default:
             break;
         }
-        if(x < 0 && necromancer_rem::rem(y, 2) == 0)
+        if(x < 0 || !(y & 1) == 0)
         {
             return undefined;
         }
@@ -195,4 +213,4 @@ namespace root
     }
 }
 
-#endif /*__ROOTS__*/
+#endif /*_NECROMANCER_ROOTS_*/

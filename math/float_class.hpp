@@ -16,6 +16,8 @@ namespace necromancer_float_class
      /*For some reason, all the CPUs do Different Things*/
      /* :o */
 
+     /*12/13/2023*/
+     /*64-bit float form*/
      union float_64
      {
           double _x;
@@ -28,7 +30,8 @@ namespace necromancer_float_class
           };
           _f_64 _f_64;
      };
-
+     /*12/13/2023*/
+     /*32-bit float form*/
      union float_32
      {
           float _x;
@@ -43,9 +46,6 @@ namespace necromancer_float_class
      };
 
      /*IEEE-754 Float Classifications*/
-
-     #ifndef _IEEE_754_CLASS_
-     #define _IEEE_754_CLASS_
           /*0.0 (Subnormal in IEEE-754)*/
           #define _FLT_ZERO 0x0000
           /*Signal NaN*/
@@ -60,81 +60,109 @@ namespace necromancer_float_class
           #define _FLT_NORMAL 0x0006
           /*Subnormal Float*/
           #define _FLT_SUBNORMAL 0x0007
-          /*NaN*/
-          #define _FLT_NAN 0x1000
-     #endif /*_IEEE_754_CLASS_*/
 
+     /*Smallest normal 32-bit float*/
+     #define _FLT_EPSILON_ 1.17549435082e-38
+     /*Smallest subnormal 32-bit float*/
+     #define _FLT_SUB_EPSILON_ 1.40129846432e-45
+     /*Largest 32-bit float*/
+     #define _FLT_MAX_ 3.40282346639e+38
+
+     /*Smallest normal 64-bit float*/
+     #define _DBL_EPSILON_ 2.2250738585072013830902327173324e-308
+     /*Smallest subnormal 64-bit float*/
+     #define _DBL_SUB_EPSILON_ 4.9405539954293899510135527255649e-324
+     /*Largest 64-bit float*/
+     #define _DBL_MAX_ 8.9884656743115775427577229730589e+307
+
+     /*12/13/2023*/
      float classify_ieee754_32f(const float& _x)
      {
           float_32 _i;
           _i._x = _x;
-          if(!(_i._y | 0x000))
+          if(!(_i._y & 0x7fffffff))
                return _FLT_ZERO;
           if(_i._f_32._exp == 0x000)
                return _FLT_SUBNORMAL;
           if(_i._f_32._exp == 0x0ff)
           {
-               return (_i._y > 0x7f800000)?
-                    ((_i._f_32._sign)? _FLT_QNAN : _FLT_SNAN) :
-                         ((_i._f_32._sign)? _FLT_NEG_INFY : _FLT_INFINITY);
+               if (_i._f_32._mantissa)
+                    return (_i._f_32._sign)? _FLT_QNAN : _FLT_SNAN;
+               return (_i._f_32._sign)? _FLT_NEG_INFY : _FLT_INFINITY;
           }
           return _FLT_NORMAL;
      }
+     /*12/13/2023*/
      double classify_ieee754_64f(const double& _x)
      {
           float_64 _i;
           _i._x = _x;
-          if(!(_i._y | 0x000))
+          if(!(_i._y & 0x7fffffffffffffff))
                return _FLT_ZERO;
           if(_i._f_64._exp == 0x000)
                return _FLT_SUBNORMAL;
           if(_i._f_64._exp == 0x7ff)
           {
-               return (_i._f_64._mantissa)?
-                    ((_i._f_64._sign)? _FLT_QNAN : _FLT_SNAN) :
-                         ((_i._f_64._sign)? _FLT_NEG_INFY : _FLT_INFINITY);
+               if (_i._f_64._mantissa)
+                    return (_i._f_64._sign)? _FLT_QNAN : _FLT_SNAN;
+               return (_i._f_64._sign)? _FLT_NEG_INFY : _FLT_INFINITY;
           }
           return _FLT_NORMAL;
      }
 
+     /*12/13/2023*/
+     /*Classify a 32-bit float*/
      float classify(const float& _x)
      {
           return classify_ieee754_32f(_x);
      }
+     /*12/13/2023*/
+     /*Classify a 64-bit float*/
      double classify(const double& _x)
      {
           return classify_ieee754_64f(_x);
      }
+     /*12/13/2023*/
+     /*Classify any number as if it were a 64-bit float (regular conversion)*/
      template<typename _flt>
      double classify(const _flt& _x)
      {
           return classify_ieee754_64f((double) _x);
      }
 
+     /*12/13/2023*/
      bool is_inff(const float& _x)
      {
           float_32 _i;
           _i._x = _x;
-          return classify(_i._x)
-               == _FLT_INFINITY || classify(_i._x)
-                    == _FLT_NEG_INFY;
+          /*|_x|*/
+          _i._y &= 0x7fffffff;
+          return classify(_i._x) == _FLT_INFINITY;
      }
+     /*12/13/2023*/
      bool is_infd(const double& _x)
      {
           float_64 _i;
           _i._x = _x;
-          return classify(_i._x)
-               == _FLT_INFINITY || classify(_i._x)
-                    == _FLT_NEG_INFY;
+          /*|_x|*/
+          _i._y &= 0x7fffffffffffffff;
+          return classify(_i._x) == _FLT_INFINITY;
      }
+     /*12/13/2023*/
+     /*Return true if a 32-bit float is infinite*/
      bool is_inf(const float& _x)
      {
           return is_inff(_x);
      }
+     /*12/13/2023*/
+     /*Return true if a 64-bit float is infinite*/
      bool is_inf(const double& _x)
      {
           return is_infd(_x);
      }
+     /*12/13/2023*/
+     /*Return true if a number converted to a 64-bit float is infinite*/
+     /*(regular conversion)*/
      template<typename _flt>
      bool is_inf(const _flt& _x)
      {
@@ -169,15 +197,23 @@ namespace necromancer_float_class
           return is_finited((double) _x);
      }
 
+     /*12/13/2023*/
      bool is_nanf(const float& _x)
      {
-          return (classify(_x) == _FLT_QNAN ||
-               classify(_x) == _FLT_SNAN);
+          float_32 _i;
+          _i._x = _x;
+          /*|_x|*/
+          _i._y &= 0x7fffffff;
+          return classify(_i._x) == _FLT_SNAN;
      }
+     /*12/13/2023*/
      bool is_nand(const double& _x)
      {
-          return (classify(_x) == _FLT_QNAN ||
-               classify(_x) == _FLT_SNAN);
+          float_32 _i;
+          _i._x = _x;
+          /*|_x|*/
+          _i._y &= 0x7fffffffffffffff;
+          return classify(_i._x) == _FLT_SNAN;
      }
      bool is_nan(const float& _x)
      {
@@ -306,7 +342,7 @@ namespace necromancer_float_class
           _i._x = _x;
           if(is_nanf(_x) || is_inff(_x))
                return false;
-          return _i._f_32._mantissa | 0x400000 == 0x400000;
+          return (_i._f_32._mantissa | 0x400000) == 0x400000;
      }
      /*12/8/2023*/
      bool is_intd(const double& _x)
@@ -315,7 +351,7 @@ namespace necromancer_float_class
           _i._x = _x;
           if(is_nan(_x) || is_inf(_x))
                return false;
-          return _i._f_64._mantissa | 0x8000000000000 == 0x8000000000000; 
+          return (_i._f_64._mantissa | 0x8000000000000) == 0x8000000000000; 
      }
      /*12/8/2023*/
      /*Return true if a 32-bit float can be expressed as an integer*/
@@ -337,7 +373,7 @@ namespace necromancer_float_class
           _i._x = _x;
           if(is_nanf(_x) || is_inff(_x))
                return false;
-          return _i._f_32._mantissa | 0x400000 != 0x400000;
+          return (_i._f_32._mantissa | 0x400000) != 0x400000;
      }
      /*12/8/2023*/
      bool is_decimald(const double& _x)
@@ -346,7 +382,7 @@ namespace necromancer_float_class
           _i._x = _x;
           if(is_nan(_x) || is_inf(_x))
                return false;
-          return _i._f_64._mantissa | 0x8000000000000 != 0x8000000000000;
+          return (_i._f_64._mantissa | 0x8000000000000) != 0x8000000000000;
      }
      /*12/8/2023*/
      /*Return true if a 32-bit float cannot be expressed as an integer*/
@@ -377,29 +413,28 @@ namespace necromancer_float_class
           /*_x or _y is NaN*/
           if(_aix > 0x7f800000 || _aiy > 0x7f800000)
                return _x + _y;
-          if(_aix == 0x7f800000)
-               return _x;
-          if(_x == _y)
+          if(_ix == _iy)
                return _y;
           if(_aix == 0x000)
           {
-               _ix = 0x00800000 | (_iy & 0x80000000);
+               /*Return +-_FLT_SUB_EPSILON_*/
+               _ix = (_ix & 0x80000000) | 0x001;
                _fx._y = _ix;
                return _fx._x;
           }
-          if(_aix > 0x000)
+          if(_aix >= 0x000)
           {
-               if(_ix > _iy)
+               if(_x > _y)
                     _ix --;
                else
                     _ix ++;
           }
           else
           {
-               if(_ix > _iy)
-                    _ix --;
-               else
+               if(_x > _y)
                     _ix ++;
+               else
+                    _ix --;
           }
           _fx._y = _ix;
           return _fx._x;
@@ -420,11 +455,12 @@ namespace necromancer_float_class
           /*_x or _y is NaN*/
           if(_aix > 0x7ff0000000000000 || _aiy > 0x7ff0000000000000)
                return _x + _y;
-          if(_aix == 0x7ff0000000000000)
-               return _x;
+          if(_ix == _iy)
+               return _y;
           if(_aix == 0x000)
           {
-               _ix = 0x0010000000000000 | (_iy & 0x8000000000000000);
+               /*Return +-_FLT_SUB_EPSILON_*/
+               _ix = (_ix & 8000000000000000) | 0x001;
                _fx._y = _ix;
                return _fx._x;
           }
@@ -447,14 +483,12 @@ namespace necromancer_float_class
      }
      /*12/8/2023*/
      /*Return the next representable 32-bit float after _x towards _y*/
-     /*(Subnormals not included)*/
      float nextafter(const float& _x, const float& _y)
      {
           return nextafterf(_x, _y);
      }
      /*12/8/2023*/
      /*Return the next representable 64-bit float after _x towards _y*/
-     /*(Subnormals not included)*/
      double nextafter(const double& _x, const double& _y)
      {
           return nextafterd(_x, _y);

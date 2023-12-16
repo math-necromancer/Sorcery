@@ -10,10 +10,10 @@
 
 #include "cordic_operations.hpp"
 #include "cordic_functions.hpp"
-#include "constants.hpp"
-#include "float_class.hpp"
-#include "rem.hpp"
-#include "abs.hpp"
+#include "../constants.hpp"
+#include "../float_class.hpp"
+#include "../rem.hpp"
+#include "../abs.hpp"
 
 namespace necromancer_cordic
 {
