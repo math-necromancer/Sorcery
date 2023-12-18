@@ -398,7 +398,7 @@ namespace necromancer_complex
 
      /*12/13/2023*/
      template<typename _Cx>
-     inline _Cx
+     inline constexpr _Cx
      _c_abs(const complex<_Cx>& _z)
      {
           if(_z.real() == 0 || _z.img() == 0)
@@ -406,6 +406,20 @@ namespace necromancer_complex
           _Cx _x = _z.real();
           _Cx _y = _z.img();
           return root::sqrt(_x * _x + _y * _y);
+     }
+     /*12/18/2023*/
+     /*Return the magnitude of a 32-bit float complex number _z*/
+     inline constexpr float
+     absf(const complex<float>& _z)
+     {
+          return _c_abs<float>(_z);
+     }
+     /*12/18/2023*/
+     /*Return the magnitude of a 64-bit float complex number _z*/
+     inline constexpr double
+     absd(const complex<double>& _z)
+     {
+          return _c_abs<double>(_z);
      }
      /*12/13/2023*/
      /*Return the magnitude of a complex number _z*/

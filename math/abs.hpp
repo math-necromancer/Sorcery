@@ -5,7 +5,7 @@
 
 #include "float_class.hpp"
 
-namespace absolute
+namespace necromancer_abs
 {
     using namespace necromancer_float_class;
     float absf(const float& _x)
@@ -31,24 +31,6 @@ namespace absolute
         if(is_nan(_x))
             return _x;
         return (_x >= 0)? _x : -_x;
-    }
-
-    float abs(const float& _x)
-    {
-        return absf(_x);
-    }
-    double abs(const double& _x)
-    {
-        return absd(_x);
-    }
-    int abs(const int& _x)
-    {
-        return absi(_x);
-    }
-    template<typename _abs_typ>
-    double abs(const _abs_typ& _x)
-    {
-        return absd((double) _x);
     }
 }
 

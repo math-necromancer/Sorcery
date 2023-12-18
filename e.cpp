@@ -1,6 +1,7 @@
 #include <iostream>
+#include "math/roots.hpp"
 #include <iomanip>
-#include "math/log.hpp"
+#include <chrono>
 
 //  π
 //  ⌠ sin(s)
@@ -54,10 +55,8 @@
  *   }
 */
 
-typedef std::string string;
-
-int main()                                      
+int main()
 {
-     std::cout << "Starting...\n";
-     std::cout << std::setprecision(16) << ":)";
+    std::cout << "Starting...\n";
+    std::cout << std::setprecision(16) << necromancer_root::sqrtd(6);
 }

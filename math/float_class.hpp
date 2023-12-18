@@ -401,37 +401,36 @@ namespace necromancer_float_class
      float nextafterf(const float& _x, const float& _y)
      {
           float_32 _fx, _fy;
-          _int32 _ix, _iy, _aix, _aiy;
+          _int32 _ix, _iy;
           _fx._x = _x;
           _fy._x = _y;
-          _ix = _fx._y;
-          _iy = _fy._y;
           /*|_x|*/
-          _aix = _fx._y & 0x7fffffff;
+          _ix = _fx._y & 0x7fffffff;
           /*|_y|*/
-          _aiy = _fy._y & 0x7fffffff;
+          _iy = _fy._y & 0x7fffffff;
           /*_x or _y is NaN*/
-          if(_aix > 0x7f800000 || _aiy > 0x7f800000)
+          if(_ix > 0x7f800000 || _iy > 0x7f800000)
                return _x + _y;
           if(_ix == _iy)
                return _y;
-          if(_aix == 0x000)
+          if(_ix == 0x000)
           {
                /*Return +-_FLT_SUB_EPSILON_*/
-               _ix = (_ix & 0x80000000) | 0x001;
+               _ix = (_ix & 0x80000000) | 1;
                _fx._y = _ix;
                return _fx._x;
           }
-          if(_aix >= 0x000)
+          /*If _fx._y is less than the sign bit. Used to check if _x is positive*/
+          if(_fx._y < 0x80000000 && _fx._y >= 0)
           {
-               if(_x > _y)
-                    _ix --;
+               if(_ix > _iy)
+                    _fx._y --;
                else
-                    _ix ++;
+                    _fx._y ++;
           }
           else
           {
-               if(_x > _y)
+               if(_ix > _iy || _y >= 0)
                     _ix ++;
                else
                     _ix --;
@@ -492,6 +491,24 @@ namespace necromancer_float_class
      double nextafter(const double& _x, const double& _y)
      {
           return nextafterd(_x, _y);
+     }
+     /*12/18/2023*/
+     /*Divide a 32-bit float by 2 (fast!)*/
+     float f32o2(const float& _x)
+     {
+          float_32 _i;
+          _i._x = _x;
+          _i._f_32._exp --;
+          return _i._x;
+     }
+     /*12/18/2023*/
+     /*Divide a 64-bit float by 2 (fast!)*/
+     double f64o2(const double& _x)
+     {
+          float_64 _i;
+          _i._x = _x;
+          _i._f_64._exp --;
+          return _i._x;
      }
 }
 
