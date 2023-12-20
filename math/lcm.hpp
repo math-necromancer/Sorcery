@@ -7,10 +7,11 @@
 
 namespace necromancer_lcm
 {
+     /*12/20/2023*/
+     /*Return the least common multiple of integers _x and _y*/
      int lcm(const int& _x, const int& _y)
      {
-          int _prod = _x * _y;
-          return _prod / necromancer_gcf::gcf(_x, _y);
+          return (_x * _y) / necromancer_gcf::gcf(_x, _y);
      }
 }
 

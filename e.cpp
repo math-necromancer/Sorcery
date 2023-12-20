@@ -1,5 +1,4 @@
 #include <iostream>
-#include "math/roots.hpp"
 #include <iomanip>
 #include <chrono>
 
@@ -58,5 +57,5 @@
 int main()
 {
     std::cout << "Starting...\n";
-    std::cout << std::setprecision(16) << necromancer_root::sqrtd(6);
+    std::cout << std::setprecision(16) << 2;
 }

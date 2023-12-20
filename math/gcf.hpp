@@ -7,6 +7,8 @@
 
 namespace necromancer_gcf
 {
+     /*12/20/2023*/
+     /*Return the greatest common factor of integers _x and _y*/
      int gcf(const int& _x, const int& _y)
      {
           if(_x == _y)
@@ -15,8 +17,7 @@ namespace necromancer_gcf
                return _y;
           if(_y == 0)
                return _x;
-          int _x1 = _x, _y1 = _y;
-          int _k;
+          int _x1 = _x, _y1 = _y, _k;
           while(((_x1 | _y1) & 1) == 0)
           {
                _x1 >>= 1;

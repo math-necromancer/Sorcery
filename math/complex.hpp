@@ -6,6 +6,7 @@
 #include "abs.hpp"
 #include "roots.hpp"
 #include "trig/euclid_trig.hpp"
+#include "trig/atan2.hpp"
 #include "log.hpp"
 
 namespace necromancer_complex
@@ -402,10 +403,10 @@ namespace necromancer_complex
      _c_abs(const complex<_Cx>& _z)
      {
           if(_z.real() == 0 || _z.img() == 0)
-               return absolute::abs(_z.real() - _z.img());
+               return necromancer_abs::abs(_z.real() - _z.img());
           _Cx _x = _z.real();
           _Cx _y = _z.img();
-          return root::sqrt(_x * _x + _y * _y);
+          return necromancer_root::sqrt(_x * _x + _y * _y);
      }
      /*12/18/2023*/
      /*Return the magnitude of a 32-bit float complex number _z*/
@@ -435,7 +436,7 @@ namespace necromancer_complex
      inline complex<_Cx>
      _c_arg(const complex<_Cx>& _z)
      {
-          return euclid_trig::atan2(_z.img(), _z.real());
+          return necromancer_atan2::atan2(_z.img(), _z.real());
      }
      /*12/13/2023*/
      /*Return the phase angle of a complex number _z*/

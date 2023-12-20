@@ -47,7 +47,6 @@ namespace necromancer_fractions
      {
           private:
                int _numerator, _denominator;
-               bool _err_state = false;
           public:
                int numerator() const
                {
@@ -66,23 +65,14 @@ namespace necromancer_fractions
                     _denominator = _den_val;
                }
 
-               bool err() const
-               {
-                    return _err_state;
-               }
-               void err(bool _err_val)
-               {
-                    _err_state = _err_val;
-               }
-
                fraction()
-                    : _numerator(1), _denominator(1), _err_state(false)
+                    : _numerator(1), _denominator(1)
                {}
                fraction(int _n, int _d)
-                    : _numerator(_n), _denominator(_d), _err_state(false)
+                    : _numerator(_n), _denominator(_d)
                {}
                fraction(int _n, int _d, bool _err)
-                    : _numerator(_n), _denominator(_d), _err_state(_err)
+                    : _numerator(_n), _denominator(_d)
                {}
 
                fraction operator = (const int& _n);
@@ -103,7 +93,6 @@ namespace necromancer_fractions
           private:
                int _integer;
                fraction _frac;
-               bool _err_state = false;
           public:
                int integer() const
                {
@@ -123,15 +112,6 @@ namespace necromancer_fractions
                     _frac = _f;
                }
 
-               bool err() const
-               {
-                    return _err_state;
-               }
-               void err(const bool& _err)
-               { 
-                    _err_state = _err;
-               }
-
                mixed()
                     : _integer(0), _frac(1, 1)
                {}
@@ -142,7 +122,7 @@ namespace necromancer_fractions
                     : _integer(_i), _frac(_f)
                {}
                mixed(int _i, necromancer_fractions::fraction _f, bool _err)
-                    : _integer(_i), _frac(_f), _err_state(_err)
+                    : _integer(_i), _frac(_f)
                {}
 
                mixed operator = (const int& _n);
@@ -652,7 +632,7 @@ namespace necromancer_fractions
      mixed mix(const fraction& _f)
      {
           fraction _f1 = _f;
-          if(absolute::abs(_f1.numerator()) < absolute::abs(_f1.denominator()))
+          if(necromancer_abs::abs(_f1.numerator()) < necromancer_abs::abs(_f1.denominator()))
           {
                return mixed(0, fraction(_f1.numerator(), _f1.denominator()));
           }
@@ -667,7 +647,7 @@ namespace necromancer_fractions
      
      fraction abs(const fraction& _f)
      {
-          return fraction(absolute::abs(_f.numerator()), absolute::abs(_f.denominator()));
+          return fraction(necromancer_abs::abs(_f.numerator()), necromancer_abs::abs(_f.denominator()));
      }
 
      fraction form_of_1(const int& _n)
@@ -681,7 +661,7 @@ namespace necromancer_fractions
      fraction simplify(const fraction& _f)
      {
           fraction _f1 = _f;
-          int _gcf = necromancer_gcf::gcf(absolute::abs(_f1.numerator()), absolute::abs(_f1.denominator()));
+          int _gcf = necromancer_gcf::gcf(necromancer_abs::abs(_f1.numerator()), necromancer_abs::abs(_f1.denominator()));
           _f1.numerator(_f1.numerator() / _gcf);
           _f1.denominator(_f1.denominator() / _gcf);
           return _f1;

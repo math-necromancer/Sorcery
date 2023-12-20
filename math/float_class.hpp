@@ -1,20 +1,15 @@
 /*The Math Necromancer*/
 
-#ifndef _FLOAT_CLASS_
-#define _FLOAT_CLASS_
-
-#include "constants.hpp"
+#ifndef _NECROMANCER_FLOAT_CLASS_
+#define _NECROMANCER_FLOAT_CLASS_
 
 namespace necromancer_float_class
 {
      typedef unsigned long _int32;
      typedef unsigned long long _int64;
 
-     /*IEEE-754 Floating-Point Forms*/
-
-     /*Long double not supported yet...*/
-     /*For some reason, all the CPUs do Different Things*/
-     /* :o */
+     /*** IEEE-754 Floating-Point Forms ***/
+     /*I will not be supporting long doubles*/
 
      /*12/13/2023*/
      /*64-bit float form*/
@@ -44,22 +39,46 @@ namespace necromancer_float_class
           };
           _f_32 _f_32;
      };
+     /*** Predefined NaNs and Infinities ***/
 
-     /*IEEE-754 Float Classifications*/
-          /*0.0 (Subnormal in IEEE-754)*/
-          #define _FLT_ZERO 0x0000
-          /*Signal NaN*/
-          #define _FLT_SNAN 0x0001
-          /*Quiet NaN*/
-          #define _FLT_QNAN 0x0002
-          /*Infinity*/
-          #define _FLT_INFINITY 0x0004
-          /*Negative Infinity*/
-          #define _FLT_NEG_INFY 0x0005
-          /*Normal Floating Point*/
-          #define _FLT_NORMAL 0x0006
-          /*Subnormal Float*/
-          #define _FLT_SUBNORMAL 0x0007
+     const static float_32 _nanf = {0x7fc00000};
+     const static float_64 _nand = {0x7ff8000000000000};
+     const static float_32 _inff = {0x7f800000};
+     const static float_32 _ninff = {0xff800000};
+     const static float_64 _infd = {0x7ff0000000000000};
+     const static float_64 _ninfd = {0xfff0000000000000};
+
+     /*Single precision "Not a Number"*/
+     #define NaNf necromancer_float_class::_nanf._x
+     /*Double precision "Not a Number"*/
+     #define NaN necromancer_float_class::_nand._x
+     /*Single precision Infinity*/
+     #define INFINITYf necromancer_float_class::_inff._x
+     /*Single precision negative Infinity*/
+     #define NEGATIVE_INFINITYf necromancer_float_class::_ninff._x
+     /*Double precision Infinity*/
+     #define INFINITY necromancer_float_class::_infd._x
+     /*Double precision Negative Infinity*/
+     #define NEGATIVE_INFINITY necromancer_float_class::_ninfd._x
+
+     /*** IEEE-754 Float Classifications ***/
+     /*Even though qNaN and sNaN are practically the same*/
+     /*in this library (no errors), it's still nice to detect*/
+
+     /*0.0 (Subnormal in IEEE-754)*/
+     #define _FLT_ZERO 0x0000
+     /*Signal "Not a Number"*/
+     #define _FLT_SNAN 0x0001
+     /*Quiet "Not a Number"*/
+     #define _FLT_QNAN 0x0002
+     /*Infinity*/
+     #define _FLT_INFINITY 0x0004
+     /*Negative Infinity*/
+     #define _FLT_NEG_INFY 0x0005
+     /*Normal Floating Point*/
+     #define _FLT_NORMAL 0x0006
+     /*Subnormal Float*/
+     #define _FLT_SUBNORMAL 0x0007
 
      /*Smallest normal 32-bit float*/
      #define _FLT_EPSILON_ 1.17549435082e-38
@@ -148,53 +167,18 @@ namespace necromancer_float_class
           _i._y &= 0x7fffffffffffffff;
           return classify(_i._x) == _FLT_INFINITY;
      }
-     /*12/13/2023*/
-     /*Return true if a 32-bit float is infinite*/
-     bool is_inf(const float& _x)
-     {
-          return is_inff(_x);
-     }
-     /*12/13/2023*/
-     /*Return true if a 64-bit float is infinite*/
-     bool is_inf(const double& _x)
-     {
-          return is_infd(_x);
-     }
-     /*12/13/2023*/
-     /*Return true if a number converted to a 64-bit float is infinite*/
-     /*(regular conversion)*/
-     template<typename _flt>
-     bool is_inf(const _flt& _x)
-     {
-          return is_infd((double) _x);
-     }
 
      bool is_finitef(const float& _x)
      {
-          return (classify(_x)
-               != _FLT_ZERO || classify(_x)
-                    == _FLT_NORMAL || classify(_x)
-                         == _FLT_SUBNORMAL);
+          float_32 _i;
+          _i._x = _x;
+          return _i._f_32._exp < 0x0ff;
      }
      bool is_finited(const double& _x)
      {
-          return (classify(_x)
-               == _FLT_ZERO || classify(_x)
-                    == _FLT_NORMAL || classify(_x)
-                         == _FLT_SUBNORMAL);
-     }
-     bool is_finite(const float& _x)
-     {
-          return is_finitef(_x);
-     }
-     bool is_finite(const double& _x)
-     {
-          return is_finited(_x);
-     }
-     template<typename _flt>
-     bool is_finite(const _flt& _x)
-     {
-          return is_finited((double) _x);
+          float_64 _i;
+          _i._x = _x;
+          return _i._f_64._exp < 0x7ff;
      }
 
      /*12/13/2023*/
@@ -204,7 +188,7 @@ namespace necromancer_float_class
           _i._x = _x;
           /*|_x|*/
           _i._y &= 0x7fffffff;
-          return classify(_i._x) == _FLT_SNAN;
+          return _i._y > 0x7f800000;
      }
      /*12/13/2023*/
      bool is_nand(const double& _x)
@@ -213,64 +197,33 @@ namespace necromancer_float_class
           _i._x = _x;
           /*|_x|*/
           _i._y &= 0x7fffffffffffffff;
-          return classify(_i._x) == _FLT_SNAN;
-     }
-     bool is_nan(const float& _x)
-     {
-          return is_nanf(_x);    
-     }
-     bool is_nan(const double& _x)
-     {
-          return is_nand(_x);
-     }
-     template<typename _flt>
-     bool is_nan(const _flt& _x)
-     {
-          return is_nand((double) _x);
+          return _i._y > 0x7ff0000000000000;
      }
 
      bool is_qnanf(const float& _x)
      {
-          return (classify(_x) == _FLT_QNAN);
+          float_32 _i;
+          _i._x = _x;
+          return _i._y > 0x7f800000 && _i._y < 0x80000000;
      }
      bool is_qnand(const double& _x)
      {
-          return (classify(_x) == _FLT_QNAN);
-     }
-     bool is_qnan(const float& _x)
-     {
-          return is_qnanf(_x);
-     }
-     bool is_qnan(const double& _x)
-     {
-          return is_qnand(_x);
-     }
-     template<typename _flt>
-     bool is_qnan(const _flt& _x)
-     {
-          return is_qnand((double) _x);
+          float_64 _i;
+          _i._x = _x;
+          return _i._y > 0x7ff0000000000000 && _i._y < 0x8000000000000000;
      }
 
      bool is_snanf(const float& _x)
      {
-          return (classify(_x) == _FLT_SNAN);
+          float_32 _i;
+          _i._x = _x;
+          return _i._y > 0xff800000;
      }
      bool is_snand(const double& _x)
      {
-          return (classify(_x) == _FLT_SNAN);
-     }
-     bool is_snan(const float& _x)
-     {
-          return is_snanf(_x);
-     }
-     bool is_snan(const double& _x)
-     {
-          return is_snand(_x);
-     }
-     template<typename _flt>
-     bool is_snan(const _flt& _x)
-     {
-          return is_snand((double) _x);
+          float_64 _i;
+          _i._x = _x;
+          return _i._y > 0xfff0000000000000;
      }
 
      /*12/8/2023*/
@@ -280,28 +233,16 @@ namespace necromancer_float_class
                return false;
           float_32 _i;
           _i._x = _x;
-          return !(_i._f_32._sign);
+          return _i._x < 0x80000000;
      }
      /*12/8/2023*/
      bool is_positived(const double& _x)
      {
-          if(is_nan(_x))
+          if(is_nand(_x))
                return false;
           float_64 _i;
           _i._x = _x;
-          return !(_i._f_64._sign);
-     }
-     /*12/8/2023*/
-     /*Return true if a 32-bit float is positive*/
-     bool is_positive(const float& _x)
-     {
-          return is_positivef(_x);
-     }
-     /*12/8/2023*/
-     /*Return true if a 64-bit float is positive*/
-     bool is_positive(const double& _x)
-     {
-          return is_positived(_x);
+          return _i._x < 0x8000000000000000;
      }
 
      /*12/8/2023*/
@@ -311,47 +252,35 @@ namespace necromancer_float_class
                return false;
           float_32 _i;
           _i._x = _x;
-          return _i._f_32._sign;
+          return _i._x > 0x80000000;
      }
      /*12/8/2023*/
      bool is_negatived(const double& _x)
      {
-          if(is_nan(_x))
+          if(is_nand(_x))
                return false;
           float_64 _i;
           _i._x = _x;
-          return _i._f_64._sign;
-     }
-     /*12/8/2023*/
-     /*Return true if a 32-bit float is negative*/
-     bool is_negative(const float& _x)
-     {
-          return is_negativef(_x);
-     }
-     /*12/8/2023*/
-     /*Return true if a 64-bit float is negative*/
-     bool is_negative(const double& _x)
-     {
-          return is_negatived(_x);
+          return _i._x > 0x8000000000000000;
      }
 
      /*12/8/2023*/
      bool is_intf(const float& _x)
      {
-          float_32 _i;
-          _i._x = _x;
           if(is_nanf(_x) || is_inff(_x))
                return false;
-          return (_i._f_32._mantissa | 0x400000) == 0x400000;
+          float_32 _i;
+          _i._x = _x;
+          return _i._y << (_i._f_32._exp - 0x076) == 0;
      }
      /*12/8/2023*/
      bool is_intd(const double& _x)
      {
+          if(is_nand(_x) || is_infd(_x))
+               return false;
           float_64 _i;
           _i._x = _x;
-          if(is_nan(_x) || is_inf(_x))
-               return false;
-          return (_i._f_64._mantissa | 0x8000000000000) == 0x8000000000000; 
+          return _i._f_64._mantissa << (_i._f_64._exp - 0x03ff) == 0; 
      }
      /*12/8/2023*/
      /*Return true if a 32-bit float can be expressed as an integer*/
@@ -380,7 +309,7 @@ namespace necromancer_float_class
      {
           float_64 _i;
           _i._x = _x;
-          if(is_nan(_x) || is_inf(_x))
+          if(is_nand(_x) || is_infd(_x))
                return false;
           return (_i._f_64._mantissa | 0x8000000000000) != 0x8000000000000;
      }
@@ -512,4 +441,4 @@ namespace necromancer_float_class
      }
 }
 
-#endif /*_FLOAT_CLASS_*/
+#endif /*_NECROMANCER_FLOAT_CLASS_*/

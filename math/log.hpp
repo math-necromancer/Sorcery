@@ -135,11 +135,11 @@ namespace necromancer_log
      }
      /*12/11/2023*/
      /*Compute the Natural Logarithm of _x*/
-     /*(Subnormal not supported)*/
+     /*(Subnormal not supported, Cast to Double)*/
      template<typename _log_ty>
      double log(const _log_ty& _x)
      {
-          return logd((double) _x);
+          return logd(static_cast<double>(_x));
      }
 }
 

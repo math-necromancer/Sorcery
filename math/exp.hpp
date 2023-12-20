@@ -1,6 +1,6 @@
 /*The Math Necromancer*/
 
-/*I promise I'll change it later; Taylor Series are slow :(*/
+/*I promise I'll change it later; Taylor Series is slow :(*/
 /*It doesn't even include range reduction, so it kinda diverges at large values*/
 
 #ifndef _NECROMANCER_EXP_

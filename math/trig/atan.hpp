@@ -37,7 +37,6 @@ namespace necromancer_atan
           _atan18 = 2.2302240345710764e-4,
           _atan19 = -2.0258553044340116e-5;
      /*12/18/2023*/
-     /*Compute the Arctangent of a 32-bit float _x*/
      float atanf(const float& _x)
      {
           float_32 _i;
@@ -68,7 +67,6 @@ namespace necromancer_atan
           return copysign(_r, _x);
      }
      /*12/18/2023*/
-     /*Compute the Arctangent of a 64-bit float _x*/
      double atand(const double& _x)
      {
           float_64 _i;
@@ -95,6 +93,26 @@ namespace necromancer_atan
           if(_y > 0x3ff0000000000000)
                _r = _atan_inf - _r;
           return copysign(_r, _x);
+     }
+     /*12/20/2023*/
+     /*Compute the Arctangnet of a 32-bit float _x*/
+     float atan(const float& _x)
+     {
+          return atanf(_x);
+     }
+     /*12/20/2023*/
+     /*Compute the Arctangent of a 64-bit float _x*/
+     double atan(const double& _x)
+     {
+          return atand(_x);
+     }
+     /*12/20/2023*/
+     /*Compute the Arctangent of any number _x*/
+     /*(Cast to Double)*/
+     template<typename _atan_ty>
+     double atan(const _atan_ty& _x)
+     {
+          return atand(static_cast<double>(_x));
      }
 }
 

@@ -3,7 +3,7 @@
 #ifndef _NECROMANCER_EXPONENT_
 #define _NECROMANCER_EXPONENT_
 
-#include "constants.hpp"
+#include "float_class.hpp"
 
 double exponentInteger(double x, int exp)
 {
@@ -11,7 +11,7 @@ double exponentInteger(double x, int exp)
     {
         if(x == 0.0)
         {
-            return undefined;
+            return NaNf;
         }
         return 1;
     }

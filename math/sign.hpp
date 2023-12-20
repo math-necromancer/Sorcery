@@ -94,6 +94,15 @@ namespace necromancer_sign
      {
           return copysignd(_x, _y);
      }
+     /*12/20/2023*/
+     /*Return a number with a magnitude _x and a sign _y*/
+     template<typename _copysign_ty>
+     _copysign_ty copysign(const _copysign_ty& _x, const _copysign_ty& _y)
+     {
+          return static_cast<_copysign_ty>(copysignd(
+               static_cast<double>(_x), static_cast<double>(_y)
+          ));
+     }
 }
 
 #endif /*_NECROMANCER_SIGN_*/

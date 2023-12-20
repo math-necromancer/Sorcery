@@ -5,14 +5,16 @@
 
 namespace necromancer_swap
 {
-     template<typename T>
-     void swap(T x, T y)
+     /*12/20/2023*/
+     /*Swap the values of 2 numbers _x and _y*/
+     template<typename _swap_ty>
+     void swap(_swap_ty& _x, _swap_ty& _y)
      {
-          T tmp;
-          tmp = x;
-          x = y;
-          y = tmp;
+          _swap_ty _tmp;
+          _tmp = _x;
+          _x = _y;
+          _y = _tmp;
      }
 }
 
-#endif /* _NECROMANCER_SWAP__ */
+#endif /* _NECROMANCER_SWAP_ */

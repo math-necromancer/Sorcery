@@ -15,14 +15,15 @@ namespace necromancer_root
     using namespace necromancer_float_class;
 
     /*12/18/2023*/
-    /*Get the Square Root of a 32-bit float _x*/
     float sqrtf(const float& _x)
     {
         float_32 _i;
         _i._x = _x;
-        /*If _x is infinite, nan, 0, or 1*/
-        /*`_i._x >= 0x7f80...` includes the sign bit, so this also handles negatives*/
-        if(_i._x >= 0x7f800000 || _i._x == 0 || _i._x == 0x3f800000)
+        /*If _x is NaN, also catches the sign bit*/
+        if(_i._y > 0x7f800000)
+            return NaNf;
+        /*If _x is infinite, 0, or 1*/
+        if(_i._y == 0x07f80000 || _i._y == 0 || _i._y == 0x3f800000)
             return _x;
         _int32 _e = (_i._f_32._exp - 0x07f) >> 1;
         _i._f_32._exp = 0x07f;
@@ -39,14 +40,15 @@ namespace necromancer_root
         return _r;
     }
     /*12/18/2023*/
-    /*Compute the Square Root of a 64-bit float _x*/
     double sqrtd(const double& _x)
     {
         float_64 _i;
         _i._x = _x;
-        /*If x is infinite, nan, 0, or 1*/
-        /*`_i._x >= 0x7ff0...` includes the sign bit, so this also handles negatives*/
-        if(_i._x >= 0x7ff0000000000000 || _i._x == 0 || _i._x == 0x3ff0000000000000)
+        /*If _x is NaN, also catches the sign bit*/
+        if(_i._y > 0x7ff0000000000000)
+            return NaN;
+        /*If _x is infinite, 0, or 1*/
+        if(_i._x == 0x7ff0000000000000 || _i._y == 0 || _i._y == 0x3ff0000000000000)
             return _x;
         _int32 _e = (_i._f_64._exp - 0x3ff) >> 1;
         _i._f_64._exp = 0x3ff;
@@ -62,6 +64,26 @@ namespace necromancer_root
         _r = f64o2(_r + (_x / _r));
         _r = f64o2(_r + (_x / _r));
         return _r;
+    }
+    /*12/20/2023*/
+    /*Compute the square root of a 32-bit float _x*/
+    float sqrt(const float& _x)
+    {
+        return sqrtf(_x);
+    }
+    /*12/20/2023*/
+    /*Compute the square root of a 64-bit float _x*/
+    double sqrt(const double& _x)
+    {
+        return sqrtd(_x);
+    }
+    /*12/20/2023*/
+    /*Compute the square root of any number _x*/
+    /*(Cast to Double)*/
+    template<typename _sqrt_ty>
+    double sqrt(const _sqrt_ty& _x)
+    {
+        return sqrtd(static_cast<double>(_x));
     }
 }
 
