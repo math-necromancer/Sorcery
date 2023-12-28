@@ -60,6 +60,6 @@
 int main()
 {
     std::cout << "Starting...\n";
-    std::cout << std::setprecision(16) << num_args(7.1, 2, 7) << '\n';
+    std::cout << std::setprecision(16) << max(atan(2), 1.07, 90.) << '\n';
     std::cout << '\n';
 }
