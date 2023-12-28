@@ -1,5 +1,8 @@
 #include <iostream>
 #include <iomanip>
+#define _MATH_SORCERY_SKIP_MATH_WARN_
+#include "math/math_sorcery.hpp"
+#include "math/rounding.hpp"
 #include <chrono>
 
 //  π
@@ -57,5 +60,6 @@
 int main()
 {
     std::cout << "Starting...\n";
-    std::cout << std::setprecision(16) << 2;
+    std::cout << std::setprecision(16) << num_args(7.1, 2, 7) << '\n';
+    std::cout << '\n';
 }

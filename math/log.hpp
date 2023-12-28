@@ -6,23 +6,29 @@
 #ifndef _NECROMANCER_LOG_
 #define _NECROMANCER_LOG_
 
+#ifndef _MATH_SORCERY_
+    #ifdef _RAW_FILE_WARN_
+        #warning "Are you sure you want to use this raw file instead of math_sorcery.hpp?"
+    #endif /*_RAW_FILE_WARN_*/
+#endif /*_MATH_SORCERY_*/
+
 #include "float_class.hpp"
 
 namespace necromancer_log
 {
      using namespace necromancer_float_class;
      const static double
-          log2_h = 6.93147180369123816490e-01,
-          log2_l = 1.90821492927232121458e-10;
+          _log2_h = 6.93147180369123816490e-01,
+          _log2_l = 1.90821492927232121458e-10;
      const static double
           /*Minimax coeficcients for 2 * arctanh(x)*/  
-          log1 = 6.66666666666667653654896829047862109605e-01,
-          log2 = 3.99999999996639180070480580779767357622e-01,
-          log3 = 2.85714286985476106491309914245597720749e-01,
-          log4 = 2.22222024077476110197597399876978069272e-01,
-          log5 = 1.81833876328594532366358057253631240618e-01,
-          log6 = 1.53181571233880298729095145342556944283e-01,
-          log7 = 1.47580071554569676223389696418304199218e-01;
+          _log1 = 6.66666666666667653654896829047862109605e-01,
+          _log2 = 3.99999999996639180070480580779767357622e-01,
+          _log3 = 2.85714286985476106491309914245597720749e-01,
+          _log4 = 2.22222024077476110197597399876978069272e-01,
+          _log5 = 1.81833876328594532366358057253631240618e-01,
+          _log6 = 1.53181571233880298729095145342556944283e-01,
+          _log7 = 1.47580071554569676223389696418304199218e-01;
      /*Compute the Natural Logarithm of _x*/
      /*Reduce the Range of _x*/
      /*   Given an IEEE-754 Machine, find an f and e where _x = (f + 1) * 2^e:*/
@@ -41,11 +47,12 @@ namespace necromancer_log
      /*   This is the formula shown in the functions below. We put in _f / (_f + 2), as*/
      /*   _f has been decremented already. Then we just return our result scaled back up*/
 
-     /*12/3/2023*/
-     float logf(const float& _x)
+     /*** log ~ ln ***/
+
+     /*12/24/2023*/
+     constexpr float logf(const float& _x)
      {
-          float_32 _i;
-          _i._x = _x;
+          float_32 _i = {_x};
           /*Special Cases...*/
           if(_i._y == 0x3f800000)
                /*log(1) = 0.0*/
@@ -53,16 +60,15 @@ namespace necromancer_log
           if(_i._y == 0x7f800000)
                /*log(inf) = inf*/
                return INFINITYf;
-          if(!_i._y)
+          if(_i._y == 0)
                /*log(0^+) -> -inf*/
                return NEGATIVE_INFINITYf;
           if(_i._y > 0x7f800000 || _i._f_32._sign)
                /*log(_x) for _x < 0 or is_nan(_x) is undefined; this includes -0*/
                return NaNf;
-          float _e, _f, _s, _z, _z2, _t1, _t2, _r, _hfsq;
-          _e = _i._f_32._exp - 0x07e;
+          float _e = _i._f_32._exp - 0x07e;
           _i._f_32._exp = 0x07e;
-          _f = _i._x;
+          float _f = _i._x;
           /*Reduce the range of _f further*/
           if(_i._f_32._mantissa < 0x3504f3)
           {
@@ -70,21 +76,20 @@ namespace necromancer_log
                _e --;
           }
           _f --;
-          _s = _f / (_f + 0x002);
-          _z = _s * _s;
-          _z2 = _z * _z;
-          _t1 = _z * (log1 + _z2 * (log3 + _z2 * (log5 + _z2 * log7)));
-          _t2 = _z2 * (log2 + _z2 * (log4 + _z2 * log6));
-          _r = _t1 + _t2;
-          _hfsq = 0.5f * _f * _f;
+          float _s = _f / (_f + 0x002);
+          float _z = _s * _s;
+          float _z2 = _z * _z;
+          float _t1 = _z * (_log1 + _z2 * (_log3 + _z2 * (_log5 + _z2 * _log7)));
+          float _t2 = _z2 * (_log2 + _z2 * (_log4 + _z2 * _log6));
+          float _r = _t1 + _t2;
+          float _hfsq = 0.5f * _f * _f;
           /*We can't just return _e * log(2). It isn't precise enough*/
-          return _e * log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * log2_l)) - _f);
+          return _e * _log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * _log2_l)) - _f);
      }
-     /*12/3/2023*/
-     double logd(const double& _x)
+     /*12/24/2023*/
+     constexpr double logd(const double& _x)
      {
-          float_64 _i;
-          _i._x = _x;
+          float_64 _i = {_x};
           /*Special Cases*/
           if(_i._y == 0x3ff0000000000000)
                /*log(1) = 0.0*/
@@ -92,16 +97,15 @@ namespace necromancer_log
           if(_i._y == 0x7ff0000000000000)
                /*log(inf) = inf*/
                return INFINITY;
-          if(!_i._y)
+          if(_i._y == 0)
                /*log(0^+) -> -inf*/
                return NEGATIVE_INFINITY;
           if(_i._y > 0x7ff0000000000000 || _i._f_64._sign)
                /*log(_x) for _x < 0 or is_nan(_x) is undefined; this includes -0*/
                return NaN;
-          double _e, _f, _s, _z, _z2, _t1, _t2, _r, _hfsq;
-          _e = _i._f_64._exp - 0x03fe;
+          double _e = _i._f_64._exp - 0x03fe;
           _i._f_64._exp = 0x03fe;
-          _f = _i._x;
+          double _f = _i._x;
           /*Reduce the range of _f further*/
           if(_i._f_64._mantissa < 0x3ff6a09e667f3bcd)
           {
@@ -109,38 +113,70 @@ namespace necromancer_log
                _e --;
           }
           _f --;
-          _s = _f / (_f + 0x002) ;
-          _z = _s * _s;
-          _z2 = _z * _z;
-          _t1 = _z * (log1 + _z2 * (log3 + _z2 * (log5 + _z2 * log7)));
-          _t2 = _z2 * (log2 + _z2 * (log4 + _z2 * log6));
-          _r = _t1 + _t2;                           
-          _hfsq = 0.5 * _f * _f;
+          double _s = _f / (_f + 0x002) ;
+          double _z = _s * _s;
+          double _z2 = _z * _z;
+          double _t1 = _z * (_log1 + _z2 * (_log3 + _z2 * (_log5 + _z2 * _log7)));
+          double _t2 = _z2 * (_log2 + _z2 * (_log4 + _z2 * _log6));
+          double _r = _t1 + _t2;                           
+          double _hfsq = 0.5 * _f * _f;
           /*We can't just return _e * log(2). It isn't precise enough*/
-          return _e * log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * log2_l)) - _f);
+          return _e * _log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * _log2_l)) - _f);
      }
-     /*12/11/2023*/
-     /*Compute the Natural Logarithm of a 32-bit float _x*/
-     /*(Subnormal not supported)*/
-     float log(const float& _x)
+     /*** log2 ***/
+
+     /*12/24/2023*/
+     constexpr float log2f(const float& _x)
      {
-          return logf(_x);
+          return logf(_x) * 1.442695f;
      }
-     /*12/11/2023*/
-     /*Compute the Natural Logarithm of a 64-bit float _x*/
-     /*(Subnormal not supported)*/
-     double log(const double& _x)
+     /*12/24/2023*/
+     constexpr double log2d(const double& _x)
      {
-          return logd(_x);
+          return logd(_x) * 1.4426950408889634;
      }
-     /*12/11/2023*/
-     /*Compute the Natural Logarithm of _x*/
-     /*(Subnormal not supported, Cast to Double)*/
-     template<typename _log_ty>
-     double log(const _log_ty& _x)
+     /*** ilog2 ~ the integral part of log2(x) ***/
+
+     /*12/24/2023*/
+     /*int return type is safe because log2(~3.402e+38) = 128*/
+     constexpr int ilog2f(const float& _x)
      {
-          return logd(static_cast<double>(_x));
+          float_32 _i = {_x};
+          return _i._f_32._exp - 0x07f;
      }
-}
+     /*12/24/2023*/
+     /*int return type is safe because log2(~1.797e+308) = 1024*/
+     constexpr int ilog2d(const double& _x)
+     {
+          float_64 _i = {_x};
+          return _i._f_64._exp - 0x3ff;
+     }
+
+     /*** log10 ***/
+
+     /*12/24/2023*/
+     constexpr float log10f(const float& _x)
+     {
+          return logf(_x) * 0.434294492f;
+     }
+     /*12/24/2023*/
+     constexpr double log10d(const double& _x)
+     {
+          return logd(_x) * 0.4342944819032518;
+     }
+
+     /*** custom base log ***/
+
+     /*12/24/2023*/
+     constexpr float logf(const float& _x, const float& _y)
+     {
+          return logf(_x) / logf(_y);
+     }
+     /*12/24/2023*/
+     constexpr double logd(const double& _x, const double& _y)
+     {
+          return logd(_x) / logd(_y);
+     }
+}    
 
 #endif /*_NECROMANCER_LOG_*/

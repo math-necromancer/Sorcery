@@ -3,11 +3,13 @@
 #ifndef _NECROMANCER_COMPLEX_
 #define _NECROMANCER_COMPLEX_
 
-#include "abs.hpp"
-#include "roots.hpp"
-#include "trig/euclid_trig.hpp"
-#include "trig/atan2.hpp"
-#include "log.hpp"
+#ifndef _MATH_SORCERY_
+    #ifdef _RAW_FILE_WARN_
+        #warning "Are you sure you want to use this raw file instead of math_sorcery.hpp?"
+    #endif /*_RAW_FILE_WARN_*/
+#endif /*_MATH_SORCERY_*/
+
+#include "math_sorcery.hpp"
 
 namespace necromancer_complex
 {
@@ -41,26 +43,26 @@ namespace necromancer_complex
                }
                /*Operations with scalars*/
 
-               complex<_Cx> operator = (const _Cx& _s);
-               complex<_Cx> operator += (const _Cx& _s);
-               complex<_Cx> operator -= (const _Cx& _s);
-               complex<_Cx> operator *= (const _Cx& _s);
-               complex<_Cx> operator /= (const _Cx& _s);
+               constexpr complex<_Cx> operator = (const _Cx& _s);
+               constexpr complex<_Cx> operator += (const _Cx& _s);
+               constexpr complex<_Cx> operator -= (const _Cx& _s);
+               constexpr complex<_Cx> operator *= (const _Cx& _s);
+               constexpr complex<_Cx> operator /= (const _Cx& _s);
                /*Operations with other complex numbers*/
 
-               complex<_Cx> operator = (const complex<_Cx>& _z);
-               complex<_Cx> operator += (const complex<_Cx>& _z);
-               complex<_Cx> operator -= (const complex<_Cx>& _z);
-               complex<_Cx> operator *= (const complex<_Cx>& _z);
-               complex<_Cx> operator /= (const complex<_Cx>& _z);
+               constexpr complex<_Cx> operator = (const complex<_Cx>& _z);
+               constexpr complex<_Cx> operator += (const complex<_Cx>& _z);
+               constexpr complex<_Cx> operator -= (const complex<_Cx>& _z);
+               constexpr complex<_Cx> operator *= (const complex<_Cx>& _z);
+               constexpr complex<_Cx> operator /= (const complex<_Cx>& _z);
 
                /*Default constructor, defaults to 0*/
                complex()
-                    : _real(0), _img(0)
+                    : _real(static_cast<_Cx>(0)), _img(static_cast<_Cx>(0))
                {}
                /*Constructor with a scalar*/
                complex(const _Cx& _s)
-                    : _real(_s), _img(0)
+                    : _real(_s), _img(static_cast<_Cx>(0))
                {}
                /*Constructor with real and imaginary components*/
                complex(const _Cx& _r, const _Cx& _i)
@@ -70,6 +72,13 @@ namespace necromancer_complex
                complex(const complex<_Cx>& _z)
                     : _real(_z.real()), _img(_z.img())
                {}
+               /*12/25/2023 ~ Christmas!*/
+               /*Return i*/
+               static constexpr complex<_Cx> i()
+               {
+                    return complex<_Cx>(static_cast<_Cx>(0),
+                                        static_cast<_Cx>(1));
+               }
      };
      /*** Modify complex values with operations ***/
 
@@ -171,7 +180,7 @@ namespace necromancer_complex
           _Cx _r = _real * _z.real() + _img * _z.img();
           const _Cx _abs2_z = _z.real() * _z.real() + _z.img() * _z.img();
           _img = (_img * _z.real() - _real * _z.img()) / _abs2_z;
-          _real = _r; / _abs2_z;
+          _real = _r / _abs2_z;
           return *this;
      }
 
@@ -373,7 +382,7 @@ namespace necromancer_complex
      /*Return _z*/
      template<typename _Cx>
      inline constexpr complex<_Cx>
-     _z_val(const complex<_Cx>& _z)
+     z_val(const complex<_Cx>& _z)
      {
           return _z;
      }
@@ -395,92 +404,135 @@ namespace necromancer_complex
           return _z.img();
      }
 
-     /*** Simple non-transcendentals ***/
+     /*12/25/2023 ~ Christmas!*/
+     /*Return i*/
+     template<typename _Cx>
+     inline constexpr complex<_Cx>
+     i()
+     {
+          return complex<_Cx>(0, 1);
+     }
+
+     /*========================================================*/
 
      /*12/13/2023*/
      template<typename _Cx>
      inline constexpr _Cx
      _c_abs(const complex<_Cx>& _z)
      {
-          if(_z.real() == 0 || _z.img() == 0)
-               return necromancer_abs::abs(_z.real() - _z.img());
           _Cx _x = _z.real();
           _Cx _y = _z.img();
-          return necromancer_root::sqrt(_x * _x + _y * _y);
-     }
-     /*12/18/2023*/
-     /*Return the magnitude of a 32-bit float complex number _z*/
-     inline constexpr float
-     absf(const complex<float>& _z)
-     {
-          return _c_abs<float>(_z);
-     }
-     /*12/18/2023*/
-     /*Return the magnitude of a 64-bit float complex number _z*/
-     inline constexpr double
-     absd(const complex<double>& _z)
-     {
-          return _c_abs<double>(_z);
+          return sqrt(_x * _x + _y * _y);
      }
      /*12/13/2023*/
      /*Return the magnitude of a complex number _z*/
      template<typename _Cx>
-     inline _Cx
+     inline constexpr _Cx
      abs(const complex<_Cx>& _z)
      {
           return _c_abs(_z);
      }
 
-     /*12/13/2023*/
+     /*12/25/2023 ~ Christmas!*/
+     template<typename _Cx>
+     inline constexpr _Cx
+     _complex_abs2(const complex<_Cx>& _z)
+     {
+          _Cx _x = _z.real();
+          _Cx _y = _z.img();
+          return _x * _x + _y * _y;
+     }
+     /*12/25/2023 ~ Christmas!*/
+     /*Return the squared magnitude of a complex number _z*/
+     template<typename _Cx>
+     inline constexpr _Cx
+     abs2(const complex<_Cx>& _z)
+     {
+          return _complex_abs2(_z);
+     }
+
+     /*12/24/2023*/
+     /*Return the complex conjugate of a complex number _z*/
+     template<typename _Cx>
+     inline constexpr complex<_Cx>
+     conj(const complex<_Cx>& _z)
+     {
+          return complex<_Cx>(_z.real(), -_z.img());
+     }
+
+     /*12/21/2023*/
      template<typename _Cx>
      inline complex<_Cx>
-     _c_arg(const complex<_Cx>& _z)
+     _complex_sqrt(const complex<_Cx>& _z)
      {
-          return necromancer_atan2::atan2(_z.img(), _z.real());
+          if(_z.img() == 0)
+               return _z.real() > 0? complex<_Cx>(sqrt(_z.real()), 0):
+                    complex<_Cx>(0, sqrt(-_z.real()));
+          /*Extremely scary, but derivable formula*/
+          _Cx _r = sqrt((abs(_z) + _z.real()) / 2);
+          _Cx _i = (_z.img() / abs(_z.img())) * 
+               sqrt((abs(_z) - _z.real()) / 2);
+          return complex<_Cx>(_r, _i);
      }
-     /*12/13/2023*/
+
+     /*12/25/2023 ~ Christmas!*/
+     /*Compute the square root of a complex number _z*/
+     template<typename _Cx>
+     inline complex<_Cx>
+     sqrt(const complex<_Cx>& _z)
+     {
+          return _complex_sqrt(_z);
+     }
+
+     /*12/25/2023 ~ Christmas!*/
+     template<typename _Cx>
+     inline constexpr _Cx
+     _complex_arg(const complex<_Cx>& _z)
+     {
+          return atan2(_z.img(), _z.real());
+     }
+     /*12/25/2023 ~ Christmas!*/
      /*Return the phase angle of a complex number _z*/
      template<typename _Cx>
-     inline complex<_Cx>
+     inline constexpr _Cx
      /*Why not use phase()???*/
      arg(const complex<_Cx>& _z)
      {
-          return _c_arg(_z);
+          return _complex_arg(_z);
      }
-     /*12/14/2023*/
+     /*12/25/2023 ~ Christmas!*/
      /*Return the phase angle of a complex number _z*/
      template<typename _Cx>
-     inline complex<_Cx>
+     inline constexpr _Cx
      /*Why not use arg()???*/
      phase(const complex<_Cx>& _z)
      {
-          return _c_arg(_z);
-     }
-     /*** Transcendentals ***/
-
-     /*12/15/2023*/
-     template<typename _Cx>
-     inline complex<_Cx>
-     _c_exp(const complex<_Cx>& _z)
-     {
-          return complex<_Cx>(necromancer_exp::exp(_z.real())
-               * complex<Cx>(euclid_trig::cos(_z.img()), euclid_trig::sin(_z.img())));
+          return _complex_arg(_z);
      }
 
-     /*12/14/2023*/
+     // /*12/15/2023*/
+     // template<typename _Cx>
+     // inline complex<_Cx>
+     // _c_exp(const complex<_Cx>& _z)
+     // {
+     //      return complex<_Cx>(necromancer_exp::exp(_z.real())
+     //           * complex<Cx>(euclid_trig::cos(_z.img()), euclid_trig::sin(_z.img())));
+     // }
+
+     /*12/25/2023 ~ Christmas!*/
      template<typename _Cx>
      inline complex<_Cx>
-     _c_log(const complex<_Cx>& _z)
+     _complex_log(const complex<_Cx>& _z)
      {
-          return complex<_Cx>(necromancer_log::log(abs(_z)), arg(_z));
+          return complex<_Cx>(log(_c_abs(_z)), arg(_z));
      }
-     /*12/14/2023*/
-     /*Return the complex natural logarithm of _z*/
+     /*12/25/2023 ~ Christmas!*/
+     /*Compute the complex natural logarithm of a complex number _z*/
      template<typename _Cx>
      inline complex<_Cx>
      log(const complex<_Cx>& _z)
      {
-          return _c_log(_z);
+          return _complex_log(_z);
      }
 }
 
