@@ -1,9 +1,8 @@
 #include <iostream>
 #include <iomanip>
-#define _MATH_SORCERY_SKIP_MATH_WARN_
-#include "math/math_sorcery.hpp"
-#include "math/rounding.hpp"
+#include "sorcery/array/array.hpp"
 #include <chrono>
+#include "algorithm"
 
 //  π
 //  ⌠ sin(s)
@@ -60,6 +59,5 @@
 int main()
 {
     std::cout << "Starting...\n";
-    std::cout << std::setprecision(16) << max(atan(2), 1.07, 90.) << '\n';
-    std::cout << '\n';
+    std::cout << std::setprecision(16) << 2.07 << '\n';
 }

@@ -58,6 +58,8 @@
           "span": "cpp",
           "variant": "cpp",
           "*.ini": "cpp",
-          "ctgmath": "cpp"
+          "ctgmath": "cpp",
+          "cstdarg": "cpp",
+          "cfenv": "cpp"
      }
 }

@@ -106,18 +106,15 @@ constexpr double dbl_bits(const necromancer_float_class::_int64 _i)
      (static_cast<_type>(-1) < 0)
 #define _digits2(_type, _bitsize)       \
      (_bitsize - _is_signed(_type, _bitsize))
-#define _max(_type, _bsize)             \
+#define _max_val(_type, _bsize)         \
      (_is_signed(_type, _bsize) ?       \
      ((((static_cast<_type>(1) <<       \
      (_digits2(_type, _bsize) - 1))     \
      - 1) << 1) + 1) : ~static_cast<_type>(0))
-#define _min(_type, _bitsize)           \
+#define _min_val(_type, _bitsize)       \
      _is_signed(_type, _bitsize) ?      \
      -_max(_type, _bitsize) - 1 :       \
      static_cast<_type>(0)
-/*643 / 2136 is a good approximation for log10(2)*/
-#define _digits10(_type, _bitsize)      \
-     (_digits2(_type, _bitsize) * 643l / 2136)
 
 template<typename _ty>
 class numeric_limits;
@@ -138,8 +135,6 @@ class numeric_limits<bool>
           }
           static constexpr int size = sizeof(bool);
           static constexpr int bitsize = _bitsize(bool);
-          static constexpr int digits2 = 1;
-          static constexpr int digits10 = 0;
 
           static constexpr bool is_signed = false;
           static constexpr bool is_integer = true;     
@@ -174,8 +169,6 @@ class numeric_limits<signed char>
           }
           static constexpr int size = sizeof(signed char);
           static constexpr int bitsize = _bitsize(signed char);
-          static constexpr int digits = _digits2(signed char, bitsize);
-          static constexpr int digits10 = _digits10(signed char, bitsize);
 
           static constexpr bool is_signed = true;
           static constexpr bool is_integer = true;
@@ -210,8 +203,6 @@ class numeric_limits<unsigned char>
           }
           static constexpr int size = sizeof(unsigned char);
           static constexpr int bitsize = _bitsize(unsigned char);
-          static constexpr int digits = _digits2(unsigned char, bitsize);
-          static constexpr int digits10 = _digits10(unsigned char, bitsize);
 
           static constexpr bool is_signed = false;
           static constexpr bool is_integer = true;
@@ -246,8 +237,6 @@ class numeric_limits<signed short>
           }
           static constexpr int size = sizeof(signed short);
           static constexpr int bitsize = _bitsize(signed short);
-          static constexpr int digits = _digits2(signed short, bitsize);
-          static constexpr int digits10 = _digits10(signed short, bitsize);
 
           static constexpr bool is_signed = true;
           static constexpr bool is_integer = true;
@@ -282,8 +271,6 @@ class numeric_limits<unsigned short>
           }
           static constexpr int size = sizeof(unsigned short);
           static constexpr int bitsize = _bitsize(unsigned short);
-          static constexpr int digits = _digits2(unsigned short, bitsize);
-          static constexpr int digits10 = _digits10(unsigned short, digits);
 
           static constexpr bool is_signed = false;
           static constexpr bool is_integer = true;
@@ -318,8 +305,6 @@ class numeric_limits<signed int>
           }
           static constexpr int size = sizeof(signed int);
           static constexpr int bitsize = _bitsize(signed int);
-          static constexpr int digits = _digits2(signed int, bitsize);
-          static constexpr int digits10 = _digits10(signed int, bitsize);
 
           static constexpr bool is_signed = true;
           static constexpr bool is_integer = true;
@@ -354,8 +339,6 @@ class numeric_limits<unsigned int>
           }
           static constexpr int size = sizeof(unsigned int);
           static constexpr int bitsize = _bitsize(unsigned int);
-          static constexpr int digits = _digits2(unsigned int, bitsize);
-          static constexpr int digits10 = _digits10(unsigned int, bitsize);
 
           static constexpr bool is_signed = false;
           static constexpr bool is_integer = true;
@@ -390,8 +373,6 @@ class numeric_limits<signed long>
           }
           static constexpr int size = sizeof(signed long);
           static constexpr int bitsize = _bitsize(signed long);
-          static constexpr int digits = _digits2(signed long, bitsize);
-          static constexpr int digits10 = _digits10(signed long, bitsize);
 
           static constexpr bool is_signed = true;
           static constexpr bool is_integer = true;
@@ -426,8 +407,6 @@ class numeric_limits<unsigned long>
           }
           static constexpr int size = sizeof(unsigned long);
           static constexpr int bitsize = _bitsize(unsigned long);
-          static constexpr int digits = _digits2(unsigned long, bitsize);
-          static constexpr int digits10 = _digits10(unsigned long, bitsize);
 
           static constexpr bool is_signed = false;
           static constexpr bool is_integer = true;
@@ -462,8 +441,6 @@ class numeric_limits<signed long long>
           }
           static constexpr bool size = sizeof(signed long long);
           static constexpr int bitsize = _bitsize(signed long long);
-          static constexpr int digits = _digits2(signed long long, bitsize);
-          static constexpr int digits10 = _digits10(signed long long, bitsize);
 
           static constexpr bool is_signed = true;
           static constexpr bool is_integer = true;
@@ -498,8 +475,6 @@ class numeric_limits<unsigned long long>
           }
           static constexpr int size = sizeof(unsigned long long);
           static constexpr int bitsize = _bitsize(unsigned long long);
-          static constexpr int digits = _digits2(unsigned long long, bitsize);
-          static constexpr int digits10 = _digits10(unsigned long long, bitsize);
 
           static constexpr bool is_signed = false;
           static constexpr bool is_integer = true;
@@ -542,10 +517,6 @@ class numeric_limits<float>
           }
           static constexpr int size = sizeof(float);
           static constexpr int bitsize = _bitsize(float);
-          static constexpr int digits = 0x018;
-          static constexpr int digits10 = 0x006;
-          static constexpr int min_exp = -0x07e;
-          static constexpr int max_exp = 0x080;
 
           static constexpr bool is_signed = true;
           static constexpr bool is_integer = false;
@@ -590,10 +561,6 @@ class numeric_limits<double>
           }
           static constexpr int size = sizeof(double);
           static constexpr int bitsize = _bitsize(double);
-          static constexpr int digits = 0x035;
-          static constexpr int digits10 = 0x00f;
-          static constexpr int min_exp = -0x3fe;
-          static constexpr int max_exp = 0x400;
 
           static constexpr bool is_signed = true;
           static constexpr bool is_integer = true;
@@ -717,16 +684,135 @@ class numeric_limits<double>
 #include "gcf.hpp"
 #include "lcm.hpp"
 #include "log.hpp"
+#include "minmax.hpp"
 #include "rem.hpp"
 #include "roots.hpp"
 #include "sign.hpp"
 #include "swap.hpp"
+#include "variadic.hpp"
 
 /*Trig folder*/
 #include "trig/acos.hpp"
 #include "trig/asin.hpp"
 #include "trig/atan.hpp"
 #include "trig/atan2.hpp"
+
+/*** Trig functions ***/
+
+/*** acos ***/
+#ifdef _NECROMANCER_ACOS_
+     /*12/24/2023*/
+     /*Compute the arccosine of a 32-bit float _x*/
+     constexpr float acos(const float& _x)
+     {
+          return necromancer_acos::acosf(_x);
+     }
+     /*12/24/2023*/
+     /*Compute the arccosine of a 64-bit float _x*/
+     constexpr double acos(const double& _x)
+     {
+          return necromancer_acos:: 
+               acosd(_x);
+     }
+     /*12/24/2023*/
+     /*Compute the arccosine of a number _x*/
+     /*(Cast to double)*/
+     template<typename _acos_ty>
+     constexpr double acos(const _acos_ty& _x)
+     {
+          return necromancer_acos::
+               acosd(static_cast<double>(_x));
+     }
+#else
+     #warning "Could not get acos()"
+#endif /*_NECROMANCER_ACOS_*/
+
+/*** asin ***/
+#ifdef _NECROMANCER_ASIN_
+     /*12/24/2023*/
+     /*Compute the arcsine of a 32-bit float _x*/
+     constexpr float asin(const float& _x)
+     {
+          return necromancer_asin::
+               asinf(_x);
+     }
+     /*12/24/2023*/
+     /*Compute the arcsine of a 64-bit float _x*/
+     constexpr double asin(const double& _x)
+     {
+          return necromancer_asin::
+               asind(_x);
+     }
+     /*12/24/2023*/
+     /*Compute the arcsine of a number _x*/
+     /*(Cast to double)*/
+     template<typename _asin_ty>
+     constexpr double asin(const _asin_ty& _x)
+     {
+          return necromancer_asin::
+               asind(static_cast<double>(_x));
+     }
+#else
+     #warning "Could not get asin()"
+#endif /*_NECROMANCER_ASIN_*/
+
+/*** atan ***/
+#ifdef _NECROMANCER_ATAN_
+     /*12/24/2023*/
+     /*Compute the arctangent of a 32-bit float _x*/
+     constexpr float atan(const float& _x)
+     {
+          return necromancer_atan::
+               atanf(_x);
+     }
+     /*12/24/2023*/
+     /*Compute the arctangent of a 64-bit float _x*/
+     constexpr double atan(const double& _x)
+     {
+          return necromancer_atan::
+               atand(_x);
+     }
+     /*12/24/2023*/
+     /*Compute the arctangent of a number _x*/
+     /*(Cast to Double)*/
+     template<typename _atan_ty>
+     constexpr double atan(const _atan_ty& _x)
+     {
+          return necromancer_atan::
+               atand(static_cast<double>(_x));
+     }
+#else
+     #warning "Could not get atan()"
+#endif /*_NECROMANCER_ATAN_*/
+
+/*** atan2 ***/
+#ifdef _NECROMANCER_ATAN2_
+     /*12/24/2023*/
+     /*Figure out what it does; it's not my job to tell you*/
+     constexpr float atan2(const float& _y, const float& _x)
+     {
+          return necromancer_atan2::
+               atan2f(_y, _x);
+     }
+     /*12/24/2023*/
+     /*Figure out what it does; it's not my job to tell you*/
+     constexpr double atan2(const double& _y, const double& _x)
+     {
+          return necromancer_atan2::
+               atan2d(_y, _x);
+     }
+     /*12/24/2023*/
+     /*Figure out what it does; it's not my job to tell you*/
+     template<typename _atan2_ty>
+     constexpr double atan2(const _atan2_ty& _x, const _atan2_ty& _y)
+     {
+          return necromancer_atan2::
+               atan2d(static_cast<double>(_x),
+                    static_cast<double>(_y));
+     }
+#else
+     #warning "Could not get atan2()"
+#endif /*_NECROMANCER_ATAN2_*/
 
 /*** abs ***/
 #ifdef _NECROMANCER_ABS_
@@ -1177,6 +1263,44 @@ class numeric_limits<double>
      #warning "Could not get log(), log2(), ilog2(), or log10()"
 #endif /*_NECROMANCER_LOG_*/
 
+/*** min, max ***/
+#ifdef _NECROMANCER_MIN_MAX_
+     /*12/28/2023*/
+     /*This gets max(_x, _y)*/
+     template<typename _max_ty>
+     constexpr _max_ty max(const _max_ty& _x, const _max_ty& _y)
+     {
+          return necromancer_min_max::
+               max(_x, _y)
+     }
+     /*12/28/2023*/
+     /*Return the maximum value in an array*/
+     template<typename _arr_ty, int _arr_size>
+     constexpr _arr_ty max(const _arr_ty (&_arr)[_arr_size])
+     {
+          return necromancer_min_max::
+               arr_max(_arr);
+     }
+     /*12/28/2023*/
+     /*This gets min(_x, _y)*/
+     template<typename _min_ty>
+     constexpr _min_ty min(const _min_ty& _x, const _min_ty& _y)
+     {
+          return necromancer_min_max::
+               min(_x, _y);
+     }
+     /*12/28/2023*/
+     /*Return the minimum value in an array*/
+     template<typename _arr_ty, int _arr_size>
+     constexpr _arr_ty min(const _arr_ty (&_arr)[_arr_size])
+     {
+          return necromancer_min_max::
+               arr_min(_arr);
+     }
+#else
+     #warning "Could not get min() or max()"
+#endif /*_NECROMANCER_LOG_*/
+
 /*** rem ***/
 #ifdef _NECROMANCER_REM_
      /*12/24/2023*/
@@ -1336,200 +1460,35 @@ class numeric_limits<double>
      #warning "Could not get swap()"
 #endif /*_NECROMANCER_SWAP*/
 
-/*** Trig functions ***/
-
-/*** acos ***/
-#ifdef _NECROMANCER_ACOS_
-     /*12/24/2023*/
-     /*Compute the arccosine of a 32-bit float _x*/
-     constexpr float acos(const float& _x)
+/*** Variadic functions ***/
+#ifdef _NECROMANCER_VARIADIC_
+     /*12/28/2023*/
+     /*Return the number of arguments passed into this function*/
+     /*Might be useful???*/
+     template<typename _arg_ty = double, typename... _args>
+     constexpr unsigned long num_args(_args... _arg)
      {
-          return necromancer_acos::acosf(_x);
+          return necromancer_variadic::
+               num_args(_arg_ty, arg...);
      }
-     /*12/24/2023*/
-     /*Compute the arccosine of a 64-bit float _x*/
-     constexpr double acos(const double& _x)
+     /*12/28/2023*/
+     /*Return the maximum value given a variable number of inputs*/
+     template<typename _arg_ty = double, typename... _args>
+     constexpr _arg_ty max(_args... _arg)
      {
-          return necromancer_acos:: 
-               acosd(_x);
+          return necromancer_variadic::
+               max(_arg...);
      }
-     /*12/24/2023*/
-     /*Compute the arccosine of a number _x*/
-     /*(Cast to double)*/
-     template<typename _acos_ty>
-     constexpr double acos(const _acos_ty& _x)
+     /*12/28/2023*/
+     /*Return the minimum value given a variable number of inputs*/
+     template<typename _arg_ty = double, typename... _args>
+     constexpr _arg_ty min(_args... _arg)
      {
-          return necromancer_acos::
-               acosd(static_cast<double>(_x));
-     }
-#else
-     #warning "Could not get acos()"
-#endif /*_NECROMANCER_ACOS_*/
-
-/*** asin ***/
-#ifdef _NECROMANCER_ASIN_
-     /*12/24/2023*/
-     /*Compute the arcsine of a 32-bit float _x*/
-     constexpr float asin(const float& _x)
-     {
-          return necromancer_asin::
-               asinf(_x);
-     }
-     /*12/24/2023*/
-     /*Compute the arcsine of a 64-bit float _x*/
-     constexpr double asin(const double& _x)
-     {
-          return necromancer_asin::
-               asind(_x);
-     }
-     /*12/24/2023*/
-     /*Compute the arcsine of a number _x*/
-     /*(Cast to double)*/
-     template<typename _asin_ty>
-     constexpr double asin(const _asin_ty& _x)
-     {
-          return necromancer_asin::
-               asind(static_cast<double>(_x));
+          return necromancer_variadic::
+               min(_arg...);
      }
 #else
-     #warning "Could not get asin()"
-#endif /*_NECROMANCER_ASIN_*/
+     #warning "Could not get variadic functions"
+#endif /*_NECROMANCER_VARIADIC_*/
 
-/*** atan ***/
-#ifdef _NECROMANCER_ATAN_
-     /*12/24/2023*/
-     /*Compute the arctangent of a 32-bit float _x*/
-     constexpr float atan(const float& _x)
-     {
-          return necromancer_atan::
-               atanf(_x);
-     }
-     /*12/24/2023*/
-     /*Compute the arctangent of a 64-bit float _x*/
-     constexpr double atan(const double& _x)
-     {
-          return necromancer_atan::
-               atand(_x);
-     }
-     /*12/24/2023*/
-     /*Compute the arctangent of a number _x*/
-     /*(Cast to Double)*/
-     template<typename _atan_ty>
-     constexpr double atan(const _atan_ty& _x)
-     {
-          return necromancer_atan::
-               atand(static_cast<double>(_x));
-     }
-#else
-     #warning "Could not get atan()"
-#endif /*_NECROMANCER_ATAN_*/
-
-/*** atan2 ***/
-#ifdef _NECROMANCER_ATAN2_
-     /*12/24/2023*/
-     /*Figure out what it does; it's not my job to tell you*/
-     constexpr float atan2(const float& _y, const float& _x)
-     {
-          return necromancer_atan2::
-               atan2f(_y, _x);
-     }
-     /*12/24/2023*/
-     /*Figure out what it does; it's not my job to tell you*/
-     constexpr double atan2(const double& _y, const double& _x)
-     {
-          return necromancer_atan2::
-               atan2d(_y, _x);
-     }
-     /*12/24/2023*/
-     /*Figure out what it does; it's not my job to tell you*/
-     template<typename _atan2_ty>
-     constexpr double atan2(const _atan2_ty& _x, const _atan2_ty& _y)
-     {
-          return necromancer_atan2::
-               atan2d(static_cast<double>(_x),
-                    static_cast<double>(_y));
-     }
-#else
-     #warning "Could not get atan2()"
-#endif /*_NECROMANCER_ATAN2_*/
-
-/*** max ***/
-
-/*12/28/2023*/
-/*Return the maximum value between _x and _y*/
-template<typename _max_ty>
-constexpr _max_ty max(const _max_ty& _x, const _max_ty& _y)
-{
-     return _x > _y? _x: _y;
-}
-/*** min ***/
-
-/*12/28/2023*/
-/*Return the minimum value between _x and _y*/
-template<typename _min_ty>
-constexpr _min_ty min(const _min_ty& _x, const _min_ty& _y)
-{
-     return _x > _y? _y: _x;
-}
-/*** Array functions ***/
-
-/*12/28/2023*/
-/*Return the maximum value of an array*/
-template<typename _arr_ty, int _arr_size>
-constexpr _arr_ty arr_max(const _arr_ty (&_arr)[_arr_size])
-{
-     _arr_ty _r = static_cast<_arr_ty>(0);
-     for(int _i = 0; _i < _arr_size; _i ++)
-     {
-          _r = max<_arr_ty>(_r, _arr[_i]);
-     }
-     return _r;
-}
-/*12/28/2023*/
-/*Return the minimum value of a array*/
-template<typename _arr_ty, int _arr_size>
-constexpr _arr_ty arr_min(const _arr_ty (&_arr)[_arr_size])
-{
-     _arr_ty _r = static_cast<_arr_ty>(0);
-     for(int _i = 0; _i < _arr_size; _i ++)
-     {
-          _r = min<_arr_ty>(_r, _arr[_i]);
-     }
-     return _r;
-}
-/*** Variable argument functions ***/
-
-/*12/18/2023*/
-#define _num_args(_type, ...)           \
-     (sizeof((_type[]){0, ##__VA_ARGS__}) / sizeof(_type) - 1)
-/*12/18/2023*/
-/*Specialized array for max(_type, ...)*/
-#define _max_arg_array(_type, ...)      \
-     ((_type[]){numeric_limits<_type>::min(), ##__VA_ARGS__})
-/*12/18/2023*/
-/*Specialized array for min(_type, ...)*/
-#define _min_arg_array(_type, ...)      \
-     ((_type[]){numeric_limits<_type>::max(), ##__VA_ARGS__})
-/*12/28/2023*/
-/*Return the number of arguments passed into this function*/
-/*Might be useful???*/
-template<typename _arg_ty = double, typename... _args>
-constexpr _int32 num_args(_args... _arg)
-{
-     return _num_args(_arg_ty, _arg...);
-}
-/*12/28/2023*/
-/*Return the maximum value given a variable number of inputs*/
-template<typename _arg_ty = double, typename... _args>
-constexpr _arg_ty max(_args... _arg)
-{
-     return arr_max(_max_arg_array(_arg_ty, _arg...));
-}
-/*12/28/2023*/
-/*Return the minimum value given a variable number of inputs*/
-template<typename _arg_ty = double, typename... _args>
-constexpr _arg_ty min(_args... _arg)
-{
-     return arr_min(_min_arg_array(_arg_ty, _arg...));
-}
 #endif /*_MATH_SORCERY_*/
