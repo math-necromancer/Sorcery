@@ -34,7 +34,7 @@ namespace necromancer_atan2
                return _x + _y;
           /*atan2(0, 0) is undefined*/
           if(_aix == 0 && _aiy == 0)
-               return NaNf;
+               return sorcery::NaNf;
           /*_x is positive*/
           /*(1'st and 4'th quad)*/
           if(_ix._y == _aix)
@@ -61,7 +61,7 @@ namespace necromancer_atan2
                return _x + _y;
           /*atan2(0, 0) is undefined*/
           if(_aix == 0 && _aiy == 0)
-               return NaN;
+               return sorcery::NaN;
           /*_x is positive*/
           /*(1'st and 4'th quad)*/
           if(_ix._y == _aix)

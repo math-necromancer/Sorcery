@@ -11,8 +11,9 @@
 
 #include "math_sorcery.hpp"
 
-namespace necromancer_complex
+namespace sorcery
 {
+     using namespace sorcery;
      /*12/13/2023*/
      /*Complex Number Class ~ (x + yi)*/
      template<typename _Cx = int>
@@ -418,7 +419,7 @@ namespace necromancer_complex
      /*12/13/2023*/
      template<typename _Cx>
      inline constexpr _Cx
-     _c_abs(const complex<_Cx>& _z)
+     _complex_abs(const complex<_Cx>& _z)
      {
           _Cx _x = _z.real();
           _Cx _y = _z.img();
@@ -430,7 +431,7 @@ namespace necromancer_complex
      inline constexpr _Cx
      abs(const complex<_Cx>& _z)
      {
-          return _c_abs(_z);
+          return _complex_abs(_z);
      }
 
      /*12/25/2023 ~ Christmas!*/
@@ -452,12 +453,19 @@ namespace necromancer_complex
      }
 
      /*12/24/2023*/
-     /*Return the complex conjugate of a complex number _z*/
+     template<typename _Cx>
+     inline constexpr complex<_Cx>
+     _complex_conj(const complex<_Cx>& _z)
+     {
+          return complex<_Cx>(_z.real(), -_z.img());
+     }
+     /*1/3/2024*/
+     /*Return the conjugate of a complex number _z*/
      template<typename _Cx>
      inline constexpr complex<_Cx>
      conj(const complex<_Cx>& _z)
      {
-          return complex<_Cx>(_z.real(), -_z.img());
+          return _complex_conj(_z);
      }
 
      /*12/21/2023*/
@@ -524,7 +532,7 @@ namespace necromancer_complex
      inline complex<_Cx>
      _complex_log(const complex<_Cx>& _z)
      {
-          return complex<_Cx>(log(_c_abs(_z)), arg(_z));
+          return complex<_Cx>(log(_complex_abs(_z)), _complex_arg(_z));
      }
      /*12/25/2023 ~ Christmas!*/
      /*Compute the complex natural logarithm of a complex number _z*/

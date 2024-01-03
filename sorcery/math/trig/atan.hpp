@@ -79,7 +79,7 @@ namespace necromancer_atan
      {
           float_64 _i = {_x};
           /*|_x|*/
-          _i._y &= 0x7fffffffffffffff;
+          _i._lh._hi &= 0x7fffffff;
           _int64 _y = _i._y;
           /*_x is 0 or NaN*/
           if(_i._y > 0x7ff0000000000000 || _i._y == 0)

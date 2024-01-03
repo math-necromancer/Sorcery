@@ -22,15 +22,12 @@ namespace necromancer_asin
           float_32 _i = {_x};
           /*|_x|*/
           _i._y &= 0x7fffffff;
-          /*_x is 0 or NaN*/
-          if(_i._y > 0x7f800000 || _i._y == 0)
-               return _x;
+          /*asin(_x) is undefined for |_x| > 1*/
+          if(_i._y > 0x3f800000)
+               return sorcery::NaNf;
           /*|_x| < 1/256, we return _x as it's asin(x) in single precision*/
           if(_i._y <= 0x3b800000)
                return _x;
-          /*|_x| > 1.0*/
-          if(_i._y > 0x3f800000)
-               return NaNf;
           float _r = necromancer_atan::
                atanf(_x / necromancer_root::sqrtf(1 - _x * _x));
           return necromancer_sign::
@@ -41,13 +38,11 @@ namespace necromancer_asin
      {
           float_64 _i = {_x};
           _i._x = _x;
-          _i._y &= 0x7fffffffffffffff;
-          /*_x is 0 or NaN*/
-          if(_i._y > 0x7ff0000000000000 || _i._y == 0)
-               return _x;
-          /*|_x| > 1.0*/
+          /*|_x|*/
+          _i._lh._hi &= 0x7fffffff;
+          /*asin(_x) is undefined for |_x| > 1*/
           if(_i._y > 0x3ff0000000000000)
-               return NaNf;
+               return sorcery::NaNf;
           double _r = necromancer_atan::
                atand(_x / necromancer_root::sqrtd(1 - _x * _x));
           return necromancer_sign::

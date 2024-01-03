@@ -1,8 +1,7 @@
 #include <iostream>
 #include <iomanip>
-#include "sorcery/array/array.hpp"
-#include <chrono>
-#include "algorithm"
+#include "sorcery/math/math_sorcery.hpp"
+#include "sorcery/math/complex.hpp"
 
 //  π
 //  ⌠ sin(s)
@@ -58,6 +57,10 @@
 
 int main()
 {
-    std::cout << "Starting...\n";
-    std::cout << std::setprecision(16) << 2.07 << '\n';
+    std::cout << "Starting..." << '\n';
+    using namespace sorcery;
+    complex<double> _c = log(complex<double>(-e));
+    std::cout << std::setprecision(16) << _c.real() << " + " << _c.img() << "i\n";
+    std::cout << sorcery::acos(0.001);
+    // std::cout <<
 }

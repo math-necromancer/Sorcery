@@ -1,7 +1,6 @@
 /*The Math Necromancer*/
 
-/*============ The Natural Logarithm ============*/
-/*Computes log(x) on an IEEE-754 Machine*/
+/*double precision log(x)*/
 
 #ifndef _NECROMANCER_LOG_
 #define _NECROMANCER_LOG_
@@ -13,22 +12,21 @@
 #endif /*_MATH_SORCERY_*/
 
 #include "float_class.hpp"
-
 namespace necromancer_log
 {
      using namespace necromancer_float_class;
      const static double
-          _log2_h = 6.93147180369123816490e-01,
-          _log2_l = 1.90821492927232121458e-10;
+          _log2_h = 6.931471805599453e-01,
+          _log2_l = 9.417232121458000e-18;
      const static double
           /*Minimax coeficcients for 2 * arctanh(x)*/  
-          _log1 = 6.66666666666667653654896829047862109605e-01,
-          _log2 = 3.99999999996639180070480580779767357622e-01,
-          _log3 = 2.85714286985476106491309914245597720749e-01,
-          _log4 = 2.22222024077476110197597399876978069272e-01,
-          _log5 = 1.81833876328594532366358057253631240618e-01,
-          _log6 = 1.53181571233880298729095145342556944283e-01,
-          _log7 = 1.47580071554569676223389696418304199218e-01;
+          _log1 = 6.66666666666667653e-01,
+          _log2 = 3.99999999996639180e-01,
+          _log3 = 2.85714286985476106e-01,
+          _log4 = 2.22222024077476110e-01,
+          _log5 = 1.81833876328594532e-01,
+          _log6 = 1.53181571233880298e-01,
+          _log7 = 1.47580071554569676e-01;
      /*Compute the Natural Logarithm of _x*/
      /*Reduce the Range of _x*/
      /*   Given an IEEE-754 Machine, find an f and e where _x = (f + 1) * 2^e:*/
@@ -41,11 +39,11 @@ namespace necromancer_log
      /*   Remember, e is not Euler's number in this situation*/
      /*Computation of log(f - 1)*/
      /*   The informed reader may recall that log(_x) = 2 * arctanh((_x - 1) / (_x + 1))*/
-     /*   We will use a polynomial of degree 7 to approximate 2 arctanh().*/
+     /*   We will use a polynomial of degree 15 to approximate 2 arctanh().*/
      /*                 1        3        5        7   */
      /*   arctanh(x) = x + (1/3)x + (1/5)x + (1/7)x ...*/
      /*   This is the formula shown in the functions below. We put in _f / (_f + 2), as*/
-     /*   _f has been decremented already. Then we just return our result scaled back up*/
+     /*   _f has been decremented. Then we just return our result scaled back up*/
 
      /*** log ~ ln ***/
 
@@ -56,16 +54,16 @@ namespace necromancer_log
           /*Special Cases...*/
           if(_i._y == 0x3f800000)
                /*log(1) = 0.0*/
-               return 0x000;
+               return 0.0f;
           if(_i._y == 0x7f800000)
                /*log(inf) = inf*/
-               return INFINITYf;
+               return sorcery::INFINITYf;
           if(_i._y == 0)
                /*log(0^+) -> -inf*/
-               return NEGATIVE_INFINITYf;
-          if(_i._y > 0x7f800000 || _i._f_32._sign)
+               return sorcery::NEGATIVE_INFINITYf;
+          if(_i._y > 0x7f800000)
                /*log(_x) for _x < 0 or is_nan(_x) is undefined; this includes -0*/
-               return NaNf;
+               return sorcery::NaNf;
           float _e = _i._f_32._exp - 0x07e;
           _i._f_32._exp = 0x07e;
           float _f = _i._x;
@@ -76,14 +74,14 @@ namespace necromancer_log
                _e --;
           }
           _f --;
-          float _s = _f / (_f + 0x002);
+          float _s = _f / (_f + 2);
           float _z = _s * _s;
           float _z2 = _z * _z;
           float _t1 = _z * (_log1 + _z2 * (_log3 + _z2 * (_log5 + _z2 * _log7)));
           float _t2 = _z2 * (_log2 + _z2 * (_log4 + _z2 * _log6));
           float _r = _t1 + _t2;
           float _hfsq = 0.5f * _f * _f;
-          /*We can't just return _e * log(2). It isn't precise enough*/
+          /*We can't just return _r + _e * log(2). It isn't precise enough*/
           return _e * _log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * _log2_l)) - _f);
      }
      /*12/24/2023*/
@@ -93,16 +91,16 @@ namespace necromancer_log
           /*Special Cases*/
           if(_i._y == 0x3ff0000000000000)
                /*log(1) = 0.0*/
-               return 0x00000000;
+               return 0.0;
           if(_i._y == 0x7ff0000000000000)
                /*log(inf) = inf*/
-               return INFINITY;
+               return sorcery::INFINITY;
           if(_i._y == 0)
                /*log(0^+) -> -inf*/
-               return NEGATIVE_INFINITY;
-          if(_i._y > 0x7ff0000000000000 || _i._f_64._sign)
+               return sorcery::NEGATIVE_INFINITY;
+          if(_i._y > 0x7ff0000000000000)
                /*log(_x) for _x < 0 or is_nan(_x) is undefined; this includes -0*/
-               return NaN;
+               return sorcery::NaN;
           double _e = _i._f_64._exp - 0x03fe;
           _i._f_64._exp = 0x03fe;
           double _f = _i._x;
@@ -113,14 +111,14 @@ namespace necromancer_log
                _e --;
           }
           _f --;
-          double _s = _f / (_f + 0x002) ;
+          double _s = _f / (_f + 2) ;
           double _z = _s * _s;
           double _z2 = _z * _z;
           double _t1 = _z * (_log1 + _z2 * (_log3 + _z2 * (_log5 + _z2 * _log7)));
           double _t2 = _z2 * (_log2 + _z2 * (_log4 + _z2 * _log6));
           double _r = _t1 + _t2;                           
           double _hfsq = 0.5 * _f * _f;
-          /*We can't just return _e * log(2). It isn't precise enough*/
+          /*We can't just return _r + _e * log(2). It isn't precise enough*/
           return _e * _log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * _log2_l)) - _f);
      }
      /*** log2 ***/
@@ -177,6 +175,6 @@ namespace necromancer_log
      {
           return logd(_x) / logd(_y);
      }
-}    
+}   
 
 #endif /*_NECROMANCER_LOG_*/

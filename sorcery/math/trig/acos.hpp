@@ -26,9 +26,9 @@ namespace necromancer_acos
      constexpr float acosf(const float& _x)
      {
           float_32 _i = {_x};
-          /*_x is NaN*/
-          if(_i._y & 0x7fffffff > 0x7f800000)
-               return _x;
+          /*acos(_x) is undefined for |_x| > 1*/
+          if(_i._y & 0x7fffffff > 0x3f800000)
+               return sorcery::NaNf;
           float _r =  necromancer_atan::
                atanf(necromancer_root::sqrtf(1 - _x * _x) / _x);
           /*_x > 0*/
@@ -40,9 +40,9 @@ namespace necromancer_acos
      constexpr double acosd(const double& _x)
      {
           float_64 _i = {_x};
-          /*_x is NaN*/
-          if(_i._y & 0x7fffffffffffffff > 0x7ff0000000000000)
-               return _x;
+          /*acos(_x) is undefined for |_x| > 1*/
+          if(_i._y & 0x7fffffffffffffff > 0x3ff0000000000000)
+               return sorcery::NaN;
           double _r = necromancer_atan::
                atand(necromancer_root::sqrtd(1 - _x * _x) / _x);
           /*_x > 0*/

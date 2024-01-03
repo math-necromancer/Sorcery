@@ -9,11 +9,23 @@
     #endif /*_RAW_FILE_WARN_*/
 #endif /*_MATH_SORCERY_*/
 
+/*Nice #defines for cases where you have not included "math_necromancy"*/
+
+#ifndef _int32
+     /*You might be using this file alone. Maybe #include math_sorcery.hpp?*/
+     #define _int32 unsigned long
+#endif /*_int32*/
+#ifndef _int64
+     /*You might be using this file alone. Maybe #include math_sorcery.hpp?*/
+     #define _int64 unsigned long long
+#endif /*_int64*/
+
 namespace necromancer_float_class
 {
-     typedef unsigned long _int32;
-     typedef unsigned long long _int64;
      /*** IEEE-754 Floating-Point Forms ***/
+
+     /*These unions are basically the magic behind all the fancy functions*/
+
      /*I will not be supporting long doubles (80 bit float)*/
 
      /*12/13/2023*/
@@ -27,8 +39,7 @@ namespace necromancer_float_class
                _int32 _mantissa : 23;
                _int32 _exp : 8;
                _int32 _sign : 1;
-          };
-          _f_32 _f_32;
+          } _f_32;
      };
      /*12/13/2023*/
      /*64-bit float form*/
@@ -41,8 +52,11 @@ namespace necromancer_float_class
                _int64 _mantissa : 52;
                _int64 _exp : 11;
                _int64 _sign : 1;
-          };
-          _f_64 _f_64;
+          }_f_64;
+          struct _lh
+          {
+               _int32 _lo, _hi;
+          } _lh;
      };
      /*** IEEE-754 Float Classifications ***/
 

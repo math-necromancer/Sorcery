@@ -29,7 +29,7 @@ namespace necromancer_abs
         if(is_nand(_x))
             return _x;
         float_64 _i = {_x};
-        _i._y &= 0x7fffffffffffffff;
+        _i._lh._hi &= 0x7fffffff;
         return _i._x;
     }
     /*12/20/2023*/

@@ -19,7 +19,7 @@ namespace necromancer_rem
         if(_y == 1)
             return _x - static_cast<int>(_x);
         if(_y == 0)
-            return NaNf;
+            return sorcery::NaNf;
         int _q = static_cast<int>(_x / _y);
         return _x - (static_cast<float>(_q) * _y);
     }
@@ -29,7 +29,7 @@ namespace necromancer_rem
         if(_y == 1)
             return _x - static_cast<int>(_x);
         if(_y == 0)
-            return NaN;
+            return sorcery::NaN;
         int _q = static_cast<int>(_x / _y);
         return _x - (static_cast<double>(_q) * _y);
     }

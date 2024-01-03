@@ -53,7 +53,7 @@ namespace necromancer_round
      {
           float_64 _i = {_x};
           /*|_x|*/
-          _i._y &= 0x7fffffffffffffff;
+          _i._lh._hi &= 0x7fffffff;
           /*If |_x| is greater than this, it's an integer, infinity, or NaN*/
           if(_i._y >= 0x433fffffffffffff)
                return _x;
