@@ -3,6 +3,10 @@
 #ifndef _NECROMANCER_VARIADIC_
 #define _NECROMANCER_VARIADIC_
 
+#ifndef _MATH_SORCERY_
+    #warning Are you sure you want to use this raw file instead of "math_sorcery.hpp"?
+#endif /*_MATH_SORCERY_*/
+
 #include "minmax.hpp"
 
 /*** Variable argument functions ***/
@@ -20,7 +24,6 @@
      ((_type[]){sorcery::numeric_limits<_type>::max(), ##__VA_ARGS__})
 namespace necromancer_variadic
 {
-     using namespace necromancer_min_max;
      /*12/28/2023*/
      /*Return the number of arguments passed into this function*/
      /*Might be useful???*/
@@ -34,15 +37,16 @@ namespace necromancer_variadic
      template<typename _arg_ty = double, typename... _args>
      constexpr _arg_ty max(_args... _arg)
      {
-          return arr_max<_arg_ty>(_max_arg_array(_arg_ty, _arg...));
+          return necromancer_min_max::
+               arr_max<_arg_ty>(_max_arg_array(_arg_ty, _arg...));
      }
      /*12/28/2023*/
      /*Return the minimum value given a variable number of inputs*/
      template<typename _arg_ty = double, typename... _args>
      constexpr _arg_ty min(_args... _arg)
      {
-          return arr_min<_arg_ty>(_min_arg_array(_arg_ty, _arg...));
+          return necromancer_min_max::
+               arr_min<_arg_ty>(_min_arg_array(_arg_ty, _arg...));
      }
 }
-
 #endif /*_NECROMANCER_VARIADIC_*/

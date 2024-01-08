@@ -4,55 +4,68 @@
 #define _NECROMANCER_GCF_
 
 #ifndef _MATH_SORCERY_
-    #ifdef _RAW_FILE_WARN_
-        #warning "Are you sure you want to use this raw file instead of math_sorcery.hpp?"
-    #endif /*_RAW_FILE_WARN_*/
-#endif /*_MATH_SORCERY_*/
-
-#include "swap.hpp"
-
-namespace sorcery
-{
+    #error This file won't work if you don't include "math_sorcery.hpp"!
+#else
+     #include "math_sorcery.hpp"
+     #include "swap.hpp"
      namespace necromancer_gcf
      {
           /*12/24/2023*/
-          /*Return the greatest common factor of integers _x and _y*/
           constexpr int gcf(const int& _x, const int& _y)
           {
-               if(_x == _y)
-                    return _x;
                if(_x == 0)
                     return _y;
                if(_y == 0)
                     return _x;
-               int _x1 = _x;
-               int _y1 = _y;
-               int _k = 0;
-               while(((_x1 | _y1) & 1) == 0)
+               int _f = sorcery::abs(_x), _g = sorcery::abs(_y);
+               int _k = sorcery::countr_zero(_f | _g);
+               const int _i = sorcery::countr_zero(_f);
+                    _f >>= _i;
+               const int _j = sorcery::countr_zero(_g);
+                    _g >>= _j;
+               while(_f != _g)
                {
-                    _x1 >>= 1;
-                    _y1 >>= 1;
-                    _k ++;
+                    if(_f < _g)
+                         necromancer_swap::swap(_f, _g);
+                    _f -= _g;
+                    _f >>= sorcery::countr_zero(_f);
                }
-               while((_x1 & 1) == 0)
-                    _x1 >>= 1;
-               while(_y1 != 0)
+               return _f << _k;
+          }
+          /*1/7/2024*/
+          constexpr _s_int64 gcf(const _s_int64& _x, const _s_int64& _y)
+          {
+               if(_x == 0)
+                    return _y;
+               if(_y == 0)
+                    return _x;
+               _s_int64 _f = sorcery::abs(_x), _g = sorcery::abs(_y);
+               _s_int64 _k = sorcery::countr_zero(_f | _g);
+               const int _i = sorcery::countr_zero(_f);
+                    _f >>= _i;
+               const int _j = sorcery::countr_zero(_g);
+                    _g >>= _j;
+               while(_f != _g)
                {
-                    while((_y1 & 1) == 0)
-                         _y1 >>= 1;
-                    if(_x1 > _y1)
-                         necromancer_swap::swap(_x1, _y1);
-                    _y1 -= _x1;
+                    if(_f < _g)
+                         necromancer_swap::swap(_f, _g);
+                    _f -= _g;
+                    _f >>= sorcery::countr_zero(_f);
                }
-               return _x1 << _k;
+               return _f << _k;
           }
           /*12/24/2023*/
-          /*Return the least common multiple of integers _x and _y*/
           constexpr int lcm(const int& _x, const int& _y)
           {
-               return ((long long)_x * _y) / gcf(_x, _y);
+               /*We would do (_x * _y) / gcf(_x, _y), but that has overflow*/
+               return _x * (_y / gcf(_x, _y));
+          }
+          /*1/7/2024*/
+          constexpr _s_int64 lcm(const _s_int64 _x, const _s_int64 _y)
+          {
+               /*We would do (_x * _y) / gcf(_x, _y), but that has overflow*/
+               return _x * (_y / gcf(_x, _y));
           }
      }
-}
-
+#endif /*_MATH_SORCERY_*/
 #endif /* _NECROMANCER_GCF_ */

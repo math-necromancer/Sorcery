@@ -3,8 +3,6 @@
 #ifndef _MATH_SORCERY_
 #define _MATH_SORCERY_
 
-/*For raw file warnings, define _RAW_FILE_WARN_*/
-
 /*Sometimes, it's necessary to catch other math libraries, but these detect <cmath> and <math.h>*/
 /*At least, they do on my compiler*/
 
@@ -17,9 +15,9 @@
 #endif /*!defined(_GLIBCXX_CMATH) && !defined(_GLIBCXX_MATH_H)*/
 /*Throw an error if the standard math libraries are included, it will cause conflict*/
 /*To detect another library, #define _FORBIDDEN_MATH_ as the #define of said library*/
-#if (defined(_GLIBCXX_CMATH) || defined(_GLIBCXX_MATH_H) || defined(_MATH_H_) || defined(_FORBIDDEN_MATH_)) && defined(_NECROMANCER_MATH_)
+#if (defined(_GLIBCXX_CMATH) || defined(_GLIBCXX_MATH_H) || defined(_MATH_H_) || defined(_FORBIDDEN_MATH_)) && defined(_MATH_SORCERY_)
      #error "Never use this library with <cmath> or other math libraries!"
-#endif /*(defined(_GLIBCXX_CMATH) || defined(_GLIBCXX_MATH_H) || defined(_MATH_H_)) && defined(_NECROMANCER_MATH_)*/
+#endif /*(defined(_GLIBCXX_CMATH) || defined(_GLIBCXX_MATH_H) || defined(_MATH_H_)) && defined(_MATH_SORCERY_)*/
 
 #include "float_class.hpp"
 
@@ -40,22 +38,22 @@
 #undef _FLT_NEGATIVE_INFY
 #undef _FLT_NORMAL
 #undef _FLT_SUBNORMAL
-
 #undef _int32
 #undef _int64
 
-/*Redefine _int32 and _int64*/
+/*Redefine _int32 and _int64 if needed...*/
 
 #ifndef _int32
      /*32 bit unsiged integer (unsigned long)*/
      #define _int32 unsigned long
 #endif /*_int32*/
-/*64 bit signed integer (signed long long)*/
-#define _s_int64 long long
 #ifndef _int64
      /*64 bit unsigned integer (unsigned long long)*/
      #define _int64 unsigned long long
 #endif /*_int64*/
+
+/*Mystical namespace for everything*/
+namespace sorcery{};
 
 namespace sorcery
 {
@@ -66,8 +64,8 @@ namespace sorcery
           return necromancer_float_class::
                _flt_bits(_i);
      }
-     /*12/24/2023*/
-     /*Conver an integral bit representation into it's respective 64-bit float*/
+     /*12/24/2023 <~ 69?*/
+     /*Convert an integral bit representation into it's respective 64-bit float*/
      constexpr double dbl_bits(const _int64 _i)
      {
           return necromancer_float_class::
@@ -114,491 +112,607 @@ namespace sorcery
      (_digits2(_type, _bsize) - 1))     \
      - 1) << 1) + 1) : ~static_cast<_type>(0))
 #define _min_val(_type, _bitsize)       \
-     _is_signed(_type, _bitsize) ?      \
+     (_is_signed(_type, _bitsize) ?     \
      -_max(_type, _bitsize) - 1 :       \
-     static_cast<_type>(0)
+     static_cast<_type>(0))
 
 namespace sorcery
 {
+     /*Sorry, it looks like this type isn't supported yet...*/
      template<typename _ty>
-     class numeric_limits;
+     class numeric_limits
+     {
+          public:
+               /*Is this a specialized class?*/
+               static constexpr bool is_specialized = false;
+     };
 
      /*Specification for numeric_limits<bool>*/
      template<>
      class numeric_limits<bool>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr bool min()
                {
                     return false;
                }
+               /*Maximum value of this type*/
                static constexpr bool max()
                {
                     return true;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(bool);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(bool);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = false;
-               static constexpr bool is_integer = true;     
+               /*Is this type integral?*/
+               static constexpr bool is_integer = true; 
+               /*Is this type exact?*/    
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = false;
+               /*Does this type have "Not a Number"?*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr bool infinity(const bool& _neg)
                {
                     return static_cast<bool>(0);
                }
+               /*Get a NaN if this type has one*/
                static constexpr bool nan()
                {
                     return static_cast<bool>(0);
                }
-
-               static constexpr char type[] = "bool";
      };
      /*Specification for numeric_limits<signed char>*/
      template<>
      class numeric_limits<signed char>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr signed char min()
                {
                     return -_NUMERIC_CHAR_MAXIMUM_ - 1;
                }
+               /*Maximum value of this type*/
                static constexpr signed char max()
                {
                     return _NUMERIC_CHAR_MAXIMUM_;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(signed char);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(signed char);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = true;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = false;
+               /*Does this type have "Not a Number"?*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr signed char infinity(const bool& _neg)
                {
                     return static_cast<signed char>(0);
                }
+               /*Get a NaN if this type has one*/
                static constexpr signed char nan()
                {
                     return static_cast<signed char>(0);
                }
-
-               static constexpr char type[] = "signed char";
      };
      /*Specification for numeric_limits<unsigned char>*/
      template<>
      class numeric_limits<unsigned char>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr unsigned char min()
                {
                     return 0;
                }
+               /*Maximum value of this type*/
                static constexpr unsigned char max()
                {
                     return _NUMERIC_CHAR_MAXIMUM_ * 2 + 1;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(unsigned char);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(unsigned char);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = false;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = false;
+               /*Does this type have a "Not a Number"?*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr unsigned char infinity(const bool& _neg)
                {
                     return static_cast<unsigned char>(0);
                }
+               /*Get a NaN if this tpye has one*/
                static constexpr unsigned char nan()
                {
                     return static_cast<unsigned char>(0);
                }
-
-               static constexpr char type[] = "unsigned char";
      };
      /*Specification for numeric_limits<signed short>*/
      template<>
      class numeric_limits<signed short>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr signed short min()
                {
                     return -_NUMERIC_SHORT_MAXIMUM_ - 1;
                }
+               /*Maximum value of this type*/
                static constexpr signed short max()
                {
                     return _NUMERIC_SHORT_MAXIMUM_;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(signed short);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(signed short);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = true;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity*/
                static constexpr bool has_infinity = false;
+               /*Does this type have "Not a Number"?*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr signed short infinity(const bool& _neg)
                {
                     return static_cast<signed short>(0);
                }
+               /*Get a NaN if this tpe has one*/
                static constexpr signed short nan()
                {
                     return static_cast<signed short>(0);
                }
-               
-               static constexpr char type[] = "signed short"; 
      };
      /*Specification for numeric_limits<unsigned short>*/
      template<>
      class numeric_limits<unsigned short>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr unsigned short min()
                {
                     return 0;
                }
+               /*Maximum value of this type*/
                static constexpr unsigned short max()
                {
                     return _NUMERIC_SHORT_MAXIMUM_ * 2 + 1;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(unsigned short);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(unsigned short);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = false;
+               /*Is this type integral*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = false;
+               /*Does this type have "Not a Number"*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr unsigned short infinity(const bool& _neg)
                {
                     return static_cast<unsigned short>(0);
                }
+               /*Get a NaN if this type has one*/
                static constexpr unsigned short nan()
                {
                     return static_cast<unsigned short>(0);
                }
-
-               static constexpr char type[] = "unsigned short";
      };
      /*Specification for numeric_limits<signed int>*/
      template<>
      class numeric_limits<signed int>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr signed int min()
                {
                     return -_NUMERIC_INT32_MAXIMUM_ - 1;
                }
+               /*Maximum value of this type*/
                static constexpr signed int max()
                {
                     return _NUMERIC_INT32_MAXIMUM_;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(signed int);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(signed int);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = true;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = false;
+               /*Does this type have "Not a Number"?*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr signed int infinity(const bool& _neg)
                {
                     return static_cast<signed int>(0);
                }
+               /*Get a NaN if this type has one*/
                static constexpr signed int nan()
                {
                     return static_cast<signed int>(0);
                }
-
-               static constexpr char type[] = "signed int";
      };
      /*Specification for numeric_limits<unsigned int>*/
      template<>
      class numeric_limits<unsigned int>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr unsigned int min()
                {
                     return 0;
                }
+               /*Maximum value of this type*/
                static constexpr unsigned int max()
                {
                     return _NUMERIC_INT32_MAXIMUM_ * 2u + 1;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(unsigned int);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(unsigned int);
-
+               /*Is this type siged?*/
                static constexpr bool is_signed = false;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = false;
+               /*Does this type have "Not a Number"?*/
                static constexpr bool has_nan = false;
+               /*Return an infinity if this type has one*/
                static constexpr unsigned int infinity(const bool& _neg)
                {
                     return static_cast<unsigned int>(0);
                }
+               /*Return a NaN if this type has one*/
                static constexpr unsigned int nan()
                {
                     return static_cast<unsigned int>(0);
                }
-
-               static constexpr char type[] = "unsigned int";
      };
      /*Specification for numeric_limits<signed long>*/
      template<>
      class numeric_limits<signed long>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr signed long min()
                {
                     return -_NUMERIC_INT32_MAXIMUM_ - 1;
                }
+               /*Maximum value of this type*/
                static constexpr signed long max()
                {
                     return _NUMERIC_INT32_MAXIMUM_;
                }
+               /*Size on bytes of this type*/
                static constexpr int size = sizeof(signed long);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(signed long);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = true;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity*/
                static constexpr bool has_infinity = false;
+               /*Does this type have a NaN?*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr signed long infinity(const bool& _neg)
                {
                     return static_cast<signed long>(0);
                }
+               /*Get a NaN if this type has one*/
                static constexpr signed long nan()
                {
                     return static_cast<signed long>(0);
                }
-
-               static constexpr char type[] = "signed long";
      };
      /*Specification for numeric_limits<unsigned long>*/
      template<>
      class numeric_limits<unsigned long>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr unsigned long min()
                {
                     return 0;
                }
+               /*Maximum value of this type*/
                static constexpr unsigned long max()
                {
                     return _NUMERIC_INT32_MAXIMUM_ * 2ul + 1;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(unsigned long);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(unsigned long);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = false;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = false;
+               /*Does this type have "Not a Number"*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr unsigned long infinity(const bool& _neg)
                {
                     return static_cast<unsigned long>(0);
                }
+               /*Get a NaN if this type has one*/
                static constexpr unsigned long nan()
                {
                     return static_cast<unsigned long>(0);
                }
-
-               static constexpr char type[] = "unsigned long";
      };
      /*Specification for numeric_limits<signed long long>*/
      template<>
      class numeric_limits<signed long long>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value of this type*/
                static constexpr signed long long min()
                {
                     return -_NUMERIC_INT64_MAXIMUM_ - 1;
                }
+               /*Maximum value of this type*/
                static constexpr signed long long max()
                {
                     return _NUMERIC_INT64_MAXIMUM_;
                }
+               /*Size in bytes of this type*/
                static constexpr bool size = sizeof(signed long long);
+               /*Size of bits of this type*/
                static constexpr int bitsize = _bitsize(signed long long);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = true;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = false;
+               /*Does this type have "Not a Number"*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr signed long long infinity(const bool& _neg)
                {
                     return static_cast<signed long long>(0);
                }
+               /*Get a NaN if this type has one*/
                static constexpr signed long long nan()
                {
                     return static_cast<signed long long>(0);
                }
-
-               static constexpr char type[] = "signed long long";
      };
      /*Specification for numeric_limits<unsigned long long>*/
      template<>
      class numeric_limits<unsigned long long>
      {
           public:
+               /*Is this a specified class?*/
                static constexpr bool is_specialized = true;
+               /*Minimum value*/
                static constexpr unsigned long long min()
                {
                     return 0;
                }
+               /*Maximum value*/
                static constexpr unsigned long long max()
                {
                     return _NUMERIC_INT64_MAXIMUM_ * 2ull + 1;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(unsigned long long);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(unsigned long long);
-
+               /*Is this type singed?*/
                static constexpr bool is_signed = false;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = true;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = false;
+               /*Does this type have "Not a Number"*/
                static constexpr bool has_nan = false;
+               /*Get an infinity if this type has one*/
                static constexpr unsigned long long infinity(const bool& _neg)
                {
                     return static_cast<unsigned long long>(0);
                }
+               /*Get a NaN inf this type has one*/
                static constexpr unsigned long long nan()
                {
                     return static_cast<unsigned long long>(0);
                }
-
-               static constexpr char type[] = "unsigned long long";
      };
      /*Specification for numeric_limits<float>*/
      template<>
      class numeric_limits<float>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Smallest positive normal number*/
                static constexpr float epsilon()
                {
                     return _NUMERIC_FLT_EPSILON_;
                }
+               /*Smallest positive subnormal number*/
                static constexpr float sub_epsilon()
                {
                     return _NUMERIC_FLT_SUB_EPSILON_;
                }
+               /*Minimum value of this type*/
                static constexpr float min()
                {
                     return -_NUMERIC_FLT_MAXIMUM_;
                }
+               /*Maximum value of this type*/
                static constexpr float max()
                {
                     return _NUMERIC_FLT_MAXIMUM_;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(float);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(float);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = true;
+               /*Is this type integral?*/
                static constexpr bool is_integer = false;
+               /*Is this type exact?*/
                static constexpr bool is_exact = false;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = true;
+               /*DOes this type have "Not a Number"?*/
                static constexpr bool has_nan = true;
+               /*Get an infinity if this type has one*/
                static constexpr float infinity(const bool& _neg)
                {
                     return necromancer_float_class::
                          _flt_inff(_neg);
                }
+               /*Get a NaN if this type has one*/
                static constexpr float nan()
                {
                     return necromancer_float_class::
                          _flt_nanf();
                }
-
-               static constexpr char type[] = "float";
      };
      /*Specification for numeric_limits<double>*/
      template<>
      class numeric_limits<double>
      {
           public:
+               /*Is this a specialized class?*/
                static constexpr bool is_specialized = true;
+               /*Smallest positive normal number*/
                static constexpr double epsilon()
                {
                     return _NUMERIC_DBL_EPSILON_;
                }
+               /*Smallest positive subnormal number*/
                static constexpr double sub_epsilon()
                {
                     return _NUMERIC_DBL_SUB_EPSILON_;
                }
+               /*Minimum value of this type*/
                static constexpr double min()
                {
                     return -_NUMERIC_DBL_MAXIMUM_;
                }
+               /*Maximum value of this type*/
                static constexpr double max()
                {
                     return _NUMERIC_DBL_MAXIMUM_;
                }
+               /*Size in bytes of this type*/
                static constexpr int size = sizeof(double);
+               /*Size in bits of this type*/
                static constexpr int bitsize = _bitsize(double);
-
+               /*Is this type signed?*/
                static constexpr bool is_signed = true;
+               /*Is this type integral?*/
                static constexpr bool is_integer = true;
+               /*Is this type exact?*/
                static constexpr bool is_exact = false;
-
+               /*Does this type have an infinity?*/
                static constexpr bool has_infinity = true;
+               /*Does this type have "Not a Number"?*/
                static constexpr bool has_nan = true;
+               /*Get an infinity if this type has one*/
                static constexpr double infinity(const bool& _neg)
                {
                     return necromancer_float_class::
                          _flt_infd(_neg);
                }
+               /*Get a NaN if this type has one*/
                static constexpr double nan()
                {
                     return necromancer_float_class::
                          _flt_nand();
                }
-
-               static constexpr char type[] = "double";
      };
 }
 
 /*1 bit of information*/
 #define bit bool
 /*8 bit signed integer (signed char)*/
-#define s_int08 char
+#define _s_int08 char
 /*8 bit unsigned integer (unsigned char)*/
 #define int08 unsigned char
 /*16 bit signed integer (signed short)*/
-#define s_int16 short
+#define _s_int16 short
 /*16 bit unsigned integer (unsigned short)*/
 #define int16 unsigned short
 /*32 bit signed integer (signed long)*/
-#define s_int32 long
+#define _s_int32 long
+/*64 bit signed integer (signed long long)*/
+#define _s_int64 long long
 /*32-bit IEEE-754 float (float)*/
 #define f32 float
 /*32-bit IEEE-754 float (double)*/
@@ -621,44 +735,62 @@ namespace sorcery
 /*Double precision "Not a Number"*/
 #define NaN numeric_limits<double>::nan()
 /*π*/
+/*This is the ratio of a circle's circumference to its diameter*/
 #define pi 3.1415926535897932384
 /*π/2*/
+/*This is the arc of a semicircle over 2 * its radius*/
 #define pi_2 1.5707963267948966192
 /*π/4*/
+/*This is the arc of a semicircle over its radius*/
 #define pi_4 0.7853981633974483096
 /*τ = 2π*/
+/*This is the ratio of a circle's circumfrerence to its radius*/
 #define tau 6.2831853071795864769
+/*e*/
 /*You should know what this is*/
 #define e 2.7182818284590452354
 /*log(2)*/
+/*This is the natural logarithm of 2. In other words:*/
+/*exp(ln2) = 2.0*/
 #define ln2 0.6931471805599453094
 /*log_2(e)*/
+/*This is the binary logarithm of e. In other words:*/
+/*2^log2e = e (~2.718...)*/
 #define log2e 1.4426950408889634074
 /*√2*/
+/*This is the square root of 2. In other words:*/
+/*sqrt2 * sqrt2 = 2.0*/
 #define sqrt2 1.4142135623730950488
 /*** IEEE-754 Float Classifications ***/
 
 /*0.0 (Subnormal in IEEE-754)*/
+/*This is a flag, not the actual value*/
 #define _FLT_ZERO 0x001
 /*"Not a Number"*/
+/*This is a flag, not the actual value*/
 #define _FLT_NAN 0x0002
 /*Infinity*/
+/*This is a flag, not the actual value*/
 #define _FLT_INFINITY 0x0003
 /*Negative Infinity*/
+/*This is a flag, not the actual value*/
 #define _FLT_NEG_INFY 0x0004
 /*Normal Floating Point*/
+/*This is a flag, not the actual value*/
 #define _FLT_NORMAL 0x0005
 /*Subnormal Float*/
+/*This is a flag, not the actual value*/
 #define _FLT_SUBNORMAL 0x0006
 
 /*Main folder*/
 #include "abs.hpp"
 #include "float_class.hpp"
-#include "gcf.hpp"
+/*gcf.hpp included later*/
 #include "log.hpp"
 #include "minmax.hpp"
 #include "rem.hpp"
 #include "roots.hpp"
+#include "rounding.hpp"
 #include "sign.hpp"
 #include "swap.hpp"
 #include "variadic.hpp"
@@ -804,24 +936,49 @@ namespace sorcery
                return necromancer_abs::
                     absd(_x);
           }
-          /*12/24/2023*/
-          /*Get the absolute value of a 32-bit integer _x*/
-          constexpr int abs(const int& _x)
-          {
-               return necromancer_abs::
-                    absi(_x);
-          }
-          /*12/24/2023*/
+          /*1/7/2024*/
           /*Get the absolute value of a number _x*/
           template<typename _abs_ty>
           constexpr _abs_ty abs(const _abs_ty& _x)
           {
-               return static_cast<_abs_ty>(necromancer_abs::
-                    absd(static_cast<double>(_x)));
+               return _x > 0? _x : -_x;
           }
      #else
           #warning "Could not get abs()"
      #endif /*_NECROMANCER_ABS_*/
+
+     /*1/7/2023*/
+     /*Get the number of trailing zeros of a 32 bit int _x*/
+     /*It's not the fastest, but it does the job...*/
+     constexpr int countr_zero(const int& _x)
+     {
+          if(_x == 0)    
+               return 32;
+          int _i = 0;
+          int _y = _x;
+          while(!(_y & 1))
+          {
+               _y >>= 1;
+               _i ++;
+          }
+          return _i;
+     }
+     /*1/7/2023*/
+     /*Get the number of trailing zeros of a 64 bit int _x*/
+     /*It's not the fastest, but it does the job...*/
+     constexpr _s_int64 countr_zero(const _s_int64 _x)
+     {
+          if(_x == 0)
+               return 64;
+          int _i = 0;
+          int _y = _x;
+          while(!(_y & 1))
+          {
+               _y >>= 1;
+               _i ++;
+          }
+          return _i;
+     }
 
      /*** float_class stuff ***/
      #ifdef _NECROMANCER_FLOAT_CLASS_
@@ -1077,6 +1234,8 @@ namespace sorcery
           /*This error has already been accounted for*/
      #endif
 
+     #include "gcf.hpp"
+
      /*** gcf and lcm ***/
      #ifdef _NECROMANCER_GCF_
           /*** gcf ***/
@@ -1085,7 +1244,15 @@ namespace sorcery
           /*Get the greatest common factor of two 32-bit ints _x and _y*/
           constexpr int gcf(const int& _x, const int& _y)
           {
-               return necromancer_gcf::gcf(_x, _y);
+               return necromancer_gcf::
+                    gcf(_x, _y);
+          }
+          /*1/7/2024*/
+          /*Get the greatest common factor of two 64-bit ints _x and _y*/
+          constexpr _s_int64 gcf(const _s_int64& _x, const _s_int64& _y)
+          {
+               return necromancer_gcf::
+                    gcf(_x, _y);
           }
           /*** lcm ***/
 
@@ -1093,7 +1260,15 @@ namespace sorcery
           /*Get the least common multiple of two 32-bit ints _x and _y*/
           constexpr int lcm(const int& _x, const int& _y)
           {
-               return necromancer_gcf::lcm(_x, _y);
+               return necromancer_gcf::
+                    lcm(_x, _y);
+          }
+          /*1/7/2024*/
+          /*Get the least common multiple of two 64-bit ints _x and _y*/
+          constexpr _s_int64 lcm(const _s_int64 _x, const _s_int64 _y)
+          {
+               return necromancer_gcf::
+                    lcm(_x, _y);
           }
      #else
           #warning "Could not get gcf() or lcm()"
@@ -1328,6 +1503,79 @@ namespace sorcery
           #warning "Could not get sqrt()"
      #endif /*_NECROMANCER_ROOTS_*/
 
+     /*** rounding functions ***/
+     #ifdef _NECROMANCER_ROUND_
+          /*** trunc ***/
+
+          /*1/5/2024*/
+          /*Round a 32-bit float towards 0*/
+          constexpr float trunc(const float& _x)
+          {
+               return necromancer_round::
+                    truncf(_x);
+          }
+          /*1/5/2024*/
+          /*Round a 64-bit float towards 0*/
+          constexpr double trunc(const double& _x)
+          {
+               return necromancer_round::
+                    truncd(_x);
+          }
+          /*1/5/2024*/
+          /*Round a number _x towards 0*/
+          template<typename _trunc_ty>
+          constexpr double trunc(const _trunc_ty& _x)
+          {
+               return necromancer_round::
+                    truncd(static_cast<double>(_x));
+          }
+          /*1/6/2024*/
+          /*Round a 32-bit float towards -inf*/
+          constexpr float floor(const float& _x)
+          {
+               return necromancer_round::
+                    floorf(_x);
+          }
+          /*1/6/2024*/
+          /*Round a 64-bit float towards -inf*/
+          constexpr double floor(const double& _x)
+          {
+               return necromancer_round::
+                    floord(_x);
+          }
+          /*1/6/2024*/
+          /*Round a number _x towards -inf*/
+          template<typename _floor_ty>
+          constexpr double floor(const _floor_ty& _x)
+          {
+               return necromancer_round::
+                    floorf(static_cast<double>(_x));
+          }
+          /*1/6/2024*/
+          /*Round a 32-bit float towards inf*/
+          constexpr float ceil(const float& _x)
+          {
+               return necromancer_round::
+                    ceilf(_x);
+          }
+          /*1/6/2024*/
+          /*Round a 64-bit float towards inf*/
+          constexpr double ceil(const double& _x)
+          {
+               return necromancer_round::
+                    ceild(_x);
+          }
+          /*1/6/2024*/
+          /*Round a number _x towards inf*/
+          template<typename _ceil_ty>
+          constexpr double ceil(const _ceil_ty& _x)
+          {
+               return necromancer_round::
+                    ceild(static_cast<double>(_x));
+          }
+     #else
+     #endif /*_NECROMANCER_ROUND_*/
+
      /*** sign functions ***/
      #ifdef _NECROMANCER_SIGN_
           /*** sign ***/
@@ -1349,10 +1597,9 @@ namespace sorcery
           /*12/24/2023*/
           /*Get the sign of a number _x*/
           template<typename _sign_ty>
-          constexpr int sign(const _sign_ty& _x)
+          constexpr _sign_ty sign(const _sign_ty& _x)
           {
-               return necromancer_sign::
-                    signd(static_cast<double>(_x));
+               return _x > 0? 1 : -1;
           }
           /*** signbit ***/
 

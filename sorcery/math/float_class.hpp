@@ -4,9 +4,7 @@
 #define _NECROMANCER_FLOAT_CLASS_
 
 #ifndef _MATH_SORCERY_
-    #ifdef _RAW_FILE_WARN_
-        #warning "Are you sure you want to use this raw file instead of math_sorcery.hpp?"
-    #endif /*_RAW_FILE_WARN_*/
+     #warning Are you sure you want to use this raw file instead of "math_sorcery.hpp"?
 #endif /*_MATH_SORCERY_*/
 
 /*Nice #defines for cases where you have not included "math_necromancy"*/
@@ -23,9 +21,8 @@
 namespace necromancer_float_class
 {
      /*** IEEE-754 Floating-Point Forms ***/
-
+     /*nice floating point shapes (o_o)*/
      /*These unions are basically the magic behind all the fancy functions*/
-
      /*I will not be supporting long doubles (80 bit float)*/
 
      /*12/13/2023*/
@@ -40,6 +37,10 @@ namespace necromancer_float_class
                _int32 _exp : 8;
                _int32 _sign : 1;
           } _f_32;
+          struct _lh
+          {
+               unsigned short _lo, _hi;
+          } _lh;
      };
      /*12/13/2023*/
      /*64-bit float form*/
@@ -52,7 +53,7 @@ namespace necromancer_float_class
                _int64 _mantissa : 52;
                _int64 _exp : 11;
                _int64 _sign : 1;
-          }_f_64;
+          } _f_64;
           struct _lh
           {
                _int32 _lo, _hi;
@@ -72,6 +73,7 @@ namespace necromancer_float_class
      #define _FLT_NORMAL 0x0005
      /*Subnormal Float*/
      #define _FLT_SUBNORMAL 0x0006
+
      /*12/24/2023*/
      constexpr float _flt_bits(const _int32 _i)
      {
@@ -89,16 +91,14 @@ namespace necromancer_float_class
      /*12/24/2023*/
      constexpr float _flt_inff(const bool& _is_negative)
      {
-          if(_is_negative)
-               return _flt_bits(0xff800000);
-          return _flt_bits(0x7f800000);
+          return _is_negative ? _flt_bits(0xff800000):
+               _flt_bits(0x7f800000);
      }
      /*12/24/2023*/
      constexpr double _flt_infd(const bool& _is_negative)
      {
-          if(_is_negative)
-               return _dbl_bits(0xfff0000000000000);
-          return _dbl_bits(0x7ff0000000000000);
+          return _is_negative ? _dbl_bits(0xfff0000000000000):
+               _dbl_bits(0x7ff0000000000000);
      }
      /*12/24/2023*/
      constexpr float _flt_nanf()
@@ -134,7 +134,7 @@ namespace necromancer_float_class
           {
                if (_i._f_32._mantissa)
                     return _FLT_NAN;
-               return (_i._f_32._sign)? _FLT_NEG_INFY : _FLT_INFINITY;
+               return (_i._f_32._sign)? _FLT_NEG_INFY: _FLT_INFINITY;
           }
           return _FLT_NORMAL;
      }
@@ -142,7 +142,7 @@ namespace necromancer_float_class
      constexpr int classify_ieee754_64f(const double& _x)
      {
           float_64 _i = {_x};
-          if(!(_i._y & 0x7fffffffffffffff))
+          if(!((_i._lh._hi & 0x7fffffff) | _i._lh._lo))
                return _FLT_ZERO;
           if(_i._f_64._exp == 0x000)
                return _FLT_SUBNORMAL;
@@ -150,7 +150,7 @@ namespace necromancer_float_class
           {
                if (_i._f_64._mantissa)
                     return _FLT_NAN;
-               return (_i._f_64._sign)? _FLT_NEG_INFY : _FLT_INFINITY;
+               return (_i._f_64._sign)? _FLT_NEG_INFY: _FLT_INFINITY;
           }
           return _FLT_NORMAL;
      }
@@ -158,13 +158,15 @@ namespace necromancer_float_class
      constexpr bool is_inff(const float& _x)
      {
           float_32 _i = {_x};
-          return _i._y & 0x7fffffff == 0x7f800000;
+          _i._y &= 0x7fffffff;
+          return _i._y == 0x7f800000;
      }
      /*12/24/2023*/
      constexpr bool is_infd(const double& _x)
      {
           float_64 _i = {_x};
-          return _i._y & 0x7fffffffffffffff == 0x7ff0000000000000;
+          _i._lh._hi &= 0x7fffffff;
+          return _i._y == 0x7ff0000000000000;
      }
      /*12/24/2023*/
      constexpr bool is_finitef(const float& _x)
@@ -182,13 +184,15 @@ namespace necromancer_float_class
      constexpr bool is_nanf(const float& _x)
      {
           float_32 _i = {_x};
-          return _i._y & 0x7fffffff > 0x7f800000;
+          _i._y &= 0x7fffffff;
+          return _i._y > 0x7f800000;
      }
      /*12/24/2023*/
      constexpr bool is_nand(const double& _x)
      {
           float_64 _i = {_x};
-          return _i._y & 0x7fffffffffffffff > 0x7ff0000000000000;
+          _i._lh._hi &= 0x7fffffff;
+          return _i._y > 0x7ff0000000000000;
      }
      /*12/24/2023*/
      constexpr bool is_positivef(const float& _x)
@@ -204,7 +208,7 @@ namespace necromancer_float_class
           if(is_nand(_x))
                return false;
           float_64 _i = {_x};
-          return _i._x < 0x8000000000000000;
+          return _i._lh._hi < 0x80000000;
      }
      /*12/24/2023*/
      constexpr bool is_negativef(const float& _x)
@@ -220,7 +224,7 @@ namespace necromancer_float_class
           if(is_nand(_x))
                return false;
           float_64 _i = {_x};
-          return _i._x >= 0x8000000000000000;
+          return _i._lh._hi >= 0x80000000;
      }
      /*12/24/2023*/
      constexpr bool is_intf(const float& _x)
@@ -233,20 +237,20 @@ namespace necromancer_float_class
           /*If _x is larger than this, than IEEE-754 can only represent integers*/
           if(_i._y >= 0x4b7fffff)
                return true;
-          return _i._y << (_i._f_32._exp - 0x076) == 0;
+          return _i._y << _i._f_32._exp - 0x076 == 0;
      }
      /*12/24/2023*/
      constexpr bool is_intd(const double& _x)
      {
           float_64 _i = {_x};
-          _i._y &= 0x7fffffffffffffff;
+          _i._lh._hi &= 0x7fffffff;
           /*If _x is Infinity or NaN*/
-          if(_i._y >= 0x7ff0000000000000)
+          if(_i._lh._hi >= 0x7f800000)
                return false;
           /*If _x is larger than this, than IEEE-754 can only represent integers*/
-          if(_i._y >= 0x433fffffffffffff)
+          if(_i._lh._hi >= 0x43400000)
                return true;
-          return _i._y << (_i._f_64._exp - 0x03f2) == 0;
+          return _i._y << _i._f_64._exp - 0x03f2 == 0;
      }
      /*12/24/2023*/
      constexpr bool is_decimalf(const float& _x)
@@ -263,12 +267,28 @@ namespace necromancer_float_class
      constexpr bool is_decimald(const double& _x)
      {
           float_64 _i = {_x};
-          _i._y &= 0x7fffffffffffffff;
+          _i._lh._hi &= 0x7fffffff;
           /*If _x is larger than this, than IEEE-754 can only represent integers*/
           /*This also catches Infinity and NaN*/
-          if(_i._y >= 0x434fffffffffffff)
+          if(_i._lh._hi >= 0x43400000)
                return false;
           return _i._y << (_i._f_64._exp - 0x03f2); 
+     }
+     constexpr float frexpf(const float& _x, int *_eptr)
+     {
+          float_32 _i = {_x};
+          _i._lh._hi &= 0x7fffffff;
+          if(_i._y >= 0x7f800000 || (_i._lh._hi | _i._lh._lo) == 0)
+               return _x;
+          *_eptr = _i._f_32._exp - 0x07f;
+          _i._f_32._exp = 0x07f;
+          float _fp = _i._x;
+          if(_i._f_32._exp > 0x07f)
+          {
+               *_eptr ++;
+               _fp *= 0.5;
+          }
+          return _fp;
      }
      /*12/24/2023*/
      constexpr float nextafterf(const float& _x, const float& _y)

@@ -1,7 +1,11 @@
 #include <iostream>
 #include <iomanip>
+#define _MATH_SORCERY_SKIP_MATH_WARN_
 #include "sorcery/math/math_sorcery.hpp"
-#include "sorcery/math/complex.hpp"
+
+/* Yooo... C++ can control time now?... */
+
+#include <chrono>
 
 //  π
 //  ⌠ sin(s)
@@ -58,9 +62,16 @@
 int main()
 {
     std::cout << "Starting..." << '\n';
-    using namespace sorcery;
-    complex<double> _c = log(complex<double>(-e));
-    std::cout << std::setprecision(16) << _c.real() << " + " << _c.img() << "i\n";
-    std::cout << sorcery::acos(0.001);
+    double _s;
+    std::chrono::time_point<std::chrono::high_resolution_clock> _start, _end;
+    _start = std::chrono::high_resolution_clock::now();
+
+    // for(int _c = 0; _c <= 70000000; _c ++)
+        _s = sorcery::asin(2.f);
+
+    _end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed_seconds = _end - _start;
+    std::cout << std::setprecision(16) << _s << '\n';
+    std::cout << std::setprecision(16) << "That computation took " << elapsed_seconds.count() << " seconds!\n";
     // std::cout <<
 }

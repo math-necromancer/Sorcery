@@ -4,9 +4,7 @@
 #define _NECROMANCER_SWAP_
 
 #ifndef _MATH_SORCERY_
-    #ifdef _RAW_FILE_WARN_
-        #warning "Are you sure you want to use this raw file instead of math_sorcery.hpp?"
-    #endif /*_RAW_FILE_WARN_*/
+    #warning Are you sure you want to use this raw file instead of "math_sorcery.hpp"?
 #endif /*_MATH_SORCERY_*/
 
 namespace necromancer_swap
