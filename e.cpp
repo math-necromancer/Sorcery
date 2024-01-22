@@ -2,6 +2,7 @@
 #include <iomanip>
 #define _MATH_SORCERY_SKIP_MATH_WARN_
 #include "sorcery/math/math_sorcery.hpp"
+#include "sorcery/math/exp.hpp"
 
 /* Yooo... C++ can control time now?... */
 
@@ -62,16 +63,22 @@
 int main()
 {
     std::cout << "Starting..." << '\n';
-    double _s;
     std::chrono::time_point<std::chrono::high_resolution_clock> _start, _end;
     _start = std::chrono::high_resolution_clock::now();
 
-    // for(int _c = 0; _c <= 70000000; _c ++)
-        _s = sorcery::asin(2.f);
+    double _s;
+    int _e = 0;
 
+    //death
+
+    //double squares[] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100};
+
+    //for(int _c = 0; _c <= 70000000; _c++ /* C++ :) */)
+        _s = sorcery::ldexp(1., -3);
+    
     _end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed_seconds = _end - _start;
     std::cout << std::setprecision(16) << _s << '\n';
+    std::chrono::duration<double> elapsed_seconds = _end - _start;
     std::cout << std::setprecision(16) << "That computation took " << elapsed_seconds.count() << " seconds!\n";
     // std::cout <<
 }

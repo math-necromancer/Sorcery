@@ -13,7 +13,7 @@
           /*To disable this warning, `#define _NECROMANCER_SKIP_CMATH_WARN_` before including this file*/
      #endif /*_MATH_SORCERY_SKIP_MATH_WARN_*/
 #endif /*!defined(_GLIBCXX_CMATH) && !defined(_GLIBCXX_MATH_H)*/
-/*Throw an error if the standard math libraries are included, it will cause conflict*/
+/*Throw an error if the standard math libraries are included; it will cause conflict*/
 /*To detect another library, #define _FORBIDDEN_MATH_ as the #define of said library*/
 #if (defined(_GLIBCXX_CMATH) || defined(_GLIBCXX_MATH_H) || defined(_MATH_H_) || defined(_FORBIDDEN_MATH_)) && defined(_MATH_SORCERY_)
      #error "Never use this library with <cmath> or other math libraries!"
@@ -53,18 +53,28 @@
 #endif /*_int64*/
 
 /*Mystical namespace for everything*/
-namespace sorcery{};
+namespace sorcery
+{
+     /*1/14/2024*/
+     /*Return the argument*/
+     /*Might be useful???*/
+     template<typename _ret_val>
+     _ret_val ret(const _ret_val& _x)
+     {
+          return _x;
+     }
+};
 
 namespace sorcery
 {
-     /*12/24/2023*/
+     /*12/24/2023 <~ 69?*/
      /*Convert an integral bit representation into it's respective 32-bit float*/
      constexpr float flt_bits(const _int32& _i)
      {
           return necromancer_float_class::
                _flt_bits(_i);
      }
-     /*12/24/2023 <~ 69?*/
+     /*12/24/2023*/
      /*Convert an integral bit representation into it's respective 64-bit float*/
      constexpr double dbl_bits(const _int64 _i)
      {
@@ -718,9 +728,9 @@ namespace sorcery
 /*32-bit IEEE-754 float (double)*/
 #define f64 double
 /*Union to acces the bits of a 32-bit float*/
-#define float_32 necromancer_float_class::float_32
+typedef necromancer_float_class::float_32 float_32;
 /*Union to access the bits of a 64-bit float*/
-#define float_64 necromancer_float_class::float_64
+typedef necromancer_float_class::float_64 float_64;
 
 /*Single precision Infinity*/
 #define INFINITYf numeric_limits<float>::infinity(false)
@@ -735,31 +745,21 @@ namespace sorcery
 /*Double precision "Not a Number"*/
 #define NaN numeric_limits<double>::nan()
 /*π*/
-/*This is the ratio of a circle's circumference to its diameter*/
 #define pi 3.1415926535897932384
 /*π/2*/
-/*This is the arc of a semicircle over 2 * its radius*/
 #define pi_2 1.5707963267948966192
 /*π/4*/
-/*This is the arc of a semicircle over its radius*/
 #define pi_4 0.7853981633974483096
 /*τ = 2π*/
-/*This is the ratio of a circle's circumfrerence to its radius*/
 #define tau 6.2831853071795864769
-/*e*/
+/*e ~ The base of natural logarithms*/
 /*You should know what this is*/
 #define e 2.7182818284590452354
 /*log(2)*/
-/*This is the natural logarithm of 2. In other words:*/
-/*exp(ln2) = 2.0*/
 #define ln2 0.6931471805599453094
 /*log_2(e)*/
-/*This is the binary logarithm of e. In other words:*/
-/*2^log2e = e (~2.718...)*/
 #define log2e 1.4426950408889634074
 /*√2*/
-/*This is the square root of 2. In other words:*/
-/*sqrt2 * sqrt2 = 2.0*/
 #define sqrt2 1.4142135623730950488
 /*** IEEE-754 Float Classifications ***/
 
@@ -782,6 +782,8 @@ namespace sorcery
 /*This is a flag, not the actual value*/
 #define _FLT_SUBNORMAL 0x0006
 
+// #include "exp.hpp"
+
 /*Main folder*/
 #include "abs.hpp"
 #include "float_class.hpp"
@@ -794,7 +796,6 @@ namespace sorcery
 #include "sign.hpp"
 #include "swap.hpp"
 #include "variadic.hpp"
-
 /*Trig folder*/
 #include "trig/acos.hpp"
 #include "trig/asin.hpp"
@@ -952,32 +953,70 @@ namespace sorcery
      /*It's not the fastest, but it does the job...*/
      constexpr int countr_zero(const int& _x)
      {
-          if(_x == 0)    
+          /*|_x|*/
+          if(_x == 0)
                return 32;
-          int _i = 0;
-          int _y = _x;
-          while(!(_y & 1))
+          /*I am confused by this part. I just stole it from*/
+          /*the Java stl*/
+          int _i = ~_x & (_x - 1);
+          int _c = 1;
+          if(_i > 0x8000)
           {
-               _y >>= 1;
-               _i ++;
+               _c += 16;
+               _i >>= 16;
           }
-          return _i;
+          if(_i > 0x0080){
+               _c += 8;
+               _i >>= 8;
+          }
+          if(_i > 0x0008)
+          {
+               _c += 4;
+               _i >>= 4;
+          }
+          if(_i > 0x0002)
+          {
+               _c += 2;
+               _i >>= 2;
+          }
+          return _c + (_i >> 1);
      }
      /*1/7/2023*/
      /*Get the number of trailing zeros of a 64 bit int _x*/
      /*It's not the fastest, but it does the job...*/
-     constexpr _s_int64 countr_zero(const _s_int64 _x)
+     constexpr long long countr_zero(const long long _x)
      {
           if(_x == 0)
                return 64;
-          int _i = 0;
-          int _y = _x;
-          while(!(_y & 1))
+          /*I am confused by this part. I just stole it from*/
+          /*the Java stl*/
+          long long _i = ~_x & (_x - 1);
+          long long _c = 1;
+          if(_i > 0x80000000)
           {
-               _y >>= 1;
-               _i ++;
+               _c += 32;
+               _i >>= 32;
           }
-          return _i;
+          if(_i > 0x8000)
+          {
+               _c += 16;
+               _i >>= 16;
+          }
+          if(_i > 0x0080){
+               _c += 8;
+               _i >>= 8;
+          }
+          if(_i > 0x0008)
+          {
+               _c += 4;
+               _i >>= 4;
+          }
+          if(_i > 0x0002)
+          {
+               _c += 2;
+               _i >>= 2;
+          }
+          return _c + (_i >> 1);
      }
 
      /*** float_class stuff ***/
@@ -1221,21 +1260,44 @@ namespace sorcery
                return necromancer_float_class::
                     f64o2(_x);
           }
-          /*12/28/2023*/
-          /*Divide a number _x by 2*/
-          /*(Cast to Double)*/
-          template<typename _flto2_ty>
-          constexpr double flto2(const _flto2_ty& _x)
+          /*1/9/2024*/
+          /*Return a 32 bit float _f where 0.5 <= |_f| < 1, and set *_e to be*/
+          /*an exponent where _x = _f * 2^_e*/
+          constexpr float frexp(const float& _x, int* _e)
           {
                return necromancer_float_class::
-                    f64o2(static_cast<double>(_x));
+                    frexpf(_x, _e);
+          }
+          /*1/9/2024*/
+          /*Return a 64 bit float _f where 0.5 <= |_f| < 1, and set *_e to be*/
+          /*an exponent where _x = _f * 2^_e*/
+          constexpr double frexp(const double& _x, int* _e)
+          {
+               return necromancer_float_class::
+                    frexpd(_x, _e);
+          }
+          /*1/9/2024*/
+          /*Return a 32 bit float _f where _f = _x * 2^_e*/
+          constexpr float ldexp(const float& _x, const int& _e)
+          {
+               return necromancer_float_class::
+                    ldexpf(_x, _e);
+          }
+          /*1/9/2024*/
+          /*Return a 64 bit float _f where _f = _x * 2^_e*/
+          constexpr double ldexp(const double& _x, const int& _e)
+          {
+               return necromancer_float_class::
+                    ldexpd(_x, _e);
           }
      #else
           /*This error has already been accounted for*/
      #endif
-
+}
      #include "gcf.hpp"
 
+namespace sorcery
+{
      /*** gcf and lcm ***/
      #ifdef _NECROMANCER_GCF_
           /*** gcf ***/

@@ -1,7 +1,15 @@
 /*The Math Necromancer*/
 
-/*Reference:*/
-/*https://stackoverflow.com/questions/23047978/how-is-arctan-implemented*/
+/*Compute the trigonometric arc tangent of _x*/
+/*Range Reduction:*/
+/*   If |_x| > 1, use the reciprocal of _x (1 / _x). This works because*/
+/*   of the identity atan(x) = sign(x) * pi / 2 + atan(1 / x)*/
+/*Then, just use a polynomial to approximate atan(_x) for 0 < |_x| <= 1*/
+/*The polynomial is such*/
+/*         3                5                  39          */
+/* _x + (_x * _atan1) + (_x * _atan2) + ... (_x  * _atan19)*/
+/*   ez :)   */
+
 
 #ifndef _NECROMANCER_ATAN_
 #define _NECROMANCER_ATAN_
@@ -15,8 +23,10 @@
      {
           static const double
                /*atan(inf) = pi/2*/
-               _atan_inf = 1.57079632679489661;
+               _atan_inf[] = {1.57079632679489661, -1.57079632679489661};
           /*Minimax coefficients for a polynomial approximation*/
+          /*From referenced stackoverflow post*/
+          /*https://stackoverflow.com/questions/23047978/how-is-arctan-implemented*/
           static const double
                _atan1 = -3.3333333333331838e-1,
                _atan2 = 1.9999999999755005e-1,
@@ -41,6 +51,8 @@
           constexpr float atanf(const float& _x)
           {
                float_32 _i = {_x};
+               /*signbit(_x) << 31*/
+               _int32 _sx = _i._y & 0x80000000;
                /*|_x|*/
                _i._y &= 0x7fffffff;
                _int32 _y = _i._y;
@@ -49,7 +61,7 @@
                     return _x;
                /*|_x| > 1.0*/
                if(_i._y > 0x3f800000)
-                    _i._x = (1.0f/ _i._x);
+                    _i._x = (1.0f / _i._x);
                /*|_x|^2*/
                float _z = _i._x * _i._x;
                /*|_x|^4*/
@@ -60,18 +72,20 @@
                float _t2 = _i._x* _z2 * (_atan2 + _z2 * (_atan4 + _z2 * (_atan6 + _z2 *
                     (_atan8 + _z2 * (_atan10 + _z2 * (_atan12 + _z2 * (_atan14 + _z2 *
                          (_atan16 + _z2 * _atan18))))))));
-               float _r = (_t1 + _t2);
+               _i._x = (_t1 + _t2);
+               _i._y |= _sx;
                /*Special case if |_x| is greater than 1*/
                if(_y > 0x3f800000)
                     /*atan(x) = atan(inf) - atan(1/x)*/
-                    _r = _atan_inf - _r;
-               return necromancer_sign::
-                    copysignf(_r, _x);
+                    _i._x = _atan_inf[_sx >> 31] - _i._x;
+               return _i._x;
           }
           /*12/24/2023*/
           constexpr double atand(const double& _x)
           {
                float_64 _i = {_x};
+               /*signbit(_x) << 31*/
+               _int32 _sx = _i._lh._hi & 0x80000000;
                /*|_x|*/
                _i._lh._hi &= 0x7fffffff;
                _int64 _y = _i._y;
@@ -91,13 +105,13 @@
                double _t2 = _i._x* _z2 * (_atan2 + _z2 * (_atan4 + _z2 * (_atan6 + _z2 *
                     (_atan8 + _z2 * (_atan10 + _z2 * (_atan12 + _z2 * (_atan14 + _z2 *
                          (_atan16 + _z2 * _atan18))))))));
-               double _r = (_t1 + _t2);
+               _i._x = (_t1 + _t2);
+               _i._lh._hi |= _sx;
                /*Special case if |_x| is greater than 1*/
                if(_y > 0x3ff0000000000000)
                     /*atan(x) = atan(inf) - atan(1/x)*/
-                    _r = _atan_inf - _r;
-               return necromancer_sign::
-                    copysignd(_r, _x);
+                    _i._x = _atan_inf[_sx >> 31] - _i._x;
+               return _i._x;
           }
      }
 #endif /*_MATH_SORCERY_*/

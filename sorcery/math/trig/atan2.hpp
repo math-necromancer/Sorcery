@@ -43,22 +43,22 @@
                float_64 _ix = {_x};
                float_64 _iy = {_y};
                /*|_x|*/
-               _int64 _aix = _ix._y & 0x7fffffffffffffff;
+               _int32 _aix = _ix._lh._hi & 0x7fffffff;
                /*|_y|*/
-               _int64 _aiy = _iy._y & 0x7fffffffffffffff;
+               _int32 _aiy = _iy._lh._hi & 0x7fffffff;
                /*If _x of _y is NaN*/
-               if(_aix > 0x7ff0000000000000 || _aiy > 0x7ff0000000000000)
+               if(_aix > 0x7ff00000 || _aiy > 0x7ff00000)
                     return _x + _y;
                /*atan2(0, 0) is undefined*/
-               if(_aix == 0 && _aiy == 0)
+               if((_aix | _ix._lh._lo) == 0 && (_aiy | _iy._lh._lo == 0))
                     return sorcery::NaN;
                /*_x is positive*/
                /*(1'st and 4'th quad)*/
-               if(_ix._y == _aix)
+               if(_ix._lh._hi == _aix)
                     return necromancer_atan::atand(_y / _x);
                /*_x is negative and _y is positive*/
                /*(2'nd quad)*/
-               if(_ix._y > 0x8000000000000000 && _iy._y == _aiy)
+               if(_ix._lh._hi > 0x80000000 && _iy._lh._hi == _aiy)
                     return necromancer_atan::atand(_y / _x) + pi;
                /*_x and _y are both negative*/
                /*(3'rd quad)*/

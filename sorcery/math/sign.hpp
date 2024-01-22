@@ -43,15 +43,16 @@
                _ix._y = (_ix._y & 0x7fffffff) | (_iy._y & 0x80000000);
                return _ix._x;
           }
-          /*12/24/2023*/
+          /*1/17/2024*/
           constexpr double copysignd(const double& _x, const double& _y)
           {
                float_64 _ix = {_x};
                float_64 _iy = {_y};
                /*|_x| OR sign_bit(_y)*/
-               _ix._y = (_ix._y & 0x7fffffffffffffff) | (_iy._y & 0x8000000000000000);
+               _ix._lh._hi = (_ix._lh._hi & 0x7fffffff) | (_iy._lh._hi & 0x80000000);
                return _ix._x;
           }
      }
 #endif /*_MATH_SORCERY_*/
+
 #endif /*_NECROMANCER_SIGN_*/

@@ -16,78 +16,78 @@ namespace sorcery
      using namespace sorcery;
      /*12/13/2023*/
      /*Complex Number Class ~ (x + yi)*/
-     template<typename _Cx = int>
+     template<typename _cx_ty = int>
      class complex
      {
           private:
-               _Cx _real, _img;
+               _cx_ty _real, _img;
           public:
                /*Get the real component of a complex number*/
-               _Cx real() const
+               _cx_ty real() const
                {
                     return _real;
                }
                /*Set the real component of a complex number*/
-               void real(const _Cx& _r)
+               void real(const _cx_ty& _r)
                {
                     _real = _r;
                }
                /*Get the imaginary component of a complex number*/
-               _Cx img() const
+               _cx_ty img() const
                {
                     return _img;
                }
                /*Set the imaginary component of a complex number*/
-               void img(const _Cx& _i)
+               void img(const _cx_ty& _i)
                {
                     _img = _i;
                }
                /*Operations with scalars*/
 
-               constexpr complex<_Cx> operator = (const _Cx& _s);
-               constexpr complex<_Cx> operator += (const _Cx& _s);
-               constexpr complex<_Cx> operator -= (const _Cx& _s);
-               constexpr complex<_Cx> operator *= (const _Cx& _s);
-               constexpr complex<_Cx> operator /= (const _Cx& _s);
+               constexpr complex<_cx_ty> operator = (const _cx_ty& _s);
+               constexpr complex<_cx_ty> operator += (const _cx_ty& _s);
+               constexpr complex<_cx_ty> operator -= (const _cx_ty& _s);
+               constexpr complex<_cx_ty> operator *= (const _cx_ty& _s);
+               constexpr complex<_cx_ty> operator /= (const _cx_ty& _s);
                /*Operations with other complex numbers*/
 
-               constexpr complex<_Cx> operator = (const complex<_Cx>& _z);
-               constexpr complex<_Cx> operator += (const complex<_Cx>& _z);
-               constexpr complex<_Cx> operator -= (const complex<_Cx>& _z);
-               constexpr complex<_Cx> operator *= (const complex<_Cx>& _z);
-               constexpr complex<_Cx> operator /= (const complex<_Cx>& _z);
+               constexpr complex<_cx_ty> operator = (const complex<_cx_ty>& _z);
+               constexpr complex<_cx_ty> operator += (const complex<_cx_ty>& _z);
+               constexpr complex<_cx_ty> operator -= (const complex<_cx_ty>& _z);
+               constexpr complex<_cx_ty> operator *= (const complex<_cx_ty>& _z);
+               constexpr complex<_cx_ty> operator /= (const complex<_cx_ty>& _z);
 
                /*Default constructor, defaults to 0*/
                complex()
-                    : _real(static_cast<_Cx>(0)), _img(static_cast<_Cx>(0))
+                    : _real(static_cast<_cx_ty>(0)), _img(static_cast<_cx_ty>(0))
                {}
                /*Constructor with a scalar*/
-               complex(const _Cx& _s)
-                    : _real(_s), _img(static_cast<_Cx>(0))
+               complex(const _cx_ty& _s)
+                    : _real(_s), _img(static_cast<_cx_ty>(0))
                {}
                /*Constructor with real and imaginary components*/
-               complex(const _Cx& _r, const _Cx& _i)
+               complex(const _cx_ty& _r, const _cx_ty& _i)
                     : _real(_r), _img(_i)
                {}
                /*Contructor with another complex number*/
-               complex(const complex<_Cx>& _z)
+               complex(const complex<_cx_ty>& _z)
                     : _real(_z.real()), _img(_z.img())
                {}
                /*12/25/2023 ~ Christmas!*/
                /*Return i*/
-               static constexpr complex<_Cx> i()
+               static constexpr complex<_cx_ty> i()
                {
-                    return complex<_Cx>(static_cast<_Cx>(0),
-                                        static_cast<_Cx>(1));
+                    return complex<_cx_ty>(static_cast<_cx_ty>(0),
+                                        static_cast<_cx_ty>(1));
                }
      };
      /*** Modify complex values with operations ***/
 
      /*12/13/2023*/
      /*Assign a complex number to a scalar*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator = (const _Cx& _s)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator = (const _cx_ty& _s)
      {
           _real = _s;
           _img = 0;
@@ -95,27 +95,27 @@ namespace sorcery
      }
      /*12/13/2023*/
      /*Add a scalar to a complex number*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator += (const _Cx& _s)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator += (const _cx_ty& _s)
      {
           _real += _s;
           return *this;
      }
      /*12/13/2023*/
      /*Subtract a scalar from a complex number*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator -= (const _Cx& _s)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator -= (const _cx_ty& _s)
      {
           _real -= _s;
           return *this;
      }
      /*12/13/2023*/
      /*Multiply a complex number by a scalar*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator *= (const _Cx& _s)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator *= (const _cx_ty& _s)
      {
           _real *= _s;
           _img *= _s;
@@ -123,9 +123,9 @@ namespace sorcery
      }
      /*12/13/2023*/
      /*Divide a complex number by a scalar*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator /= (const _Cx& _s)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator /= (const _cx_ty& _s)
      {
           _real /= _s;
           _img /= _s;
@@ -134,9 +134,9 @@ namespace sorcery
      
      /*12/13/2023*/
      /*Assign one complex number to another*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator = (const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator = (const complex<_cx_ty>& _z)
      {
           _real = _z.real();
           _img = _z.img();
@@ -144,9 +144,9 @@ namespace sorcery
      }
      /*12/13/2023*/
      /*Add one complex number to another*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator += (const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator += (const complex<_cx_ty>& _z)
      {
           _real += _z.real();
           _img += _z.img();
@@ -154,9 +154,9 @@ namespace sorcery
      }
      /*12/13/2023*/
      /*Subtract one complex number from another*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator -= (const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator -= (const complex<_cx_ty>& _z)
      {
           _real -= _z.real();
           _img -= _z.img();
@@ -164,9 +164,9 @@ namespace sorcery
      }
      /*12/13/2023*/
      /*Multiply one complex number by another*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator *= (const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator *= (const complex<_cx_ty>& _z)
      {
           _real = _real * _z.real() - _img * _z.img();
           _img = _real * _z.img() + _img() * _z.real();
@@ -174,12 +174,12 @@ namespace sorcery
      }
      /*12/13/2023*/
      /*Divide one complex number by another*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     complex<_Cx>::operator /= (const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     complex<_cx_ty>::operator /= (const complex<_cx_ty>& _z)
      {
-          _Cx _r = _real * _z.real() + _img * _z.img();
-          const _Cx _abs2_z = _z.real() * _z.real() + _z.img() * _z.img();
+          _cx_ty _r = _real * _z.real() + _img * _z.img();
+          const _cx_ty _abs2_z = _z.real() * _z.real() + _z.img() * _z.img();
           _img = (_img * _z.real() - _real * _z.img()) / _abs2_z;
           _real = _r / _abs2_z;
           return *this;
@@ -189,191 +189,191 @@ namespace sorcery
 
      /*12/14/2023*/
      /*Return _z*/
-     template<typename _Cx>
+     template<typename _cx_ty>
      inline constexpr bool
-     operator + (const complex<_Cx>& _z)
+     operator + (const complex<_cx_ty>& _z)
      {
           return _z;
      }
      /*12/14/2023*/
      /*Return the complex negation of _z*/
-     template<typename _Cx>
+     template<typename _cx_ty>
      inline constexpr bool
-     operator - (const complex<_Cx>& _z)
+     operator - (const complex<_cx_ty>& _z)
      {
-          return complex<_Cx>(-_z.real(), -_z.img());
+          return complex<_cx_ty>(-_z.real(), -_z.img());
      }
 
      /*12/13/2023*/
      /*Return a new complex number (_x + _y)*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator + (const complex<_Cx>& _x, const complex<_Cx>& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator + (const complex<_cx_ty>& _x, const complex<_cx_ty>& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _r += _y;
           return _r;
      }
      /*12/13/2023*/
      /*Return a new complex number _x plus a scalar _y*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator + (const complex<_Cx>& _x, const _Cx& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator + (const complex<_cx_ty>& _x, const _cx_ty& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _r += _y;
           return _r;
      }
      /*12/13/2023*/
      /*Return a scalar _x plus a complex number _y*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator + (const _Cx& _x, const complex<_Cx>& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator + (const _cx_ty& _x, const complex<_cx_ty>& _y)
      {
-          complex<_Cx> _r = _y;
+          complex<_cx_ty> _r = _y;
           _r += _x;
           return _r;
      }
 
      /*12/13/2023*/
      /*Return a new complex number (_x - _y)*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator - (const complex<_Cx>& _x, const complex<_Cx>& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator - (const complex<_cx_ty>& _x, const complex<_cx_ty>& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _r -= _y;
           return _r;
      }
      /*12/13/2023*/
      /*Return a new complex number _x minus a scalar _y*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator - (const complex<_Cx>& _x, const _Cx& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator - (const complex<_cx_ty>& _x, const _cx_ty& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _r += _y;
           return _r;
      }
      /*12/13/2023*/
      /*Return a scalar _x minus a complex number _y*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator - (const _Cx& _x, const complex<_Cx>& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator - (const _cx_ty& _x, const complex<_cx_ty>& _y)
      {
-          complex<_Cx> _r = -_y;
+          complex<_cx_ty> _r = -_y;
           _r += _x;
           return _r;
      }
 
      /*12/13/2023*/
      /*Return a new complex number (_x * _y)*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator * (const complex<_Cx>& _x, const complex<_Cx>& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator * (const complex<_cx_ty>& _x, const complex<_cx_ty>& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _r *= _y;
           return _r;
      }
      /*12/13/2023*/
      /*Return a complex number _x time a scalar _y*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator * (const complex<_Cx>& _x, const _Cx& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator * (const complex<_cx_ty>& _x, const _cx_ty& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _x *= _y;
           return _r;
      }
      /*12/13/2023*/
      /*Return a scalar _x times a complex number _y*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator * (const _Cx& _x, const complex<_Cx>& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator * (const _cx_ty& _x, const complex<_cx_ty>& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _r *= _y;
           return _r;
      }
 
      /*12/13/2023*/
      /*Return a new complex number (_x / _y)*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator / (const complex<_Cx>& _x, const complex<_Cx>& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator / (const complex<_cx_ty>& _x, const complex<_cx_ty>& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _r /= _y;
           return _r;
      }
      /*12/13/2023*/
      /*Return a comlex number _x divided by a scalar _y*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator / (const complex<_Cx>& _x, const _Cx& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator / (const complex<_cx_ty>& _x, const _cx_ty& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _r /= _y;
           return _r;
      }
      /*12/13/2023*/
      /*Return a scalar _x divided by a complex number _y*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     operator / (const _Cx& _x, const complex<_Cx>& _y)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     operator / (const _cx_ty& _x, const complex<_cx_ty>& _y)
      {
-          complex<_Cx> _r = _x;
+          complex<_cx_ty> _r = _x;
           _r /= _y;
           return _r;
      }
 
      /*12/13/2023*/
      /*Return true if complex numbers _x and _y are equal*/
-     template<typename _Cx>
+     template<typename _cx_ty>
      inline constexpr bool
-     operator == (const complex<_Cx>& _x, const complex<_Cx>& _y)
+     operator == (const complex<_cx_ty>& _x, const complex<_cx_ty>& _y)
      {
           return (_x.real() == _y.real() && _x.img() == _y.img());
      }
      /*12/13/2023*/
      /*Return true if a complex number _x and a scalar _y are equal*/
-     template<typename _Cx>
+     template<typename _cx_ty>
      inline constexpr bool
-     operator == (const complex<_Cx>& _x, const _Cx& _y)
+     operator == (const complex<_cx_ty>& _x, const _cx_ty& _y)
      {
           return (_x.real() == _y && _x.img() == 0);
      }
      /*12/13/2023*/
      /*Return true if a scalar _x and a complex number _y are equal*/
-     template<typename _Cx>
+     template<typename _cx_ty>
      inline constexpr bool 
-     operator == (const _Cx& _x, const complex<_Cx>& _y)
+     operator == (const _cx_ty& _x, const complex<_cx_ty>& _y)
      {
           return (_y.real() == _x && _y.img() == 0);
      }
      
      /*12/13/2023*/
      /*Return false if complex number _x and _y are equal*/
-     template<typename _Cx>
+     template<typename _cx_ty>
      inline constexpr bool
-     operator != (const complex<_Cx>& _x, const complex<_Cx>& _y)
+     operator != (const complex<_cx_ty>& _x, const complex<_cx_ty>& _y)
      {
           return (_x.real() != _y.real() || _x.img() != _y.img());
      }
      /*12/13/2023*/
      /*Return false if a complex number _x and a scalar _y are equal*/
-     template<typename _Cx>
+     template<typename _cx_ty>
      inline constexpr bool
-     operator != (const complex<_Cx>& _x, const _Cx& _y)
+     operator != (const complex<_cx_ty>& _x, const _cx_ty& _y)
      {
           return (_x.real() != _y || _x.img() != 0);
      }
      /*12/13/2023*/
      /*Return false if a scalar _x and a complex number _y are equal*/
-     template<typename _Cx>
+     template<typename _cx_ty>
      inline constexpr bool
-     operator != (const _Cx& _x, const complex<_Cx>& _y)
+     operator != (const _cx_ty& _x, const complex<_cx_ty>& _y)
      {
           return (_y.real() != _x || _y.img() != 0);
      }
@@ -381,164 +381,164 @@ namespace sorcery
 
      /*12/14/2023*/
      /*Return _z*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     z_val(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     z_val(const complex<_cx_ty>& _z)
      {
           return _z;
      }
 
      /*12/13/2023*/
      /*Get the real component of a complex number _z*/
-     template<typename _Cx>
-     inline constexpr _Cx
-     real(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr _cx_ty
+     real(const complex<_cx_ty>& _z)
      {
           return _z.real();
      }
      /*12/13/2023*/
      /*Get the imaginary component of a complex number _z*/
-     template<typename _Cx>
-     inline constexpr _Cx
-     img(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr _cx_ty
+     img(const complex<_cx_ty>& _z)
      {
           return _z.img();
      }
 
      /*12/25/2023 ~ Christmas!*/
      /*Return i*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
      i()
      {
-          return complex<_Cx>(0, 1);
+          return complex<_cx_ty>(0, 1);
      }
 
      /*========================================================*/
 
      /*12/13/2023*/
-     template<typename _Cx>
-     inline constexpr _Cx
-     _complex_abs(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr _cx_ty
+     _complex_abs(const complex<_cx_ty>& _z)
      {
-          _Cx _x = _z.real();
-          _Cx _y = _z.img();
+          _cx_ty _x = _z.real();
+          _cx_ty _y = _z.img();
           return sqrt(_x * _x + _y * _y);
      }
      /*12/13/2023*/
      /*Return the magnitude of a complex number _z*/
-     template<typename _Cx>
-     inline constexpr _Cx
-     abs(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr _cx_ty
+     abs(const complex<_cx_ty>& _z)
      {
           return _complex_abs(_z);
      }
 
      /*12/25/2023 ~ Christmas!*/
-     template<typename _Cx>
-     inline constexpr _Cx
-     _complex_abs2(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr _cx_ty
+     _complex_abs2(const complex<_cx_ty>& _z)
      {
-          _Cx _x = _z.real();
-          _Cx _y = _z.img();
+          _cx_ty _x = _z.real();
+          _cx_ty _y = _z.img();
           return _x * _x + _y * _y;
      }
      /*12/25/2023 ~ Christmas!*/
      /*Return the squared magnitude of a complex number _z*/
-     template<typename _Cx>
-     inline constexpr _Cx
-     abs2(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr _cx_ty
+     abs2(const complex<_cx_ty>& _z)
      {
           return _complex_abs2(_z);
      }
 
      /*12/24/2023*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     _complex_conj(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     _complex_conj(const complex<_cx_ty>& _z)
      {
-          return complex<_Cx>(_z.real(), -_z.img());
+          return complex<_cx_ty>(_z.real(), -_z.img());
      }
      /*1/3/2024*/
      /*Return the conjugate of a complex number _z*/
-     template<typename _Cx>
-     inline constexpr complex<_Cx>
-     conj(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr complex<_cx_ty>
+     conj(const complex<_cx_ty>& _z)
      {
           return _complex_conj(_z);
      }
 
      /*12/21/2023*/
-     template<typename _Cx>
-     inline complex<_Cx>
-     _complex_sqrt(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline complex<_cx_ty>
+     _complex_sqrt(const complex<_cx_ty>& _z)
      {
           if(_z.img() == 0)
-               return _z.real() > 0? complex<_Cx>(sqrt(_z.real()), 0):
-                    complex<_Cx>(0, sqrt(-_z.real()));
+               return _z.real() > 0? complex<_cx_ty>(sqrt(_z.real()), 0):
+                    complex<_cx_ty>(0, sqrt(-_z.real()));
           /*Extremely scary, but derivable formula*/
-          _Cx _r = sqrt((abs(_z) + _z.real()) / 2);
-          _Cx _i = (_z.img() / abs(_z.img())) * 
+          _cx_ty _r = sqrt((abs(_z) + _z.real()) / 2);
+          _cx_ty _i = (_z.img() / abs(_z.img())) * 
                sqrt((abs(_z) - _z.real()) / 2);
-          return complex<_Cx>(_r, _i);
+          return complex<_cx_ty>(_r, _i);
      }
 
      /*12/25/2023 ~ Christmas!*/
      /*Compute the square root of a complex number _z*/
-     template<typename _Cx>
-     inline complex<_Cx>
-     sqrt(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline complex<_cx_ty>
+     sqrt(const complex<_cx_ty>& _z)
      {
           return _complex_sqrt(_z);
      }
 
      /*12/25/2023 ~ Christmas!*/
-     template<typename _Cx>
-     inline constexpr _Cx
-     _complex_arg(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline constexpr _cx_ty
+     _complex_arg(const complex<_cx_ty>& _z)
      {
           return atan2(_z.img(), _z.real());
      }
      /*12/25/2023 ~ Christmas!*/
      /*Return the phase angle of a complex number _z*/
-     template<typename _Cx>
-     inline constexpr _Cx
+     template<typename _cx_ty>
+     inline constexpr _cx_ty
      /*Why not use phase()???*/
-     arg(const complex<_Cx>& _z)
+     arg(const complex<_cx_ty>& _z)
      {
           return _complex_arg(_z);
      }
      /*12/25/2023 ~ Christmas!*/
      /*Return the phase angle of a complex number _z*/
-     template<typename _Cx>
-     inline constexpr _Cx
+     template<typename _cx_ty>
+     inline constexpr _cx_ty
      /*Why not use arg()???*/
-     phase(const complex<_Cx>& _z)
+     phase(const complex<_cx_ty>& _z)
      {
           return _complex_arg(_z);
      }
 
      // /*12/15/2023*/
-     // template<typename _Cx>
-     // inline complex<_Cx>
-     // _c_exp(const complex<_Cx>& _z)
+     // template<typename _cx_ty>
+     // inline complex<_cx_ty>
+     // _c_exp(const complex<_cx_ty>& _z)
      // {
-     //      return complex<_Cx>(necromancer_exp::exp(_z.real())
+     //      return complex<_cx_ty>(necromancer_exp::exp(_z.real())
      //           * complex<Cx>(euclid_trig::cos(_z.img()), euclid_trig::sin(_z.img())));
      // }
 
      /*12/25/2023 ~ Christmas!*/
-     template<typename _Cx>
-     inline complex<_Cx>
-     _complex_log(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline complex<_cx_ty>
+     _complex_log(const complex<_cx_ty>& _z)
      {
-          return complex<_Cx>(log(_complex_abs(_z)), _complex_arg(_z));
+          return complex<_cx_ty>(log(_complex_abs(_z)), _complex_arg(_z));
      }
      /*12/25/2023 ~ Christmas!*/
      /*Compute the complex natural logarithm of a complex number _z*/
-     template<typename _Cx>
-     inline complex<_Cx>
-     log(const complex<_Cx>& _z)
+     template<typename _cx_ty>
+     inline complex<_cx_ty>
+     log(const complex<_cx_ty>& _z)
      {
           return _complex_log(_z);
      }
