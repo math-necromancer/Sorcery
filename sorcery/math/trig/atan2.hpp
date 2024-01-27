@@ -6,8 +6,6 @@
 #ifndef _MATH_SORCERY_
      #error This file won't work if you don't include "math_sorcery.hpp"!
 #else
-     #include "../float_class.hpp"
-     #include "atan.hpp"
      namespace necromancer_atan2
      {
           /*12/24/2023*/

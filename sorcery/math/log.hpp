@@ -20,7 +20,7 @@
 /*The constants _log1 ... _log7 are to be used for the polynomial approximation*/
 /*   for 2 * arctanh(x) within sqrt(2) / 2 ... sqrt(2). They are taken from fdlibm*/
 /*log(2) is split into high and low parts, whos sum is more accurate*/
-/*than double preciison log(2)*/
+/*than double precison log(2)*/
 
 #ifndef _NECROMANCER_LOG_
 #define _NECROMANCER_LOG_
@@ -28,15 +28,19 @@
 #ifndef _MATH_SORCERY_
      #error This file won't work if you don't include "math_sorcery.hpp"!
 #else
-#include "float_class.hpp"
 namespace necromancer_log
 {
      const static double
           /*Doubles to make log(2) better than a single number*/
           /*Their sum is more accurate than the double log(2)*/
           /*From fdlibm*/
-          _log2_h = 6.9314718036912381e-01,
-          _log2_l = 1.9082149292705877e-10;
+          _log2_h = 6.93147180369123816490e-01,
+          _log2_l = 1.90821492927058770002e-10,
+          /*Similar cases as with _log2_h and _log2_l*/
+          _log2_e_h = 1.44269504025578498840e-00,
+          _log2_e_l = 6.33178418959924679144e-10,
+          _log10_e_h = 4.34294481761753559113e-01,
+          _log10_e_l = 1.41498268538128924051e-10;
      const static double
           /*Minimax coeficcients for 2 * arctanh(x)*/ 
           /*From fdlibm*/ 
@@ -139,15 +143,44 @@ namespace necromancer_log
      }
      /*** log2 ***/
 
-     /*12/24/2023*/
+     /*1/27/2024*/
      constexpr float log2f(const float& _x)
      {
-          return logf(_x) * 1.442695f;
+          float_32 _i = {_x};
+          /*log2(1) = 0*/
+          if(_i._y == 0x3f800000)
+               return 0.0f;
+          /*log2(negative) is undefined*/
+          if(_i._y > 0x80000000)
+               return sorcery::NaNf;
+          int _e = 0;
+          /*log2(+-0) -> -inf*/
+          if((_i._y & 0x7fffffff) == 0)
+               return sorcery::NEGATIVE_INFINITYf;
+          /*log2(inf or NaN) is itself*/
+          if(_i._y >= 0x7f800000)
+               return _x;
+          float _logx = logf(_i._x);
+          return _logx * _log2_e_h + _logx * _log2_e_l;
      }
-     /*12/24/2023*/
+     /*1/27/2024*/
      constexpr double log2d(const double& _x)
      {
-          return logd(_x) * 1.4426950408889634;
+          float_64 _i = {_x};
+          /*log2(1) = 0*/
+          if(_i._lh._hi == 0x3ff00000 && _i._lh._lo == 0)
+               return 0.0;
+          /*log2(negative) is undefined*/
+          if(_i._lh._hi > 0x80000000)
+               return sorcery::NaN;
+          /*log2(+-0) = -inf*/
+          if(((_i._lh._hi & 0x7fffffff) | _i._lh._lo) == 0)
+               return sorcery::NEGATIVE_INFINITY;
+          /*log2(inf or NaN) is itself*/
+          if(_i._lh._hi >= 0x7ff00000)
+               return _x;
+          double _logx = logd(_i._x);
+          return _logx * _log2_e_h + _logx * _log2_e_l;
      }
      /*** ilog2 ~ the integral part of log2(x) ***/
 
@@ -167,15 +200,44 @@ namespace necromancer_log
      }
      /*** log10 ***/
 
-     /*12/24/2023*/
+     /*1/27/2024*/
      constexpr float log10f(const float& _x)
      {
-          return logf(_x) * 0.434294492f;
+          float_32 _i = {_x};
+          /*log10(1) = 0*/
+          if(_i._y == 0x3f800000)
+               return 0.0f;
+          /*log10(negative) is undefined*/
+          if(_i._y > 0x80000000)
+               return sorcery::NaNf;
+          int _e = 0;
+          /*log10(+-0) -> -inf*/
+          if((_i._y & 0x7fffffff) == 0)
+               return sorcery::NEGATIVE_INFINITYf;
+          /*log10(inf or NaN) is itself*/
+          if(_i._y >= 0x7f800000)
+               return _x;
+          float _logx = logf(_i._x);
+          return _logx * _log10_e_h + _logx * _log10_e_l;
      }
-     /*12/24/2023*/
+     /*1/27/2024*/
      constexpr double log10d(const double& _x)
      {
-          return logd(_x) * 0.4342944819032518;
+          float_64 _i = {_x};
+          /*log10(1) = 0*/
+          if(_i._lh._hi == 0x3ff00000 && _i._lh._lo == 0)
+               return 0.0;
+          /*log10(negative) is undefined*/
+          if(_i._lh._hi > 0x80000000)
+               return sorcery::NaN;
+          /*log10(+-0) = -inf*/
+          if(((_i._lh._hi & 0x7fffffff) | _i._lh._lo) == 0)
+               return sorcery::NEGATIVE_INFINITY;
+          /*log10(inf or NaN) is itself*/
+          if(_i._lh._hi >= 0x7ff00000)
+               return _x;
+          double _logx = logd(_i._x);
+          return _logx * _log10_e_h + _logx * _log10_e_l;
      }
 
      /*** custom base log ***/

@@ -2,7 +2,6 @@
 #include <iomanip>
 #define _MATH_SORCERY_SKIP_MATH_WARN_
 #include "sorcery/math/math_sorcery.hpp"
-#include "sorcery/math/exp.hpp"
 
 /* Yooo... C++ can control time now?... */
 
@@ -71,13 +70,16 @@ int main()
 
     //death
 
-    //double squares[] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100};
+    double squares[] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961};
 
-    //for(int _c = 0; _c <= 70000000; _c++ /* C++ :) */)
-        _s = sorcery::ldexp(1., -3);
+    for(float sqr : squares)
+    {
+        _s = sorcery::sqrt(sqr);
+        std::cout << std::setprecision(16) << _s << '\n';
+    }
     
     _end = std::chrono::high_resolution_clock::now();
-    std::cout << std::setprecision(16) << _s << '\n';
+    //std::cout << std::setprecision(16) << _s << '\n';
     std::chrono::duration<double> elapsed_seconds = _end - _start;
     std::cout << std::setprecision(16) << "That computation took " << elapsed_seconds.count() << " seconds!\n";
     // std::cout <<

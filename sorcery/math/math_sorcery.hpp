@@ -709,6 +709,11 @@ namespace sorcery
      };
 }
 
+/*Return the high word of a [_float32] or [_float64] _i*/
+#define hi(_i) _i._lh._hi
+/*Return the low word of a [_float32] or [_float64] _i*/
+#define lo(_i) _i._lh._lo
+
 /*1 bit of information*/
 #define bit bool
 /*8 bit signed integer (signed char)*/
@@ -731,6 +736,32 @@ namespace sorcery
 typedef necromancer_float_class::float_32 float_32;
 /*Union to access the bits of a 64-bit float*/
 typedef necromancer_float_class::float_64 float_64;
+
+namespace sorcery
+{
+     /*Generate a single precision infinity*/
+     /*Set _n to true for a negative infinity, otherwise leave blank*/
+     float inff(bool _n = false)
+     {
+          return numeric_limits<float>::infinity(_n);
+     }
+     /*Generate a double precision infinity*/
+     /*Set _n to true for a negative infinity, otherwise leave blank*/
+     double inf(bool _n = false)
+     {
+          return numeric_limits<double>::infinity(_n);
+     }
+     /*Generate a single precision "Not a Number"*/
+     float nanf()
+     {
+          return numeric_limits<float>::nan();
+     }
+     /*Generate a double precision "Not a Number"*/
+     double nan()
+     {
+          return numeric_limits<double>::nan();
+     }
+}
 
 /*Single precision Infinity*/
 #define INFINITYf numeric_limits<float>::infinity(false)
@@ -782,10 +813,10 @@ typedef necromancer_float_class::float_64 float_64;
 /*This is a flag, not the actual value*/
 #define _FLT_SUBNORMAL 0x0006
 
-// #include "exp.hpp"
 
 /*Main folder*/
 #include "abs.hpp"
+#include "exp.hpp"
 #include "float_class.hpp"
 /*gcf.hpp included later*/
 #include "log.hpp"
@@ -1018,6 +1049,51 @@ namespace sorcery
           }
           return _c + (_i >> 1);
      }
+
+     /*** exp and exp2 ***/
+     #ifdef _NECROMANCER_EXP_
+          /*** exp ***/
+
+          /*Returm the base e exponential of a 32-bit float _x, where*/
+          /*e is the base of natural logarithms*/
+          constexpr float exp(const float& _x)
+          {
+               return necromancer_exp::expf(_x);
+          }
+          /*Returm the base e exponential of a 64-bit float _x, where*/
+          /*e is the base of natural logarithms*/
+          constexpr double exp(const double& _x)
+          {
+               return necromancer_exp::expd(_x);
+          }
+          /*Returm the base e exponential of _x, where*/
+          /*e is the base of natural logarithms*/
+          template<typename _exp_ty>
+          double exp(const _exp_ty& _x)
+          {
+               return necromancer_exp::expd(static_cast<double>(_x));
+          }
+          /*** exp2 ***/
+
+          /*Returm the base 2 exponential of a 32-bit float _x*/
+          constexpr float exp2(const float& _x)
+          {
+               return necromancer_exp::exp2f(_x);
+          }
+          /*Returm the base 2 exponential of a 64-bit float _x*/
+          constexpr double exp2(const double& _x)
+          {
+               return necromancer_exp::exp2d(_x);
+          }
+          /*Returm the base 2 exponential of _x*/
+          template<typename _exp_ty>
+          double exp2(const _exp_ty& _x)
+          {
+               return necromancer_exp::exp2d(static_cast<double>(_x));
+          }
+     #else
+          #warning Could not get exp() or exp2()
+     #endif
 
      /*** float_class stuff ***/
      #ifdef _NECROMANCER_FLOAT_CLASS_
@@ -1333,7 +1409,7 @@ namespace sorcery
                     lcm(_x, _y);
           }
      #else
-          #warning "Could not get gcf() or lcm()"
+          #warning Could not get gcf() or lcm()
      #endif /*_NECROMANCER_GCF_*/
 
      /*** logarithms ***/
