@@ -1352,6 +1352,15 @@ namespace sorcery
                return necromancer_float_class::
                     frexpd(_x, _e);
           }
+          /*1/29/2024*/
+          /*Return a 64 bit float _f where 0.5 <= |_f| < 1, and set *_e to be*/
+          /*an exponent where _x = _f * 2^_e*/
+          template<typename _frexp_ty>
+          constexpr double frexp(const _frexp_ty& _x, int* _e)
+          {
+               return necromancer_float_class::
+                    frexpd(static_cast<double>(_x), _e);
+          }
           /*1/9/2024*/
           /*Return a 32 bit float _f where _f = _x * 2^_e*/
           constexpr float ldexp(const float& _x, const int& _e)
@@ -1365,6 +1374,14 @@ namespace sorcery
           {
                return necromancer_float_class::
                     ldexpd(_x, _e);
+          }
+          /*1/29/2024*/
+          /*Return a 64 bit float _f where _f = _x * 2^_e*/
+          template<typename _ldexp_ty>
+          constexpr double ldexp(const _ldexp_ty& _x, const int& _e)
+          {
+               return necromancer_float_class::
+                    ldexpd(static_cast<double>(_x), _e);
           }
      #else
           /*This error has already been accounted for*/

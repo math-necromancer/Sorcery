@@ -70,16 +70,12 @@ int main()
 
     //death
 
-    double squares[] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961};
+    //double squares[] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961};
 
-    for(float sqr : squares)
-    {
-        _s = sorcery::sqrt(sqr);
-        std::cout << std::setprecision(16) << _s << '\n';
-    }
-    
+    for(int _i = 0; _i <= 200'000'000; _i ++)
+        _s = sorcery::log(_i);
     _end = std::chrono::high_resolution_clock::now();
-    //std::cout << std::setprecision(16) << _s << '\n';
+    std::cout << std::setprecision(16) << _s << " * 2 ^ " << _e << '\n';
     std::chrono::duration<double> elapsed_seconds = _end - _start;
     std::cout << std::setprecision(16) << "That computation took " << elapsed_seconds.count() << " seconds!\n";
     // std::cout <<

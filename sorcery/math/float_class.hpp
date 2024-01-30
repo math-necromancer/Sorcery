@@ -279,20 +279,16 @@ namespace necromancer_float_class
                return false;
           return _i._y << _i._f_64._exp - 0x03f2; 
      }
-     /*1/8/2023*/
+     /*1/29/2024*/
      constexpr float frexpf(const float& _x, int *_eptr)
      {
           float_32 _i = {_x};
-          /*sign(_x)*/
-          _int32 _sx = _i._y & 0x80000000;
-          /*|_x|*/
-          _i._y &= 0x7fffffff;
           *_eptr = 0;
           /*_x is infinity, NaN, or 0*/
-          if(_i._y >= 0x7f800000 || _i._y == 0)
+          if(_i._y & 0x7fffffff >= 0x7f800000 || _i._y == 0)
                return _x;
           /*Subnormal float ~ scale up _x*/
-          if(_i._y < 0x01000000)
+          if(_i._y & 0x7fffffff < 0x01000000)
           {
                *_eptr -= 24;
                _i._x *= two24;
@@ -302,25 +298,20 @@ namespace necromancer_float_class
           *_eptr += _i._f_32._exp - 0x07e;
           /*Same business...*/
           _i._f_32._exp = 0x07e;
-          _i._y |= _sx;
           return _i._x;
      }
-     /*1/8/2023*/
+     /*1/29/2024*/
      constexpr double frexpd(const double& _x, int *_eptr)
      {
           float_64 _i = {_x};
-          /*sign(_x)*/
-          _int64 _sx = _i._lh._hi & 0x80000000;
-          /*|_x|*/
-          _i._lh._hi &= 0x7fffffff;
           *_eptr = 0;
           /*If _x is infinity, NaN, or 0*/
-          if(_i._lh._hi >= 0x7ff00000 || _i._y == 0)
+          if(_i._lh._hi & 0x7fffffff >= 0x7ff00000 || _i._y == 0)
                return _x;
           /*Subnormal float ~ scale up _x*/
-          if(_i._lh._hi < 0x01000000)
+          if(_i._lh._hi & 0x7fffffff < 0x01000000)
           {
-               *_eptr -= 54;
+               *_eptr = -54;
                _i._x *= two54;
           }
           /*Subtract 1022 to avoid a multiplication that would be*/
@@ -328,40 +319,25 @@ namespace necromancer_float_class
           *_eptr += _i._f_64._exp - 0x3fe;
           /*Same business...*/
           _i._f_64._exp = 0x3fe;
-          /*Restore the sign*/
-          _i._lh._hi |= _sx;
           return _i._x;
      }
-     /*1/9/2023*/
+     /*1/29/2024*/
      constexpr float ldexpf(const float& _x, const int& _e)
      {
           float_32 _i = {_x};
-          /*sign(_x)*/
-          _int32 _sx = _i._y & 0x80000000;
-          /*|_x|*/
-          _i._y &= 0x7fffffff;
-          /*If _x is infinity, NaN, or 0*/
-          if(_i._y >= 0x7f800000 || _i._y == 0)
+          if(_i._y & 0x7fffffff >= 0x7f800000 || _i._y == 0)
                return _x;
           _i._f_32._exp += _e;
-          /*Restore the sign*/
-          _i._y |= _sx;
           return _i._x;
      }
-     /*1/9/2023*/
+     /*1/29/2024*/
      constexpr double ldexpd(const double& _x, const int& _e)
      {
           float_64 _i = {_x};
-          /*sign(x)*/
-          _int64 _sx = _i._lh._hi & 0x80000000;
-          /*|_x|*/
-          _i._lh._hi &= 0x7fffffff;
           /*If _x is infinity, NaN, or 0*/
-          if(_i._lh._hi >= 0x7f800000 || _i._y == 0)
+          if(_i._lh._hi & 0x7fffffff >= 0x7f800000 || _i._y == 0)
                return _x;
           _i._f_64._exp += _e;
-          /*Restore the sign*/
-          _i._lh._hi |= _sx;
           return _i._x;
      }
      /*12/24/2023*/
