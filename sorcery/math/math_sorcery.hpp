@@ -1681,6 +1681,8 @@ namespace sorcery
           template<typename _trunc_ty>
           constexpr double trunc(const _trunc_ty& _x)
           {
+               if(numeric_limits<_trunc_ty>::is_integer)
+                    return _x;
                return necromancer_round::
                     truncd(static_cast<double>(_x));
           }
@@ -1703,6 +1705,8 @@ namespace sorcery
           template<typename _floor_ty>
           constexpr double floor(const _floor_ty& _x)
           {
+               if(numeric_limits<_floor_ty>::is_integer)
+                    return _x;
                return necromancer_round::
                     floorf(static_cast<double>(_x));
           }
@@ -1725,6 +1729,8 @@ namespace sorcery
           template<typename _ceil_ty>
           constexpr double ceil(const _ceil_ty& _x)
           {
+               if(numeric_limits<_ceil_ty>::is_integer)
+                    return _x;
                return necromancer_round::
                     ceild(static_cast<double>(_x));
           }

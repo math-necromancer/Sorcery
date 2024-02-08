@@ -1,5 +1,19 @@
 /*The Math Necromancer*/
 
+/*This is the implementation as seen in fdlibm. All constants and methods*/
+/*come from fdlibm as well.*/
+/*https://netlib.org/fdlibm/e_exp.c*/
+/*
+* ====================================================
+* Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
+*
+* Developed at SunSoft, a Sun Microsystems, Inc. business.
+* Permission to use, copy, modify, and distribute this
+* software is freely granted, provided that this notice 
+* is preserved.
+* ====================================================
+*/
+
 /*Compute the Natural Logarithm of _x*/
 /*Reduce the Range of _x*/
 /*   Given an IEEE-754 Machine, find an f and e where _x = (f + 1) * 2^e:*/
@@ -60,21 +74,21 @@ namespace necromancer_log
      constexpr float logf(const float& _x)
      {
           float_32 _i = {_x};
-          /*log(1) = 0*/
-          if(_i._y == 0x3f800000)
-               return 0.0f;
           /*log(negative) is undefined*/
           if(_i._y > 0x80000000)
                return sorcery::NaNf;
+          /*log(1) = 0*/
+          if(_i._y == 0x3f800000)
+               return 0.0f;
           int _e = 0;
-          if(_i._y & 0x7fffffff < 0x00100000)
+          if(_i._y & 0x7fffffff < 0x00800000)
           {
                /*log(+-0) -> -inf*/
                if((_i._y & 0x7fffffff) == 0)
                     return sorcery::NEGATIVE_INFINITYf;
                /*Subnormal float, scale up _x*/
-               _e -= 24;
                _i._x *= two24;
+               _e -= 24;
           }
           /*log(inf or NaN) is itself*/
           if(_i._y >= 0x7f800000)
@@ -94,21 +108,20 @@ namespace necromancer_log
           float _z2 = _z * _z;
           float _t1 = _z * (_log1 + _z2 * (_log3 + _z2 * (_log5 + _z2 * _log7)));
           float _t2 = _z2 * (_log2 + _z2 * (_log4 + _z2 * _log6));
-          float _r = _t1 + _t2;
           float _hfsq = 0.5f * _f * _f;
           /*We can't just return _r + _e * log(2). It isn't precise enough*/
-          return _e * _log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * _log2_l)) - _f);
+          return _e * _log2_h - ((_hfsq - (_s * (_hfsq + _t1 + _t2) + _e * _log2_l)) - _f);
      }
      /*12/24/2023*/
      constexpr double logd(const double& _x)
      {
           float_64 _i = {_x};
-          /*log(1) = 0*/
-          if(_i._lh._hi == 0x3ff00000 && _i._lh._lo == 0)
-               return 0.0;
           /*log(negative) is undefined*/
           if(_i._lh._hi > 0x80000000)
                return sorcery::NaN;
+          /*log(1) = 0*/
+          if(_i._lh._hi == 0x3ff00000 && _i._lh._lo == 0)
+               return 0.0;
           int _e = 0;
           if((_i._lh._hi & 0x7fffffff) < 0x00100000)
           {
@@ -116,8 +129,8 @@ namespace necromancer_log
                if((_i._lh._hi & 0x7fffffff) | _i._lh._lo == 0)
                     return sorcery::NEGATIVE_INFINITY;
                /*Subnormal float, scale up _x*/
-               _e -= 54;
                _i._x *= two54;
+               _e -= 54;
           }
           /*log(inf or NaN) is itself*/
           if(_i._lh._hi >= 0x7ff00000)
@@ -136,10 +149,9 @@ namespace necromancer_log
           double _z2 = _z * _z;
           double _t1 = _z * (_log1 + _z2 * (_log3 + _z2 * (_log5 + _z2 * _log7)));
           double _t2 = _z2 * (_log2 + _z2 * (_log4 + _z2 * _log6));
-          double _r = _t1 + _t2;                           
           double _hfsq = 0.5 * _f * _f;
           /*We can't just return _r + _e * log(2). It isn't precise enough*/
-          return _e * _log2_h - ((_hfsq - (_s * (_hfsq + _r) + _e * _log2_l)) - _f);
+          return _e * _log2_h - ((_hfsq - (_s * (_hfsq + _t1 + _t2) + _e * _log2_l)) - _f);
      }
      /*** log2 ***/
 
@@ -147,12 +159,12 @@ namespace necromancer_log
      constexpr float log2f(const float& _x)
      {
           float_32 _i = {_x};
-          /*log2(1) = 0*/
-          if(_i._y == 0x3f800000)
-               return 0.0f;
           /*log2(negative) is undefined*/
           if(_i._y > 0x80000000)
                return sorcery::NaNf;
+          /*log2(1) = 0*/
+          if(_i._y == 0x3f800000)
+               return 0.0f;
           int _e = 0;
           /*log2(+-0) -> -inf*/
           if((_i._y & 0x7fffffff) == 0)
@@ -167,12 +179,12 @@ namespace necromancer_log
      constexpr double log2d(const double& _x)
      {
           float_64 _i = {_x};
-          /*log2(1) = 0*/
-          if(_i._lh._hi == 0x3ff00000 && _i._lh._lo == 0)
-               return 0.0;
           /*log2(negative) is undefined*/
           if(_i._lh._hi > 0x80000000)
                return sorcery::NaN;
+          /*log2(1) = 0*/
+          if(_i._lh._hi == 0x3ff00000 && _i._lh._lo == 0)
+               return 0.0;
           /*log2(+-0) = -inf*/
           if(((_i._lh._hi & 0x7fffffff) | _i._lh._lo) == 0)
                return sorcery::NEGATIVE_INFINITY;
@@ -189,14 +201,26 @@ namespace necromancer_log
      constexpr int ilog2f(const float& _x)
      {
           float_32 _i = {_x};
-          return _i._f_32._exp - 0x07f;
+          int _e = _i._f_32._exp - 0x07f;
+          if(_i._y & 0x7fffffff < 0x00100000)
+          {
+               _i._x *= two24;
+               _e -= 24;
+          }
+          return _e;
      }
      /*12/24/2023*/
      /*int return type is safe because log2(~1.797e+308) = 1024*/
      constexpr int ilog2d(const double& _x)
      {
           float_64 _i = {_x};
-          return _i._f_64._exp - 0x3ff;
+          int _e = _i._f_64._exp - 0x3ff;
+          if(_i._lh._hi & 0x7fffffff < 0x00100000)
+          {
+               _i._x *= two54;
+               _e -= 54;
+          }
+          return _e;
      }
      /*** log10 ***/
 
@@ -204,12 +228,12 @@ namespace necromancer_log
      constexpr float log10f(const float& _x)
      {
           float_32 _i = {_x};
-          /*log10(1) = 0*/
-          if(_i._y == 0x3f800000)
-               return 0.0f;
           /*log10(negative) is undefined*/
           if(_i._y > 0x80000000)
                return sorcery::NaNf;
+          /*log10(1) = 0*/
+          if(_i._y == 0x3f800000)
+               return 0.0f;
           int _e = 0;
           /*log10(+-0) -> -inf*/
           if((_i._y & 0x7fffffff) == 0)
@@ -224,12 +248,12 @@ namespace necromancer_log
      constexpr double log10d(const double& _x)
      {
           float_64 _i = {_x};
-          /*log10(1) = 0*/
-          if(_i._lh._hi == 0x3ff00000 && _i._lh._lo == 0)
-               return 0.0;
           /*log10(negative) is undefined*/
           if(_i._lh._hi > 0x80000000)
                return sorcery::NaN;
+          /*log10(1) = 0*/
+          if(_i._lh._hi == 0x3ff00000 && _i._lh._lo == 0)
+               return 0.0;
           /*log10(+-0) = -inf*/
           if(((_i._lh._hi & 0x7fffffff) | _i._lh._lo) == 0)
                return sorcery::NEGATIVE_INFINITY;

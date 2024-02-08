@@ -52,7 +52,7 @@
           {
                float_32 _i = {_x};
                /*signbit(_x) << 31*/
-               _int32 _sx = _i._y & 0x80000000;
+               _int32 _sx = (_i._y >> 31) & 1;
                /*|_x|*/
                _i._y &= 0x7fffffff;
                _int32 _y = _i._y;
@@ -77,7 +77,7 @@
                /*Special case if |_x| is greater than 1*/
                if(_y > 0x3f800000)
                     /*atan(x) = atan(inf) - atan(1/x)*/
-                    _i._x = _atan_inf[_sx >> 31] - _i._x;
+                    _i._x = _atan_inf[_sx] - _i._x;
                return _i._x;
           }
           /*12/24/2023*/
@@ -85,7 +85,7 @@
           {
                float_64 _i = {_x};
                /*signbit(_x) << 31*/
-               _int32 _sx = _i._lh._hi & 0x80000000;
+               _int32 _sx = (_i._lh._hi >> 31) & 1;
                /*|_x|*/
                _i._lh._hi &= 0x7fffffff;
                _int64 _y = _i._y;
@@ -110,7 +110,7 @@
                /*Special case if |_x| is greater than 1*/
                if(_y > 0x3ff0000000000000)
                     /*atan(x) = atan(inf) - atan(1/x)*/
-                    _i._x = _atan_inf[_sx >> 31] - _i._x;
+                    _i._x = _atan_inf[_sx] - _i._x;
                return _i._x;
           }
      }

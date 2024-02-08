@@ -242,7 +242,7 @@ namespace necromancer_float_class
           /*If _x is larger than this, than IEEE-754 can only represent integers*/
           if(_i._y >= 0x4b7fffff)
                return true;
-          return _i._y << _i._f_32._exp - 0x076 == 0;
+          return _i._f_32._mantissa << _i._f_32._exp - 0x07e == 0;
      }
      /*12/24/2023*/
      constexpr bool is_intd(const double& _x)
@@ -255,7 +255,7 @@ namespace necromancer_float_class
           /*If _x is larger than this, than IEEE-754 can only represent integers*/
           if(_i._lh._hi >= 0x43400000)
                return true;
-          return _i._y << _i._f_64._exp - 0x03f2 == 0;
+          return _i._f_64._mantissa << _i._f_64._exp - 0x03fe == 0;
      }
      /*12/24/2023*/
      constexpr bool is_decimalf(const float& _x)
@@ -285,19 +285,19 @@ namespace necromancer_float_class
           float_32 _i = {_x};
           *_eptr = 0;
           /*_x is infinity, NaN, or 0*/
-          if(_i._y & 0x7fffffff >= 0x7f800000 || _i._y == 0)
+          if(_i._y & 0x7fffffff >= 0x7f800000 || _x == 0)
                return _x;
           /*Subnormal float ~ scale up _x*/
-          if(_i._y & 0x7fffffff < 0x01000000)
+          if(_i._y & 0x7fffffff < 0x00800000)
           {
-               *_eptr -= 24;
                _i._x *= two24;
+               *_eptr -= 24;
           }
           /*Subtract 126 to avoid a multiplication that would be*/
           /*needed if we subtracted 127*/
-          *_eptr += _i._f_32._exp - 0x07e;
+          *_eptr += _i._f_32._exp - 126;
           /*Same business...*/
-          _i._f_32._exp = 0x07e;
+          _i._f_32._exp = 126;
           return _i._x;
      }
      /*1/29/2024*/
@@ -306,19 +306,19 @@ namespace necromancer_float_class
           float_64 _i = {_x};
           *_eptr = 0;
           /*If _x is infinity, NaN, or 0*/
-          if(_i._lh._hi & 0x7fffffff >= 0x7ff00000 || _i._y == 0)
+          if(_i._lh._hi & 0x7fffffff >= 0x7ff00000 || _x == 0)
                return _x;
           /*Subnormal float ~ scale up _x*/
           if(_i._lh._hi & 0x7fffffff < 0x01000000)
           {
-               *_eptr = -54;
                _i._x *= two54;
+               *_eptr = -54;
           }
           /*Subtract 1022 to avoid a multiplication that would be*/
           /*needed if we subtracted 1023*/
-          *_eptr += _i._f_64._exp - 0x3fe;
+          *_eptr += _i._f_64._exp - 1022;
           /*Same business...*/
-          _i._f_64._exp = 0x3fe;
+          _i._f_64._exp = 1022;
           return _i._x;
      }
      /*1/29/2024*/

@@ -74,7 +74,7 @@
                _i._y |= _sx;
                return _i._y;
           }
-          /*12/21/2023*/
+          /*2/1/2024*/
           /*We assume that |_x| is within pi/4*/
           float cosf_in_pio4(const float& _x)
           {
@@ -83,10 +83,8 @@
                /*|_x|*/
                _i._y &= 0x7fffffff;
                _z = _i._x * _i._x;
-               _r = 1.0f + _z * (0.5 + _z * (_cos1 + _z * (_cos2 + _z *
-                    (_cos3 + _z * (_cos4 + _z * (_cos5 + _z * _cos6))))));
-               /*No need for copysign because cos(-x) = cos(x)*/
-               return _r;
+               _r = _z * (_cos1 + _z * (_cos2 + _z * (_cos3 + _z * (_cos4 + _z * (_cos5 + _z * _cos6)))));
+               return 1.0f - _z * 0.5f + _r;
           }
           /*12/21/2023*/
           /*We assume that |_x| is within pi/4*/
@@ -97,10 +95,8 @@
                /*|_x|*/
                _i._y &= 0x7fffffffffffffff;
                _z = _i._x * _i._x;
-               _r = 1.0f + _z * (0.5 + _z * (_cos1 + _z * (_cos2 + _z *
-                    (_cos3 + _z * (_cos4 + _z * (_cos5 + _z * _cos6))))));
-               /*No need for copysign because cos(-x) = cos(x)*/
-               return _r;
+               _r = _z * (_cos1 + _z * (_cos2 + _z * (_cos3 + _z * (_cos4 + _z * (_cos5 + _z * _cos6)))));
+               return 1.0 - _z * 0.5 + _r;
           }
      }
 #endif /*_MATH_SORCERY_*/
